@@ -21,7 +21,7 @@ const itemSchema = new mongoose.Schema({
   },
   subType: { 
     type: String, 
-    enum: ['melee', 'ranged', 'magic', 'helmet', 'chest', 'legs', 'boots', 'gloves', 'shield', 'ring', 'necklace', 'pickaxe', 'rod', 'raw', 'cooked', 'ore', 'bar', 'fish', 'misc'],
+    enum: ['melee', 'ranged', 'magic', 'ammunition', 'helmet', 'chest', 'legs', 'boots', 'gloves', 'shield', 'ring', 'necklace', 'pickaxe', 'rod', 'axe', 'raw', 'cooked', 'ore', 'bar', 'wood', 'component', 'fish', 'misc'],
     required: true 
   },
   levelRequired: { type: Number, default: 1 },

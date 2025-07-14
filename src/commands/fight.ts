@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { Player } from '../models/Player';
 import { Area } from '../models/Area';
+import { checkRangedCombatRequirements } from '../utils/combatUtils';
 
 export const data = new SlashCommandBuilder()
   .setName('fight')
@@ -61,6 +62,16 @@ export async function execute(interaction: any) {
     if (!monster) {
       await interaction.reply({
         content: 'No monster selected!',
+        ephemeral: true
+      });
+      return;
+    }
+
+    // Check ranged combat requirements
+    const combatCheck = await checkRangedCombatRequirements(player);
+    if (!combatCheck.valid) {
+      await interaction.reply({
+        content: combatCheck.message,
         ephemeral: true
       });
       return;

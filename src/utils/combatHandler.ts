@@ -43,6 +43,21 @@ export async function handleCombatAction(interaction: any, action: string) {
         playerDamage = calculateDamage(playerStats, monster.defense);
         monsterCurrentHp -= playerDamage;
         playerAction = playerDamage > 0 ? `You hit for ${playerDamage} damage!` : 'You missed!';
+        
+        // Consume ammunition for ranged attacks
+        if (player.combatStats.attackStyle === 'range' && player.equipment.ammunition && playerDamage > 0) {
+          const ammoItem = player.inventory.find(item => item.itemId === player.equipment.ammunition);
+          if (ammoItem && ammoItem.quantity > 0) {
+            ammoItem.quantity -= 1;
+            if (ammoItem.quantity <= 0) {
+              // Remove from inventory and unequip
+              const filteredInventory = player.inventory.filter(item => item.itemId !== player.equipment.ammunition);
+              player.inventory.splice(0, player.inventory.length, ...filteredInventory);
+              player.equipment.ammunition = null as any;
+              playerAction += ' (Last arrow used!)';
+            }
+          }
+        }
         break;
 
       case 'defend':
@@ -122,37 +137,46 @@ export async function handleCombatAction(interaction: any, action: string) {
       player.currentMonster = null as any;
       
       if (playerWon) {
-        const expGained = calculateExperienceGained(playerDamage, monster.level);
         const combatStyle = player.combatStats.attackStyle || 'attack';
+        const expGained = calculateExperienceGained(playerDamage, monster.level, combatStyle);
         
         // Give experience based on combat style
         let expResult;
         let skillName = '';
-        if (combatStyle === 'attack' && player.skills?.attack) {
+        let mainExpAmount = 0;
+        
+        if (expGained.attack && player.skills?.attack) {
           expResult = addExperience(player.skills.attack.experience, expGained.attack);
           player.skills.attack.experience = expResult.newExp;
           skillName = 'Attack';
-        } else if (combatStyle === 'strength' && player.skills?.strength) {
+          mainExpAmount = expGained.attack;
+        } else if (expGained.strength && player.skills?.strength) {
           expResult = addExperience(player.skills.strength.experience, expGained.strength);
           player.skills.strength.experience = expResult.newExp;
           skillName = 'Strength';
-        } else if (combatStyle === 'defense' && player.skills?.defense) {
+          mainExpAmount = expGained.strength;
+        } else if (expGained.defense && player.skills?.defense) {
           expResult = addExperience(player.skills.defense.experience, expGained.defense);
           player.skills.defense.experience = expResult.newExp;
           skillName = 'Defense';
-        } else if (combatStyle === 'magic' && player.skills?.magic) {
-          expResult = addExperience(player.skills.magic.experience, expGained.attack);
+          mainExpAmount = expGained.defense;
+        } else if (expGained.magic && player.skills?.magic) {
+          expResult = addExperience(player.skills.magic.experience, expGained.magic);
           player.skills.magic.experience = expResult.newExp;
           skillName = 'Magic';
-        } else if (combatStyle === 'range' && player.skills?.range) {
-          expResult = addExperience(player.skills.range.experience, expGained.attack);
+          mainExpAmount = expGained.magic;
+        } else if (expGained.range && player.skills?.range) {
+          expResult = addExperience(player.skills.range.experience, expGained.range);
           player.skills.range.experience = expResult.newExp;
           skillName = 'Range';
+          mainExpAmount = expGained.range;
         }
         
-        // Always give a small amount of defense experience
+        // Always give a small amount of defense experience (unless already training defense)
+        let defenseExpAmount = 0;
         if (player.skills?.defense && combatStyle !== 'defense') {
-          const defenseResult = addExperience(player.skills.defense.experience, Math.floor(expGained.defense / 3));
+          defenseExpAmount = Math.floor(mainExpAmount / 3);
+          const defenseResult = addExperience(player.skills.defense.experience, defenseExpAmount);
           player.skills.defense.experience = defenseResult.newExp;
         }
         
@@ -167,11 +191,10 @@ export async function handleCombatAction(interaction: any, action: string) {
         }
         
         let experienceText = '';
-        if (expResult) {
-          const mainExp = combatStyle === 'defense' ? expGained.defense : expGained.attack;
-          experienceText = `${skillName}: +${mainExp}`;
-          if (combatStyle !== 'defense') {
-            experienceText += `\nDefense: +${Math.floor(expGained.defense / 3)}`;
+        if (expResult && mainExpAmount > 0) {
+          experienceText = `${skillName}: +${mainExpAmount}`;
+          if (defenseExpAmount > 0) {
+            experienceText += `\nDefense: +${defenseExpAmount}`;
           }
           if (expResult.leveledUp) {
             experienceText += `\n🎉 ${skillName} leveled up to ${expResult.newLevel}!`;

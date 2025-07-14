@@ -20,12 +20,15 @@ A Discord MMORPG bot, the successor to Eternals Online
 - **Attack** - Melee combat effectiveness
 - **Strength** - Melee damage bonus
 - **Defense** - Damage reduction
-- **Magic** - Magical combat (framework)
-- **Range** - Ranged combat (framework)
+- **Magic** - Magical combat with staffs
+- **Range** - Ranged combat with bows and arrows
 - **Fishing** - Catch fish for cooking
 - **Cooking** - Cook food for healing
 - **Mining** - Mine ores for smithing
-- **Smithing** - Smelt ores and create items
+- **Smithing** - Smelt ores and create weapons/tools/arrow heads
+- **Woodcutting** - Cut trees to obtain logs
+- **Fletching** - Create arrow shafts and bows from logs
+- **Crafting** - Combine materials to make arrows, bows, and staffs
 
 ### 🏞️ Areas
 - **Lumbridge** - Starting area (Level 1+)
@@ -33,10 +36,11 @@ A Discord MMORPG bot, the successor to Eternals Online
 - **Falador** - High-level area (Level 25+)
 
 ### 🎒 Items & Equipment
-- Weapons (Bronze, Iron, Mithril)
-- Tools (Pickaxes, Fishing Rods)
-- Food (Bread, Cooked Fish)
-- Resources (Ores, Raw Fish)
+- **Weapons** - Swords (melee), Bows (ranged), Staffs (magic), Arrows (ammunition)
+- **Tools** - Pickaxes (mining), Fishing Rods (fishing), Axes (woodcutting)
+- **Food** - Bread, Cooked Fish for healing
+- **Resources** - Ores, Raw Fish, Logs, Arrow Components
+- **Materials** - Bronze/Iron/Mithril in various tiers
 
 ## Quick Start with Docker
 
@@ -90,10 +94,14 @@ A Discord MMORPG bot, the successor to Eternals Online
 
 ### Combat Commands
 - `/fight [monster]` - Start combat with monsters
+- `/style <combat_style>` - Change combat style (attack/strength/defense/magic/range)
 - Use interactive buttons during combat
 
 ### Skilling Commands
 - `/mine [ore]` - Mine ores (requires pickaxe)
 - `/fish [fish]` - Catch fish (requires fishing rod)
-- `/smith <smelt/smith> <item>` - Smelt ores or create items
+- `/woodcut [tree]` - Cut trees (requires axe)
+- `/smith <smelt/smith> <item>` - Smelt ores or create weapons/tools/arrow heads
+- `/fletch <item>` - Create arrow shafts and bows from logs
+- `/craft <item>` - Craft arrows, bows, and staffs from materials
 - `/cook <item>` - Cook raw fish into food

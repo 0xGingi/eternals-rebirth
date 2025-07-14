@@ -97,8 +97,8 @@ export async function execute(interaction: any) {
     }
 
     const requiredSkill = item.type === 'weapon' ? 
-      (item.subType === 'melee' ? 'attack' : item.subType === 'ranged' ? 'range' : 'magic') :
-      (item.subType === 'pickaxe' ? 'mining' : 'fishing');
+      (item.subType === 'melee' ? 'attack' : item.subType === 'ranged' ? 'range' : item.subType === 'magic' ? 'magic' : 'range') :
+      (item.subType === 'pickaxe' ? 'mining' : item.subType === 'axe' ? 'woodcutting' : 'fishing');
 
     const playerLevel = calculateLevelFromExperience(player.skills?.[requiredSkill]?.experience || 0);
     
@@ -110,7 +110,7 @@ export async function execute(interaction: any) {
       return;
     }
 
-    const equipSlot = item.type === 'weapon' || item.type === 'tool' ? 'weapon' : 'weapon';
+    const equipSlot = item.subType === 'ammunition' ? 'ammunition' : 'weapon';
     const previousItem = player.equipment[equipSlot];
 
     if (previousItem) {

@@ -17,6 +17,7 @@ export const data = new SlashCommandBuilder()
         { name: 'Gloves', value: 'gloves' },
         { name: 'Weapon', value: 'weapon' },
         { name: 'Shield', value: 'shield' },
+        { name: 'Ammunition', value: 'ammunition' },
         { name: 'Ring', value: 'ring' },
         { name: 'Necklace', value: 'necklace' }
       )

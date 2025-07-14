@@ -18,6 +18,7 @@ const equipmentSchema = new mongoose.Schema({
   gloves: { type: String, default: null },
   weapon: { type: String, default: null },
   shield: { type: String, default: null },
+  ammunition: { type: String, default: null },
   ring: { type: String, default: null },
   necklace: { type: String, default: null }
 });

@@ -20,7 +20,7 @@ export async function execute(interaction: any) {
       return;
     }
 
-    const equipmentSlots = ['helmet', 'chest', 'legs', 'boots', 'gloves', 'weapon', 'shield', 'ring', 'necklace'];
+    const equipmentSlots = ['helmet', 'chest', 'legs', 'boots', 'gloves', 'weapon', 'shield', 'ammunition', 'ring', 'necklace'];
     const equipmentText = await Promise.all(
       equipmentSlots.map(async (slot) => {
         const itemId = player.equipment[slot as keyof typeof player.equipment];
