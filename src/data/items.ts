@@ -154,6 +154,18 @@ export const defaultItems = [
     healAmount: 25,
     value: 15
   },
+  {
+    id: 'cooked_salmon',
+    name: 'Cooked Salmon',
+    description: 'A perfectly cooked salmon.',
+    type: 'food',
+    subType: 'cooked',
+    levelRequired: 25,
+    stackable: true,
+    edible: true,
+    healAmount: 35,
+    value: 25
+  },
   
   // Raw Resources
   {
@@ -237,6 +249,16 @@ export const defaultItems = [
     levelRequired: 30,
     stackable: true,
     value: 100
+  },
+  {
+    id: 'gold_ore',
+    name: 'Gold Ore',
+    description: 'A shiny chunk of gold ore.',
+    type: 'resource',
+    subType: 'ore',
+    levelRequired: 40,
+    stackable: true,
+    value: 150
   },
   
   // Logs
@@ -427,6 +449,38 @@ export const defaultItems = [
     stats: { damage: 6 },
     stackable: true,
     value: 75
+  },
+
+  // Bars
+  {
+    id: 'bronze_bar',
+    name: 'Bronze Bar',
+    description: 'A bar of bronze, used for smithing.',
+    type: 'resource',
+    subType: 'bar',
+    levelRequired: 1,
+    stackable: true,
+    value: 15
+  },
+  {
+    id: 'iron_bar',
+    name: 'Iron Bar',
+    description: 'A bar of iron, used for smithing.',
+    type: 'resource',
+    subType: 'bar',
+    levelRequired: 15,
+    stackable: true,
+    value: 50
+  },
+  {
+    id: 'mithril_bar',
+    name: 'Mithril Bar',
+    description: 'A bar of mithril, used for smithing.',
+    type: 'resource',
+    subType: 'bar',
+    levelRequired: 30,
+    stackable: true,
+    value: 200
   },
 
   // Other

@@ -31,7 +31,7 @@ export async function handleCombatAction(interaction: any, action: string) {
     }
 
     let playerAction = '';
-    let monsterCurrentHp = monster.hp;
+    let monsterCurrentHp = player.currentMonsterHp || monster.hp; // Use stored HP or default to max
     let playerDamage = 0;
     let monsterDamage = 0;
     let combatEnded = false;
@@ -91,6 +91,7 @@ export async function handleCombatAction(interaction: any, action: string) {
         if (Math.random() < 0.8) {
           player.inCombat = false;
           player.currentMonster = null as any;
+          player.currentMonsterHp = null as any;
           await player.save();
           
           const embed = new EmbedBuilder()
@@ -135,6 +136,7 @@ export async function handleCombatAction(interaction: any, action: string) {
     if (combatEnded) {
       player.inCombat = false;
       player.currentMonster = null as any;
+      player.currentMonsterHp = null as any;
       
       if (playerWon) {
         const combatStyle = player.combatStats.attackStyle || 'attack';
@@ -227,6 +229,8 @@ export async function handleCombatAction(interaction: any, action: string) {
         await interaction.update({ embeds: [embed], components: [] });
       }
     } else {
+      // Save the monster's current HP for the next turn
+      player.currentMonsterHp = monsterCurrentHp;
       await player.save();
       
       const embed = new EmbedBuilder()

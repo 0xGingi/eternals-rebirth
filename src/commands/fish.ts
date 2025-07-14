@@ -11,7 +11,43 @@ export const data = new SlashCommandBuilder()
     option.setName('fish')
       .setDescription('The fish to catch (leave empty for first available)')
       .setRequired(false)
+      .setAutocomplete(true)
   );
+
+export async function autocomplete(interaction: any) {
+  const focusedValue = interaction.options.getFocused();
+  const userId = interaction.user.id;
+
+  try {
+    const player = await Player.findOne({ userId });
+    if (!player) {
+      await interaction.respond([]);
+      return;
+    }
+
+    const area = await Area.findOne({ id: player.currentArea });
+    if (!area) {
+      await interaction.respond([]);
+      return;
+    }
+
+    const fishingResources = area.resources.filter(r => r.skill === 'fishing');
+    const availableFish = fishingResources
+      .filter(resource => {
+        const name = `${resource.name} (Level ${resource.levelRequired})`;
+        return name.toLowerCase().includes(focusedValue.toLowerCase());
+      })
+      .map(resource => ({
+        name: `${resource.name} (Level ${resource.levelRequired}) - ${resource.experience} XP`,
+        value: resource.id
+      }));
+
+    await interaction.respond(availableFish.slice(0, 25));
+  } catch (error) {
+    console.error('Error in fish autocomplete:', error);
+    await interaction.respond([]);
+  }
+}
 
 export async function execute(interaction: any) {
   const userId = interaction.user.id;
@@ -58,7 +94,10 @@ export async function execute(interaction: any) {
 
     let resource;
     if (fishName) {
-      resource = fishingResources.find(r => r.name.toLowerCase().includes(fishName.toLowerCase()));
+      resource = fishingResources.find(r => 
+        r.name.toLowerCase().includes(fishName.toLowerCase()) || 
+        r.id.toLowerCase() === fishName.toLowerCase()
+      );
       if (!resource) {
         await interaction.reply({
           content: 'That fish is not available in this area!',

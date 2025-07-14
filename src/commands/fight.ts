@@ -10,7 +10,42 @@ export const data = new SlashCommandBuilder()
     option.setName('monster')
       .setDescription('The monster to fight (leave empty for random)')
       .setRequired(false)
+      .setAutocomplete(true)
   );
+
+export async function autocomplete(interaction: any) {
+  const focusedValue = interaction.options.getFocused();
+  const userId = interaction.user.id;
+
+  try {
+    const player = await Player.findOne({ userId });
+    if (!player) {
+      await interaction.respond([]);
+      return;
+    }
+
+    const area = await Area.findOne({ id: player.currentArea });
+    if (!area) {
+      await interaction.respond([]);
+      return;
+    }
+
+    const availableMonsters = area.monsters
+      .filter(monster => {
+        const name = `${monster.name} (Level ${monster.level})`;
+        return name.toLowerCase().includes(focusedValue.toLowerCase());
+      })
+      .map(monster => ({
+        name: `${monster.name} (Level ${monster.level}) - ${monster.experience} XP`,
+        value: monster.name.toLowerCase()
+      }));
+
+    await interaction.respond(availableMonsters.slice(0, 25));
+  } catch (error) {
+    console.error('Error in fight autocomplete:', error);
+    await interaction.respond([]);
+  }
+}
 
 export async function execute(interaction: any) {
   const userId = interaction.user.id;
@@ -79,6 +114,7 @@ export async function execute(interaction: any) {
 
     player.inCombat = true;
     player.currentMonster = monster.id;
+    player.currentMonsterHp = monster.hp; // Initialize monster's current HP
     await player.save();
 
     const embed = new EmbedBuilder()

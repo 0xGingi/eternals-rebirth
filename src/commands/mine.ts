@@ -11,7 +11,43 @@ export const data = new SlashCommandBuilder()
     option.setName('ore')
       .setDescription('The ore to mine (leave empty for first available)')
       .setRequired(false)
+      .setAutocomplete(true)
   );
+
+export async function autocomplete(interaction: any) {
+  const focusedValue = interaction.options.getFocused();
+  const userId = interaction.user.id;
+
+  try {
+    const player = await Player.findOne({ userId });
+    if (!player) {
+      await interaction.respond([]);
+      return;
+    }
+
+    const area = await Area.findOne({ id: player.currentArea });
+    if (!area) {
+      await interaction.respond([]);
+      return;
+    }
+
+    const miningResources = area.resources.filter(r => r.skill === 'mining');
+    const availableOres = miningResources
+      .filter(resource => {
+        const name = `${resource.name} (Level ${resource.levelRequired})`;
+        return name.toLowerCase().includes(focusedValue.toLowerCase());
+      })
+      .map(resource => ({
+        name: `${resource.name} (Level ${resource.levelRequired}) - ${resource.experience} XP`,
+        value: resource.id
+      }));
+
+    await interaction.respond(availableOres.slice(0, 25));
+  } catch (error) {
+    console.error('Error in mine autocomplete:', error);
+    await interaction.respond([]);
+  }
+}
 
 export async function execute(interaction: any) {
   const userId = interaction.user.id;
@@ -58,7 +94,10 @@ export async function execute(interaction: any) {
 
     let resource;
     if (oreName) {
-      resource = miningResources.find(r => r.name.toLowerCase().includes(oreName.toLowerCase()));
+      resource = miningResources.find(r => 
+        r.name.toLowerCase().includes(oreName.toLowerCase()) || 
+        r.id.toLowerCase() === oreName.toLowerCase()
+      );
       if (!resource) {
         await interaction.reply({
           content: 'That ore is not available in this area!',

@@ -51,7 +51,8 @@ const playerSchema = new mongoose.Schema({
   equipment: { type: equipmentSchema, default: () => ({}) },
   combatStats: { type: combatStatsSchema, default: () => ({}) },
   inCombat: { type: Boolean, default: false },
-  currentMonster: { type: String, default: null }
+  currentMonster: { type: String, default: null },
+  currentMonsterHp: { type: Number, default: null }
 }, {
   timestamps: true
 });

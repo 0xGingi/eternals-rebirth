@@ -21,6 +21,14 @@ const smithingRecipes = [
     quantity: 1
   },
   { 
+    id: 'mithril_sword',
+    name: 'Mithril Sword',
+    materials: [{ item: 'mithril_bar', quantity: 1 }],
+    level: 30,
+    experience: 200,
+    quantity: 1
+  },
+  { 
     id: 'bronze_pickaxe',
     name: 'Bronze Pickaxe',
     materials: [{ item: 'bronze_bar', quantity: 1 }],
@@ -34,6 +42,14 @@ const smithingRecipes = [
     materials: [{ item: 'iron_bar', quantity: 1 }],
     level: 15,
     experience: 80,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_pickaxe',
+    name: 'Mithril Pickaxe',
+    materials: [{ item: 'mithril_bar', quantity: 1 }],
+    level: 30,
+    experience: 150,
     quantity: 1
   },
   // Arrow heads
@@ -149,7 +165,10 @@ export async function autocomplete(interaction: any) {
     if (focusedOption.name === 'item') {
       const action = interaction.options.getString('action');
       if (!action) {
-        await interaction.respond([]);
+        // Provide helpful message when no action is selected
+        await interaction.respond([
+          { name: 'Please select an action (smelt/smith) first', value: 'no_action' }
+        ]);
         return;
       }
 

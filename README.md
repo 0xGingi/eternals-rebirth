@@ -81,6 +81,7 @@ A Discord MMORPG bot, the successor to Eternals Online
 - `/register` - Register your character
 - `/stats` - View your character stats
 - `/help` - Show all available commands
+- `/list <category>` - View detailed game information (monsters, recipes, items, etc.)
 
 ### World Commands
 - `/travel <destination>` - Travel to different areas
