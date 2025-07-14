@@ -1,0 +1,40 @@
+services:
+  mongodb:
+    image: mongo:8.0.11
+    container_name: eternals-rebirth-mongo
+    restart: unless-stopped
+    ports:
+      - "27020:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: eternals-rebirth
+    volumes:
+      - mongodb_data:/data/db
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - eternals-network
+
+  bot:
+    build: .
+    container_name: eternals-rebirth-bot
+    restart: unless-stopped
+    depends_on:
+      - mongodb
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - CLIENT_ID=${CLIENT_ID}
+      - GUILD_ID=${GUILD_ID}
+      - MONGODB_URI=mongodb://${MONGO_ROOT_USERNAME:-admin}:${MONGO_ROOT_PASSWORD}@mongodb:27017/eternals-rebirth?authSource=admin
+      - NODE_ENV=production
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - eternals-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  eternals-network:
+    driver: bridge
