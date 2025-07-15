@@ -35,7 +35,18 @@ export const defaultItems = [
     stackable: false,
     value: 800
   },
-  
+  {
+    id: 'lost_femurs_of_phantasmic_isles',
+    name: 'The Lost Femurs of Phantasmic Isles',
+    description: 'dirty femur bones with a small gleam, its as if it wants to inspire you to give you hope. The real hope, is that someday it will actually do something…',
+    type: 'weapon',
+    subType: 'melee',
+    levelRequired: 1,
+    stats: { attack: 20, strength: 20, accuracy: 20, damage: 20 },
+    stackable: false,
+    value: 1000
+  },
+
   // Tools
   {
     id: 'bronze_pickaxe',

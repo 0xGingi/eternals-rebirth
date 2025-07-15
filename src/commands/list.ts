@@ -211,8 +211,13 @@ function createSmeltingEmbed(): EmbedBuilder {
     .setTitle('🔥 Smelting Recipes')
     .setDescription('All available smelting recipes');
 
-  smeltingRecipes.forEach(recipe => {
+  smeltingRecipes.forEach((recipe, index) => {
     const materials = recipe.materials.map(m => `${m.quantity}x ${m.item.replace('_', ' ')}`).join(' + ');
+    
+    if (index > 0) {
+      embed.addFields({ name: '\u200b', value: '\u200b', inline: false });
+    }
+    
     embed.addFields({
       name: `${recipe.name} (Level ${recipe.level})`,
       value: `**Materials:** ${materials}\n**Experience:** ${recipe.experience} XP\n**Quantity:** ${recipe.quantity}`,
@@ -229,8 +234,13 @@ function createSmithingEmbed(): EmbedBuilder {
     .setTitle('⚒️ Smithing Recipes')
     .setDescription('All available smithing recipes');
 
-  smithingRecipes.forEach(recipe => {
+  smithingRecipes.forEach((recipe, index) => {
     const materials = recipe.materials.map(m => `${m.quantity}x ${m.item.replace('_', ' ')}`).join(' + ');
+    
+    if (index > 0) {
+      embed.addFields({ name: '\u200b', value: '\u200b', inline: false });
+    }
+    
     embed.addFields({
       name: `${recipe.name} (Level ${recipe.level})`,
       value: `**Materials:** ${materials}\n**Experience:** ${recipe.experience} XP\n**Quantity:** ${recipe.quantity}`,
@@ -247,8 +257,13 @@ function createFletchingEmbed(): EmbedBuilder {
     .setTitle('🏹 Fletching Recipes')
     .setDescription('All available fletching recipes');
 
-  fletchingRecipes.forEach(recipe => {
+  fletchingRecipes.forEach((recipe, index) => {
     const materials = recipe.materials.map(m => `${m.quantity}x ${m.item.replace('_', ' ')}`).join(' + ');
+    
+    if (index > 0) {
+      embed.addFields({ name: '\u200b', value: '\u200b', inline: false });
+    }
+    
     embed.addFields({
       name: `${recipe.name} (Level ${recipe.level})`,
       value: `**Materials:** ${materials}\n**Experience:** ${recipe.experience} XP\n**Quantity:** ${recipe.quantity}`,
@@ -265,8 +280,13 @@ function createCraftingEmbed(): EmbedBuilder {
     .setTitle('🔨 Crafting Recipes')
     .setDescription('All available crafting recipes');
 
-  craftingRecipes.forEach(recipe => {
+  craftingRecipes.forEach((recipe, index) => {
     const materials = recipe.materials.map(m => `${m.quantity}x ${m.item.replace('_', ' ')}`).join(' + ');
+    
+    if (index > 0) {
+      embed.addFields({ name: '\u200b', value: '\u200b', inline: false });
+    }
+    
     embed.addFields({
       name: `${recipe.name} (Level ${recipe.level})`,
       value: `**Materials:** ${materials}\n**Experience:** ${recipe.experience} XP\n**Quantity:** ${recipe.quantity}`,

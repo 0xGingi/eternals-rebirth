@@ -31,7 +31,7 @@ export async function handleCombatAction(interaction: any, action: string) {
     }
 
     let playerAction = '';
-    let monsterCurrentHp = player.currentMonsterHp || monster.hp; // Use stored HP or default to max
+    let monsterCurrentHp = player.currentMonsterHp || monster.hp;
     let playerDamage = 0;
     let monsterDamage = 0;
     let combatEnded = false;
@@ -39,7 +39,6 @@ export async function handleCombatAction(interaction: any, action: string) {
 
     switch (action) {
       case 'attack':
-        // Check if player can attack with current weapon/ammunition
         if (player.combatStats.attackStyle === 'range') {
           if (!player.equipment.ammunition.itemId || player.equipment.ammunition.quantity <= 0) {
             playerAction = 'You cannot attack without arrows! You need to equip arrows or change your combat style.';
@@ -52,17 +51,14 @@ export async function handleCombatAction(interaction: any, action: string) {
         monsterCurrentHp -= playerDamage;
         playerAction = playerDamage > 0 ? `You hit for ${playerDamage} damage!` : 'You missed!';
         
-        // Consume ammunition for ranged attacks
-        if (player.combatStats.attackStyle === 'range' && player.equipment.ammunition.itemId && playerDamage > 0) {
+        if (player.combatStats.attackStyle === 'range' && player.equipment.ammunition.itemId) {
           if (player.equipment.ammunition.quantity > 0) {
             player.equipment.ammunition.quantity -= 1;
             if (player.equipment.ammunition.quantity <= 0) {
-              // Remove ammunition when depleted
               player.equipment.ammunition.itemId = null as any;
               player.equipment.ammunition.quantity = 0;
               playerAction += ' (Last arrow used!)';
             } else {
-              // Show remaining arrow count
               playerAction += ` (${player.equipment.ammunition.quantity} arrows remaining)`;
             }
           }
@@ -151,7 +147,6 @@ export async function handleCombatAction(interaction: any, action: string) {
         const combatStyle = player.combatStats.attackStyle || 'attack';
         const expGained = calculateExperienceGained(playerDamage, monster.level, combatStyle);
         
-        // Give experience based on combat style
         let expResult;
         let skillName = '';
         let mainExpAmount = 0;
@@ -228,7 +223,6 @@ export async function handleCombatAction(interaction: any, action: string) {
         await interaction.update({ embeds: [embed], components: [] });
       }
     } else {
-      // Save the monster's current HP for the next turn
       player.currentMonsterHp = monsterCurrentHp;
       await player.save();
       
