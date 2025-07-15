@@ -80,6 +80,15 @@ export async function execute(interaction: any) {
       return;
     }
 
+    if (player.isSkilling) {
+      const timeRemaining = player.skillingEndTime ? Math.ceil((player.skillingEndTime.getTime() - Date.now()) / 1000) : 0;
+      await interaction.reply({
+        content: `You are already ${player.currentSkill}! Please wait ${timeRemaining} seconds.`,
+        ephemeral: true
+      });
+      return;
+    }
+
     const area = await Area.findOne({ id: player.currentArea });
     
     if (!area) {
@@ -180,6 +189,11 @@ export async function execute(interaction: any) {
       const maxTime = quantity * 5000;
       const totalTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
 
+      player.isSkilling = true;
+      player.currentSkill = 'mining';
+      player.skillingEndTime = new Date(Date.now() + totalTime);
+      await player.save();
+
       const embed = new EmbedBuilder()
         .setColor(0x8B4513)
         .setTitle('⛏️ Mining in Progress...')
@@ -209,6 +223,9 @@ export async function execute(interaction: any) {
             updatedPlayer.inventory.push({ itemId: resource.id, quantity });
           }
 
+          updatedPlayer.isSkilling = false;
+          updatedPlayer.currentSkill = null as any;
+          updatedPlayer.skillingEndTime = null as any;
           await updatedPlayer.save();
 
           const completedEmbed = new EmbedBuilder()
@@ -228,6 +245,13 @@ export async function execute(interaction: any) {
           await interaction.editReply({ embeds: [completedEmbed] });
         } catch (error) {
           console.error('Error completing mining:', error);
+          const errorPlayer = await Player.findOne({ userId });
+          if (errorPlayer) {
+            errorPlayer.isSkilling = false;
+            errorPlayer.currentSkill = null as any;
+            errorPlayer.skillingEndTime = null as any;
+            await errorPlayer.save();
+          }
           await interaction.editReply({
             content: 'An error occurred while completing mining. Please try again.',
           });

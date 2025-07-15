@@ -32,7 +32,8 @@ export async function execute(interaction: any) {
       player.inventory.map(async (invItem) => {
         const item = await Item.findOne({ id: invItem.itemId });
         return {
-          ...invItem,
+          itemId: invItem.itemId,
+          quantity: invItem.quantity,
           itemDetails: item || null
         };
       })
@@ -49,7 +50,8 @@ export async function execute(interaction: any) {
 
     for (const invItem of itemsWithDetails) {
       const item = invItem.itemDetails;
-      const displayText = item ? `${item.name} x${invItem.quantity}` : `Unknown Item (${invItem.itemId}) x${invItem.quantity}`;
+      const quantity = invItem.quantity || 0;
+      const displayText = item ? `${item.name} x${quantity}` : `Unknown Item (${invItem.itemId}) x${quantity}`;
       
       if (!item) {
         categorizedItems.other.push(displayText);

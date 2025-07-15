@@ -204,6 +204,15 @@ export async function execute(interaction: any) {
       return;
     }
 
+    if (player.isSkilling) {
+      const timeRemaining = player.skillingEndTime ? Math.ceil((player.skillingEndTime.getTime() - Date.now()) / 1000) : 0;
+      await interaction.reply({
+        content: `You are already ${player.currentSkill}! Please wait ${timeRemaining} seconds.`,
+        ephemeral: true
+      });
+      return;
+    }
+
     const smithingLevel = calculateLevelFromExperience(player.skills?.smithing?.experience || 0);
     let recipe;
     

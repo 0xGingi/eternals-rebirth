@@ -52,7 +52,10 @@ const playerSchema = new mongoose.Schema({
   combatStats: { type: combatStatsSchema, default: () => ({}) },
   inCombat: { type: Boolean, default: false },
   currentMonster: { type: String, default: null },
-  currentMonsterHp: { type: Number, default: null }
+  currentMonsterHp: { type: Number, default: null },
+  isSkilling: { type: Boolean, default: false },
+  currentSkill: { type: String, default: null },
+  skillingEndTime: { type: Date, default: null }
 }, {
   timestamps: true
 });

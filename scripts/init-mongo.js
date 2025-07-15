@@ -14,6 +14,9 @@ db.players.createIndex({ userId: 1 }, { unique: true });
 db.players.createIndex({ username: 1 });
 db.players.createIndex({ currentArea: 1 });
 db.players.createIndex({ inCombat: 1 });
+db.players.createIndex({ isSkilling: 1 });
+db.players.createIndex({ currentSkill: 1 });
+db.players.createIndex({ skillingEndTime: 1 });
 
 db.areas.createIndex({ id: 1 }, { unique: true });
 db.areas.createIndex({ name: 1 });

@@ -80,6 +80,15 @@ export async function execute(interaction: any) {
       return;
     }
 
+    if (player.isSkilling) {
+      const timeRemaining = player.skillingEndTime ? Math.ceil((player.skillingEndTime.getTime() - Date.now()) / 1000) : 0;
+      await interaction.reply({
+        content: `You are already ${player.currentSkill}! Please wait ${timeRemaining} seconds.`,
+        ephemeral: true
+      });
+      return;
+    }
+
     const area = await Area.findOne({ id: player.currentArea });
     
     if (!area) {
@@ -180,9 +189,14 @@ export async function execute(interaction: any) {
       const maxTime = quantity * 5000;
       const totalTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
 
+      player.isSkilling = true;
+      player.currentSkill = 'fishing';
+      player.skillingEndTime = new Date(Date.now() + totalTime);
+      await player.save();
+
       const embed = new EmbedBuilder()
         .setColor(0x0099FF)
-        .setTitle('🎣 Fishing in Progress...')
+        .setTitle('Fishing in Progress...')
         .setDescription(`You begin fishing for **${quantity}x ${resource.name}**...`)
         .addFields(
           { name: 'Expected Time', value: `${Math.floor(totalTime / 1000)} seconds`, inline: true },
@@ -209,11 +223,14 @@ export async function execute(interaction: any) {
             updatedPlayer.inventory.push({ itemId: resource.id, quantity });
           }
 
+          updatedPlayer.isSkilling = false;
+          updatedPlayer.currentSkill = null as any;
+          updatedPlayer.skillingEndTime = null as any;
           await updatedPlayer.save();
 
           const completedEmbed = new EmbedBuilder()
             .setColor(0x00FF00)
-            .setTitle('🎣 Fishing Complete!')
+            .setTitle('Fishing Complete!')
             .setDescription(`You successfully caught **${quantity}x ${resource.name}**!`)
             .addFields(
               { name: 'Experience Gained', value: `${totalExperience} Fishing XP`, inline: true },
@@ -228,6 +245,13 @@ export async function execute(interaction: any) {
           await interaction.editReply({ embeds: [completedEmbed] });
         } catch (error) {
           console.error('Error completing fishing:', error);
+          const errorPlayer = await Player.findOne({ userId });
+          if (errorPlayer) {
+            errorPlayer.isSkilling = false;
+            errorPlayer.currentSkill = null as any;
+            errorPlayer.skillingEndTime = null as any;
+            await errorPlayer.save();
+          }
           await interaction.editReply({
             content: 'An error occurred while completing fishing. Please try again.',
           });

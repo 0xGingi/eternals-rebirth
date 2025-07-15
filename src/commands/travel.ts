@@ -40,6 +40,15 @@ export async function execute(interaction: any) {
       return;
     }
 
+    if (player.isSkilling) {
+      const timeRemaining = player.skillingEndTime ? Math.ceil((player.skillingEndTime.getTime() - Date.now()) / 1000) : 0;
+      await interaction.reply({
+        content: `You cannot travel while ${player.currentSkill}! Please wait ${timeRemaining} seconds.`,
+        ephemeral: true
+      });
+      return;
+    }
+
     const area = await Area.findOne({ id: destination });
     
     if (!area) {

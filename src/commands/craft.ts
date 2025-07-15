@@ -105,6 +105,15 @@ export async function execute(interaction: any) {
       return;
     }
 
+    if (player.isSkilling) {
+      const timeRemaining = player.skillingEndTime ? Math.ceil((player.skillingEndTime.getTime() - Date.now()) / 1000) : 0;
+      await interaction.reply({
+        content: `You are already ${player.currentSkill}! Please wait ${timeRemaining} seconds.`,
+        ephemeral: true
+      });
+      return;
+    }
+
     const recipe = craftingRecipes.find(r => 
       r.name.toLowerCase().includes(itemName!) || 
       r.id.toLowerCase().includes(itemName!)

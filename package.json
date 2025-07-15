@@ -13,5 +13,9 @@
     "discord.js": "14",
     "dotenv": "^17.2.0",
     "mongoose": "^8.16.3"
+  },
+  "scripts": {
+    "migrate-skilling": "bun run scripts/migrate-player-skilling-fields.ts",
+    "deregister-guild": "bun run scripts/deregister-guild-commands.ts"
   }
 }
