@@ -73,6 +73,11 @@ export class Bot {
         if (interaction.customId.startsWith('combat_')) {
           const action = interaction.customId.replace('combat_', '');
           await handleCombatAction(interaction, action);
+        } else if (interaction.customId.startsWith('help_')) {
+          const helpCommand = this.commands.get('help');
+          if (helpCommand && 'handleButton' in helpCommand) {
+            await (helpCommand as any).handleButton(interaction);
+          }
         }
       }
     });

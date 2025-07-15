@@ -4,19 +4,19 @@ A Discord MMORPG bot, the successor to Eternals Online
 
 ## Features
 
-### 🎮 Core Systems
+### Core Systems
 - **Player Registration & Stats** - Create characters and track progression
 - **Experience System** - Level skills from 1-99 like RuneScape
 - **Turn-based Combat** - Fight monsters with interactive buttons
 - **Area Travel** - Explore different zones with unique content
 
-### ⚔️ Combat System
+### Combat System
 - Interactive button-based combat
 - Attack, Defend, Eat Food, Run Away actions
 - Experience rewards based on damage dealt
 - Monster loot drops with percentage chances
 
-### 🔨 Skills (1-99 Progression)
+### Skills (1-99 Progression)
 - **Attack** - Melee combat effectiveness
 - **Strength** - Melee damage bonus
 - **Defense** - Damage reduction
@@ -30,12 +30,12 @@ A Discord MMORPG bot, the successor to Eternals Online
 - **Fletching** - Create arrow shafts and bows from logs
 - **Crafting** - Combine materials to make arrows, bows, and staffs
 
-### 🏞️ Areas
+### Areas
 - **Lumbridge** - Starting area (Level 1+)
 - **Varrock** - Mid-level area (Level 10+)
 - **Falador** - High-level area (Level 25+)
 
-### 🎒 Items & Equipment
+### Items & Equipment
 - **Weapons** - Swords (melee), Bows (ranged), Staffs (magic), Arrows (ammunition)
 - **Tools** - Pickaxes (mining), Fishing Rods (fishing), Axes (woodcutting)
 - **Food** - Bread, Cooked Fish for healing
