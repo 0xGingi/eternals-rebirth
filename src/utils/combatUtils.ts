@@ -66,8 +66,8 @@ export async function calculateCombatStats(player: any): Promise<CombatStats> {
   }
 
   // Apply ammunition bonuses for ranged weapons
-  if (player.equipment.ammunition && combatStyle === 'range') {
-    const ammunition = await Item.findOne({ id: player.equipment.ammunition });
+  if (player.equipment.ammunition.itemId && combatStyle === 'range') {
+    const ammunition = await Item.findOne({ id: player.equipment.ammunition.itemId });
     if (ammunition) {
       baseStats.maxHit += ammunition.stats.damage || 0;
     }
@@ -132,11 +132,11 @@ export async function checkRangedCombatRequirements(player: any): Promise<{ vali
     }
     
     // Check if player has ammunition equipped
-    if (!player.equipment.ammunition) {
+    if (!player.equipment.ammunition.itemId || player.equipment.ammunition.quantity <= 0) {
       return { valid: false, message: 'You need arrows equipped for ranged combat!' };
     }
     
-    const ammunition = await Item.findOne({ id: player.equipment.ammunition });
+    const ammunition = await Item.findOne({ id: player.equipment.ammunition.itemId });
     if (!ammunition || ammunition.subType !== 'ammunition') {
       return { valid: false, message: 'You need arrows equipped for ranged combat!' };
     }

@@ -10,6 +10,11 @@ const inventoryItemSchema = new mongoose.Schema({
   quantity: { type: Number, default: 1 }
 });
 
+const ammunitionSchema = new mongoose.Schema({
+  itemId: { type: String, default: null },
+  quantity: { type: Number, default: 0 }
+});
+
 const equipmentSchema = new mongoose.Schema({
   helmet: { type: String, default: null },
   chest: { type: String, default: null },
@@ -18,7 +23,7 @@ const equipmentSchema = new mongoose.Schema({
   gloves: { type: String, default: null },
   weapon: { type: String, default: null },
   shield: { type: String, default: null },
-  ammunition: { type: String, default: null },
+  ammunition: { type: ammunitionSchema, default: () => ({}) },
   ring: { type: String, default: null },
   necklace: { type: String, default: null }
 });
@@ -26,7 +31,8 @@ const equipmentSchema = new mongoose.Schema({
 const combatStatsSchema = new mongoose.Schema({
   currentHp: { type: Number, default: 100 },
   maxHp: { type: Number, default: 100 },
-  attackStyle: { type: String, enum: ['attack', 'strength', 'defense', 'magic', 'range'], default: 'attack' }
+  attackStyle: { type: String, enum: ['attack', 'strength', 'defense', 'magic', 'range'], default: 'attack' },
+  lastMeleeStyle: { type: String, enum: ['attack', 'strength', 'defense'], default: 'attack' }
 });
 
 const playerSchema = new mongoose.Schema({

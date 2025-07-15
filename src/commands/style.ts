@@ -117,6 +117,12 @@ export async function execute(interaction: any) {
 
     // Update combat style
     const oldStyle = player.combatStats.attackStyle;
+    
+    // Save last melee style when switching between melee styles
+    if (['attack', 'strength', 'defense'].includes(oldStyle) && ['attack', 'strength', 'defense'].includes(newStyle!)) {
+      player.combatStats.lastMeleeStyle = newStyle!;
+    }
+    
     player.combatStats.attackStyle = newStyle!;
     await player.save();
 

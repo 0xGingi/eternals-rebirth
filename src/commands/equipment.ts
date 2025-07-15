@@ -23,12 +23,21 @@ export async function execute(interaction: any) {
     const equipmentSlots = ['helmet', 'chest', 'legs', 'boots', 'gloves', 'weapon', 'shield', 'ammunition', 'ring', 'necklace'];
     const equipmentText = await Promise.all(
       equipmentSlots.map(async (slot) => {
-        const itemId = player.equipment[slot as keyof typeof player.equipment];
-        if (itemId) {
-          const item = await Item.findOne({ id: itemId });
-          return `${slot.charAt(0).toUpperCase() + slot.slice(1)}: ${item ? item.name : 'Unknown Item'}`;
+        if (slot === 'ammunition') {
+          const ammunitionData = player.equipment.ammunition;
+          if (ammunitionData.itemId && ammunitionData.quantity > 0) {
+            const item = await Item.findOne({ id: ammunitionData.itemId });
+            return `${slot.charAt(0).toUpperCase() + slot.slice(1)}: ${item ? item.name : 'Unknown Item'} (${ammunitionData.quantity})`;
+          }
+          return `${slot.charAt(0).toUpperCase() + slot.slice(1)}: Empty`;
+        } else {
+          const itemId = player.equipment[slot as keyof typeof player.equipment];
+          if (itemId) {
+            const item = await Item.findOne({ id: itemId });
+            return `${slot.charAt(0).toUpperCase() + slot.slice(1)}: ${item ? item.name : 'Unknown Item'}`;
+          }
+          return `${slot.charAt(0).toUpperCase() + slot.slice(1)}: Empty`;
         }
-        return `${slot.charAt(0).toUpperCase() + slot.slice(1)}: Empty`;
       })
     );
 

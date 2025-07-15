@@ -46,50 +46,98 @@ export async function execute(interaction: any) {
       return;
     }
 
-    const equippedItemId = player.equipment[slot as keyof typeof player.equipment];
-    
-    if (!equippedItemId) {
-      await interaction.reply({
-        content: `You don't have anything equipped in the ${slot} slot!`,
-        ephemeral: true
-      });
-      return;
-    }
+    if (slot === 'ammunition') {
+      const ammunitionData = player.equipment.ammunition;
+      
+      if (!ammunitionData.itemId || ammunitionData.quantity <= 0) {
+        await interaction.reply({
+          content: `You don't have anything equipped in the ${slot} slot!`,
+          ephemeral: true
+        });
+        return;
+      }
 
-    const item = await Item.findOne({ id: equippedItemId });
-    
-    if (!item) {
-      await interaction.reply({
-        content: 'Error: Equipped item not found in database!',
-        ephemeral: true
-      });
-      return;
-    }
+      const item = await Item.findOne({ id: ammunitionData.itemId });
+      
+      if (!item) {
+        await interaction.reply({
+          content: 'Error: Equipped item not found in database!',
+          ephemeral: true
+        });
+        return;
+      }
 
-    // Remove from equipment slot
-    player.equipment[slot as keyof typeof player.equipment] = null as any;
+      // Add to inventory
+      const existingItem = player.inventory.find(invItem => invItem.itemId === ammunitionData.itemId);
+      if (existingItem) {
+        existingItem.quantity += ammunitionData.quantity;
+      } else {
+        player.inventory.push({ itemId: ammunitionData.itemId, quantity: ammunitionData.quantity });
+      }
 
-    // Add to inventory
-    const existingItem = player.inventory.find(invItem => invItem.itemId === equippedItemId);
-    if (existingItem) {
-      existingItem.quantity += 1;
+      // Remove from equipment slot
+      player.equipment.ammunition.itemId = null as any;
+      player.equipment.ammunition.quantity = 0;
+
+      await player.save();
+
+      const embed = new EmbedBuilder()
+        .setColor(0xFF6B00)
+        .setTitle('⚔️ Item Unequipped!')
+        .setDescription(`You unequipped **${item.name}** (${ammunitionData.quantity}) from your ${slot} slot`)
+        .addFields(
+          { name: 'Item', value: item.name, inline: true },
+          { name: 'Quantity', value: ammunitionData.quantity.toString(), inline: true },
+          { name: 'Status', value: 'Added to inventory', inline: true }
+        );
+
+      await interaction.reply({ embeds: [embed] });
     } else {
-      player.inventory.push({ itemId: equippedItemId, quantity: 1 });
+      const equippedItemId = player.equipment[slot as keyof typeof player.equipment];
+      
+      if (!equippedItemId) {
+        await interaction.reply({
+          content: `You don't have anything equipped in the ${slot} slot!`,
+          ephemeral: true
+        });
+        return;
+      }
+
+      const item = await Item.findOne({ id: equippedItemId });
+      
+      if (!item) {
+        await interaction.reply({
+          content: 'Error: Equipped item not found in database!',
+          ephemeral: true
+        });
+        return;
+      }
+
+      // Remove from equipment slot
+      player.equipment[slot as keyof typeof player.equipment] = null as any;
+
+      // Add to inventory
+      const existingItem = player.inventory.find(invItem => invItem.itemId === equippedItemId);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        player.inventory.push({ itemId: equippedItemId, quantity: 1 });
+      }
+
+      await player.save();
+
+      const embed = new EmbedBuilder()
+        .setColor(0xFF6B00)
+        .setTitle('⚔️ Item Unequipped!')
+        .setDescription(`You unequipped **${item.name}** from your ${slot} slot`)
+        .addFields(
+          { name: 'Item', value: item.name, inline: true },
+          { name: 'Slot', value: slot.charAt(0).toUpperCase() + slot.slice(1), inline: true },
+          { name: 'Status', value: 'Added to inventory', inline: true }
+        );
+
+      await interaction.reply({ embeds: [embed] });
     }
-
-    await player.save();
-
-    const embed = new EmbedBuilder()
-      .setColor(0xFF6B00)
-      .setTitle('⚔️ Item Unequipped!')
-      .setDescription(`You unequipped **${item.name}** from your ${slot} slot`)
-      .addFields(
-        { name: 'Item', value: item.name, inline: true },
-        { name: 'Slot', value: slot.charAt(0).toUpperCase() + slot.slice(1), inline: true },
-        { name: 'Status', value: 'Added to inventory', inline: true }
-      );
-
-    await interaction.reply({ embeds: [embed] });
   } catch (error) {
     console.error('Error unequipping item:', error);
     await interaction.reply({

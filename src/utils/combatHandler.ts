@@ -39,22 +39,31 @@ export async function handleCombatAction(interaction: any, action: string) {
 
     switch (action) {
       case 'attack':
+        // Check if player can attack with current weapon/ammunition
+        if (player.combatStats.attackStyle === 'range') {
+          if (!player.equipment.ammunition.itemId || player.equipment.ammunition.quantity <= 0) {
+            playerAction = 'You cannot attack without arrows! You need to equip arrows or change your combat style.';
+            break;
+          }
+        }
+        
         const playerStats = await calculateCombatStats(player);
         playerDamage = calculateDamage(playerStats, monster.defense);
         monsterCurrentHp -= playerDamage;
         playerAction = playerDamage > 0 ? `You hit for ${playerDamage} damage!` : 'You missed!';
         
         // Consume ammunition for ranged attacks
-        if (player.combatStats.attackStyle === 'range' && player.equipment.ammunition && playerDamage > 0) {
-          const ammoItem = player.inventory.find(item => item.itemId === player.equipment.ammunition);
-          if (ammoItem && ammoItem.quantity > 0) {
-            ammoItem.quantity -= 1;
-            if (ammoItem.quantity <= 0) {
-              // Remove from inventory and unequip
-              const filteredInventory = player.inventory.filter(item => item.itemId !== player.equipment.ammunition);
-              player.inventory.splice(0, player.inventory.length, ...filteredInventory);
-              player.equipment.ammunition = null as any;
+        if (player.combatStats.attackStyle === 'range' && player.equipment.ammunition.itemId && playerDamage > 0) {
+          if (player.equipment.ammunition.quantity > 0) {
+            player.equipment.ammunition.quantity -= 1;
+            if (player.equipment.ammunition.quantity <= 0) {
+              // Remove ammunition when depleted
+              player.equipment.ammunition.itemId = null as any;
+              player.equipment.ammunition.quantity = 0;
               playerAction += ' (Last arrow used!)';
+            } else {
+              // Show remaining arrow count
+              playerAction += ` (${player.equipment.ammunition.quantity} arrows remaining)`;
             }
           }
         }
@@ -174,13 +183,6 @@ export async function handleCombatAction(interaction: any, action: string) {
           mainExpAmount = expGained.range;
         }
         
-        // Always give a small amount of defense experience (unless already training defense)
-        let defenseExpAmount = 0;
-        if (player.skills?.defense && combatStyle !== 'defense') {
-          defenseExpAmount = Math.floor(mainExpAmount / 3);
-          const defenseResult = addExperience(player.skills.defense.experience, defenseExpAmount);
-          player.skills.defense.experience = defenseResult.newExp;
-        }
         
         const loot = generateLoot(monster.dropTable);
         for (const drop of loot) {
@@ -195,9 +197,6 @@ export async function handleCombatAction(interaction: any, action: string) {
         let experienceText = '';
         if (expResult && mainExpAmount > 0) {
           experienceText = `${skillName}: +${mainExpAmount}`;
-          if (defenseExpAmount > 0) {
-            experienceText += `\nDefense: +${defenseExpAmount}`;
-          }
           if (expResult.leveledUp) {
             experienceText += `\n🎉 ${skillName} leveled up to ${expResult.newLevel}!`;
           }
