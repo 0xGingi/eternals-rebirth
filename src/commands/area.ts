@@ -33,14 +33,14 @@ export async function execute(interaction: any) {
     const monstersText = area.monsters.map(monster => 
       `**${monster.name}** (Level ${monster.level})\n` +
       `HP: ${monster.hp} | Attack: ${monster.attack} | Defense: ${monster.defense}\n` +
-      `Experience: ${monster.experience} XP\n`
-    ).join('\n');
+      `Experience: ${monster.experience} XP`
+    ).join('\n\n');
 
     const resourcesText = area.resources.map(resource => 
       `**${resource.name}** (${resource.skill.charAt(0).toUpperCase() + resource.skill.slice(1)})\n` +
       `Level Required: ${resource.levelRequired} | Experience: ${resource.experience} XP\n` +
-      `Tool Required: ${resource.toolRequired}\n`
-    ).join('\n');
+      `Tool Required: ${resource.toolRequired}`
+    ).join('\n\n');
 
     const embed = new EmbedBuilder()
       .setColor(0x0099FF)
