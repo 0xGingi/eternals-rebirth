@@ -10,6 +10,13 @@ export const data = new SlashCommandBuilder()
       .setDescription('The food item to eat')
       .setRequired(true)
       .setAutocomplete(true)
+  )
+  .addIntegerOption(option =>
+    option.setName('quantity')
+      .setDescription('How many to eat (default: 1)')
+      .setRequired(false)
+      .setMinValue(1)
+      .setMaxValue(50)
   );
 
 export async function autocomplete(interaction: any) {
@@ -50,6 +57,7 @@ export async function autocomplete(interaction: any) {
 export async function execute(interaction: any) {
   const userId = interaction.user.id;
   const foodName = interaction.options.getString('food')?.toLowerCase();
+  const requestedQuantity = interaction.options.getInteger('quantity') || 1;
 
   try {
     const player = await Player.findOne({ userId });
@@ -93,13 +101,26 @@ export async function execute(interaction: any) {
       return;
     }
 
-    const healAmount = Math.min(item.healAmount, player.combatStats.maxHp - player.combatStats.currentHp);
-    player.combatStats.currentHp += healAmount;
+    const actualQuantity = Math.min(requestedQuantity, foodItem.quantity);
+    let totalHealAmount = 0;
+    let itemsEaten = 0;
 
-    foodItem.quantity -= 1;
-    if (foodItem.quantity <= 0) {
-      const filteredInventory = player.inventory.filter(item => item.itemId !== foodItem.itemId);
-      player.inventory.splice(0, player.inventory.length, ...filteredInventory);
+    for (let i = 0; i < actualQuantity; i++) {
+      if (player.combatStats.currentHp >= player.combatStats.maxHp) {
+        break;
+      }
+      
+      const healAmount = Math.min(item.healAmount, player.combatStats.maxHp - player.combatStats.currentHp);
+      player.combatStats.currentHp += healAmount;
+      totalHealAmount += healAmount;
+      itemsEaten++;
+      
+      foodItem.quantity -= 1;
+      if (foodItem.quantity <= 0) {
+        const filteredInventory = player.inventory.filter(item => item.itemId !== foodItem.itemId);
+        player.inventory.splice(0, player.inventory.length, ...filteredInventory);
+        break;
+      }
     }
 
     await player.save();
@@ -107,11 +128,19 @@ export async function execute(interaction: any) {
     const embed = new EmbedBuilder()
       .setColor(0x00FF00)
       .setTitle('🍞 Food Consumed!')
-      .setDescription(`You ate **${item.name}** and restored ${healAmount} health!`)
+      .setDescription(`You ate **${itemsEaten}x ${item.name}** and restored ${totalHealAmount} health!`)
       .addFields(
         { name: 'Health', value: `${player.combatStats.currentHp}/${player.combatStats.maxHp}`, inline: true },
         { name: 'Remaining', value: `${foodItem.quantity > 0 ? foodItem.quantity : 0}x ${item.name}`, inline: true }
       );
+
+    if (itemsEaten < requestedQuantity) {
+      if (player.combatStats.currentHp >= player.combatStats.maxHp) {
+        embed.addFields({ name: 'Note', value: `Stopped at full health after eating ${itemsEaten} item(s)`, inline: false });
+      } else {
+        embed.addFields({ name: 'Note', value: `Only ate ${itemsEaten} out of ${requestedQuantity} requested (ran out of food)`, inline: false });
+      }
+    }
 
     await interaction.reply({ embeds: [embed] });
   } catch (error) {
