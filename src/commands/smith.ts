@@ -44,14 +44,6 @@ const smithingRecipes = [
     experience: 80,
     quantity: 1
   },
-  { 
-    id: 'mithril_pickaxe',
-    name: 'Mithril Pickaxe',
-    materials: [{ item: 'mithril_bar', quantity: 1 }],
-    level: 30,
-    experience: 150,
-    quantity: 1
-  },
   // Arrow heads
   { 
     id: 'bronze_arrow_head',
@@ -67,14 +59,6 @@ const smithingRecipes = [
     materials: [{ item: 'iron_bar', quantity: 1 }],
     level: 15,
     experience: 50,
-    quantity: 15
-  },
-  { 
-    id: 'mithril_arrow_head',
-    name: 'Mithril Arrow Head',
-    materials: [{ item: 'mithril_bar', quantity: 1 }],
-    level: 30,
-    experience: 100,
     quantity: 15
   },
   // Axes
@@ -94,14 +78,6 @@ const smithingRecipes = [
     experience: 80,
     quantity: 1
   },
-  { 
-    id: 'mithril_axe',
-    name: 'Mithril Axe',
-    materials: [{ item: 'mithril_bar', quantity: 1 }],
-    level: 30,
-    experience: 150,
-    quantity: 1
-  }
 ];
 
 const smeltingRecipes = [
@@ -121,14 +97,6 @@ const smeltingRecipes = [
     experience: 70,
     quantity: 1
   },
-  {
-    id: 'mithril_bar',
-    name: 'Mithril Bar', 
-    materials: [{ item: 'mithril_ore', quantity: 1 }, { item: 'coal', quantity: 2 }],
-    level: 30,
-    experience: 150,
-    quantity: 1
-  }
 ];
 
 export const data = new SlashCommandBuilder()
@@ -148,6 +116,13 @@ export const data = new SlashCommandBuilder()
       .setDescription('The item to create')
       .setRequired(true)
       .setAutocomplete(true)
+  )
+  .addIntegerOption(option =>
+    option.setName('quantity')
+      .setDescription('How many to create (default: 1)')
+      .setRequired(false)
+      .setMinValue(1)
+      .setMaxValue(100)
   );
 
 export async function autocomplete(interaction: any) {
@@ -208,6 +183,7 @@ export async function execute(interaction: any) {
   const userId = interaction.user.id;
   const action = interaction.options.getString('action');
   const itemName = interaction.options.getString('item')?.toLowerCase();
+  const requestedQuantity = interaction.options.getInteger('quantity') || 1;
 
   try {
     const player = await Player.findOne({ userId });
@@ -259,21 +235,33 @@ export async function execute(interaction: any) {
       return;
     }
 
+    // Calculate maximum possible actions based on available materials
+    let maxActions = requestedQuantity;
     for (const material of recipe.materials) {
       const inventoryItem = player.inventory.find(item => item.itemId === material.item);
-      if (!inventoryItem || inventoryItem.quantity < material.quantity) {
+      if (!inventoryItem) {
         await interaction.reply({
           content: `You need ${material.quantity}x ${material.item} to ${action} this item!`,
           ephemeral: true
         });
         return;
       }
+      const possibleActions = Math.floor(inventoryItem.quantity / material.quantity);
+      maxActions = Math.min(maxActions, possibleActions);
+    }
+
+    if (maxActions === 0) {
+      await interaction.reply({
+        content: `You don't have enough materials to ${action} this item!`,
+        ephemeral: true
+      });
+      return;
     }
 
     for (const material of recipe.materials) {
       const inventoryItem = player.inventory.find(item => item.itemId === material.item);
       if (inventoryItem) {
-        inventoryItem.quantity -= material.quantity;
+        inventoryItem.quantity -= material.quantity * maxActions;
         if (inventoryItem.quantity <= 0) {
           const filteredInventory = player.inventory.filter(item => item.itemId !== material.item);
           player.inventory.splice(0, player.inventory.length, ...filteredInventory);
@@ -281,17 +269,18 @@ export async function execute(interaction: any) {
       }
     }
 
-    const expResult = addExperience(player.skills?.smithing?.experience || 0, recipe.experience);
+    const totalExperience = recipe.experience * maxActions;
+    const expResult = addExperience(player.skills?.smithing?.experience || 0, totalExperience);
     if (player.skills?.smithing) {
       player.skills.smithing.experience = expResult.newExp;
     }
 
+    const totalItemsCreated = recipe.quantity * maxActions;
     const createdItem = player.inventory.find(item => item.itemId === recipe.id);
-    const quantityToAdd = recipe.quantity || 1;
     if (createdItem) {
-      createdItem.quantity += quantityToAdd;
+      createdItem.quantity += totalItemsCreated;
     } else {
-      player.inventory.push({ itemId: recipe.id, quantity: quantityToAdd });
+      player.inventory.push({ itemId: recipe.id, quantity: totalItemsCreated });
     }
 
     await player.save();
@@ -301,10 +290,14 @@ export async function execute(interaction: any) {
       .setTitle(`${action === 'smelt' ? 'Smelting' : 'Smithing'} Success!`)
       .setDescription(`You successfully ${action}ed **${recipe.name}**!`)
       .addFields(
-        { name: 'Experience Gained', value: `${recipe.experience} Smithing XP`, inline: true },
-        { name: 'Item Created', value: `${recipe.name} x${quantityToAdd}`, inline: true },
-        { name: 'Materials Used', value: recipe.materials.map(m => `${m.item} x${m.quantity}`).join('\n'), inline: true }
+        { name: 'Experience Gained', value: `${totalExperience} Smithing XP`, inline: true },
+        { name: 'Items Created', value: `${recipe.name} x${totalItemsCreated}`, inline: true },
+        { name: 'Materials Used', value: recipe.materials.map(m => `${m.item} x${m.quantity * maxActions}`).join('\n'), inline: true }
       );
+
+    if (maxActions < requestedQuantity) {
+      embed.addFields({ name: 'Note', value: `Only ${action}ed ${maxActions} out of ${requestedQuantity} requested (insufficient materials)`, inline: false });
+    }
 
     if (expResult.leveledUp) {
       embed.addFields({ name: 'Level Up!', value: `Smithing level is now ${expResult.newLevel}!`, inline: false });

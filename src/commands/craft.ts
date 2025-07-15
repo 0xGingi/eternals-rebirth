@@ -4,70 +4,12 @@ import { Item } from '../models/Item';
 import { calculateLevelFromExperience, addExperience } from '../utils/experienceUtils';
 
 const craftingRecipes = [
-  // Arrow crafting
-  {
-    id: 'bronze_arrow',
-    name: 'Bronze Arrow',
-    materials: [
-      { item: 'arrow_shaft', quantity: 1 },
-      { item: 'bronze_arrow_head', quantity: 1 }
-    ],
-    level: 1,
-    experience: 20,
-    quantity: 1
-  },
-  {
-    id: 'iron_arrow',
-    name: 'Iron Arrow',
-    materials: [
-      { item: 'oak_arrow_shaft', quantity: 1 },
-      { item: 'iron_arrow_head', quantity: 1 }
-    ],
-    level: 15,
-    experience: 35,
-    quantity: 1
-  },
-  {
-    id: 'mithril_arrow',
-    name: 'Mithril Arrow',
-    materials: [
-      { item: 'oak_arrow_shaft', quantity: 1 },
-      { item: 'mithril_arrow_head', quantity: 1 }
-    ],
-    level: 30,
-    experience: 60,
-    quantity: 1
-  },
-  // Bow crafting (alternative to fletching)
-  {
-    id: 'shortbow',
-    name: 'Shortbow',
-    materials: [
-      { item: 'normal_logs', quantity: 2 },
-      { item: 'arrow_shaft', quantity: 3 }
-    ],
-    level: 5,
-    experience: 45,
-    quantity: 1
-  },
-  {
-    id: 'oak_shortbow',
-    name: 'Oak Shortbow',
-    materials: [
-      { item: 'oak_logs', quantity: 2 },
-      { item: 'oak_arrow_shaft', quantity: 3 }
-    ],
-    level: 20,
-    experience: 70,
-    quantity: 1
-  },
   // Staff crafting
   {
     id: 'basic_staff',
     name: 'Basic Staff',
     materials: [
       { item: 'normal_logs', quantity: 3 },
-      { item: 'bronze_arrow_head', quantity: 1 } // bronze tip for the staff
     ],
     level: 10,
     experience: 55,
@@ -78,7 +20,6 @@ const craftingRecipes = [
     name: 'Oak Staff',
     materials: [
       { item: 'oak_logs', quantity: 3 },
-      { item: 'iron_arrow_head', quantity: 1 } // iron tip for the staff
     ],
     level: 25,
     experience: 85,
@@ -94,6 +35,13 @@ export const data = new SlashCommandBuilder()
       .setDescription('The item to craft')
       .setRequired(true)
       .setAutocomplete(true)
+  )
+  .addIntegerOption(option =>
+    option.setName('quantity')
+      .setDescription('How many to craft (default: 1)')
+      .setRequired(false)
+      .setMinValue(1)
+      .setMaxValue(100)
   );
 
 export async function autocomplete(interaction: any) {
@@ -136,6 +84,7 @@ export async function autocomplete(interaction: any) {
 export async function execute(interaction: any) {
   const userId = interaction.user.id;
   const itemName = interaction.options.getString('item')?.toLowerCase();
+  const requestedQuantity = interaction.options.getInteger('quantity') || 1;
 
   try {
     const player = await Player.findOne({ userId });
@@ -179,23 +128,34 @@ export async function execute(interaction: any) {
       return;
     }
 
-    // Check materials
+    // Calculate maximum possible crafts based on available materials
+    let maxCrafts = requestedQuantity;
     for (const material of recipe.materials) {
       const inventoryItem = player.inventory.find(item => item.itemId === material.item);
-      if (!inventoryItem || inventoryItem.quantity < material.quantity) {
+      if (!inventoryItem) {
         await interaction.reply({
           content: `You need ${material.quantity}x ${material.item.replace('_', ' ')} to craft this item!`,
           ephemeral: true
         });
         return;
       }
+      const possibleCrafts = Math.floor(inventoryItem.quantity / material.quantity);
+      maxCrafts = Math.min(maxCrafts, possibleCrafts);
+    }
+
+    if (maxCrafts === 0) {
+      await interaction.reply({
+        content: `You don't have enough materials to craft this item!`,
+        ephemeral: true
+      });
+      return;
     }
 
     // Remove materials from inventory
     for (const material of recipe.materials) {
       const inventoryItem = player.inventory.find(item => item.itemId === material.item);
       if (inventoryItem) {
-        inventoryItem.quantity -= material.quantity;
+        inventoryItem.quantity -= material.quantity * maxCrafts;
         if (inventoryItem.quantity <= 0) {
           const filteredInventory = player.inventory.filter(item => item.itemId !== material.item);
           player.inventory.splice(0, player.inventory.length, ...filteredInventory);
@@ -204,17 +164,19 @@ export async function execute(interaction: any) {
     }
 
     // Add experience
-    const expResult = addExperience(player.skills?.crafting?.experience || 0, recipe.experience);
+    const totalExperience = recipe.experience * maxCrafts;
+    const expResult = addExperience(player.skills?.crafting?.experience || 0, totalExperience);
     if (player.skills?.crafting) {
       player.skills.crafting.experience = expResult.newExp;
     }
 
-    // Add crafted item to inventory
+    // Add crafted items to inventory
+    const totalItemsCreated = recipe.quantity * maxCrafts;
     const createdItem = player.inventory.find(item => item.itemId === recipe.id);
     if (createdItem) {
-      createdItem.quantity += recipe.quantity;
+      createdItem.quantity += totalItemsCreated;
     } else {
-      player.inventory.push({ itemId: recipe.id, quantity: recipe.quantity });
+      player.inventory.push({ itemId: recipe.id, quantity: totalItemsCreated });
     }
 
     await player.save();
@@ -224,10 +186,14 @@ export async function execute(interaction: any) {
       .setTitle('🔨 Crafting Success!')
       .setDescription(`You successfully crafted **${recipe.name}**!`)
       .addFields(
-        { name: 'Experience Gained', value: `${recipe.experience} Crafting XP`, inline: true },
-        { name: 'Item Created', value: `${recipe.name} x${recipe.quantity}`, inline: true },
-        { name: 'Materials Used', value: recipe.materials.map(m => `${m.item.replace('_', ' ')} x${m.quantity}`).join('\n'), inline: true }
+        { name: 'Experience Gained', value: `${totalExperience} Crafting XP`, inline: true },
+        { name: 'Items Created', value: `${recipe.name} x${totalItemsCreated}`, inline: true },
+        { name: 'Materials Used', value: recipe.materials.map(m => `${m.item.replace('_', ' ')} x${m.quantity * maxCrafts}`).join('\n'), inline: true }
       );
+
+    if (maxCrafts < requestedQuantity) {
+      embed.addFields({ name: 'Note', value: `Only crafted ${maxCrafts} out of ${requestedQuantity} requested (insufficient materials)`, inline: false });
+    }
 
     if (expResult.leveledUp) {
       embed.addFields({ name: 'Level Up!', value: `Crafting level is now ${expResult.newLevel}!`, inline: false });

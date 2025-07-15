@@ -17,6 +17,13 @@ export const data = new SlashCommandBuilder()
       .setDescription('The raw food item to cook')
       .setRequired(true)
       .setAutocomplete(true)
+  )
+  .addIntegerOption(option =>
+    option.setName('quantity')
+      .setDescription('How many to cook (default: 1)')
+      .setRequired(false)
+      .setMinValue(1)
+      .setMaxValue(100)
   );
 
 export async function autocomplete(interaction: any) {
@@ -60,6 +67,7 @@ export async function autocomplete(interaction: any) {
 export async function execute(interaction: any) {
   const userId = interaction.user.id;
   const itemName = interaction.options.getString('item')?.toLowerCase();
+  const requestedQuantity = interaction.options.getInteger('quantity') || 1;
 
   try {
     const player = await Player.findOne({ userId });
@@ -103,6 +111,16 @@ export async function execute(interaction: any) {
       return;
     }
 
+    const actualQuantity = Math.min(requestedQuantity, rawItem.quantity);
+    
+    if (actualQuantity === 0) {
+      await interaction.reply({
+        content: `You don't have any ${recipe.raw} to cook!`,
+        ephemeral: true
+      });
+      return;
+    }
+
     const cookingLevel = calculateLevelFromExperience(player.skills?.cooking?.experience || 0);
     
     if (cookingLevel < recipe.level) {
@@ -113,12 +131,13 @@ export async function execute(interaction: any) {
       return;
     }
 
-    const expResult = addExperience(player.skills?.cooking?.experience || 0, recipe.experience);
+    const totalExperience = recipe.experience * actualQuantity;
+    const expResult = addExperience(player.skills?.cooking?.experience || 0, totalExperience);
     if (player.skills?.cooking) {
       player.skills.cooking.experience = expResult.newExp;
     }
 
-    rawItem.quantity -= 1;
+    rawItem.quantity -= actualQuantity;
     if (rawItem.quantity <= 0) {
       const filteredInventory = player.inventory.filter(item => item.itemId !== recipe.raw);
       player.inventory.splice(0, player.inventory.length, ...filteredInventory);
@@ -126,9 +145,9 @@ export async function execute(interaction: any) {
 
     const cookedItem = player.inventory.find(item => item.itemId === recipe.cooked);
     if (cookedItem) {
-      cookedItem.quantity += 1;
+      cookedItem.quantity += actualQuantity;
     } else {
-      player.inventory.push({ itemId: recipe.cooked, quantity: 1 });
+      player.inventory.push({ itemId: recipe.cooked, quantity: actualQuantity });
     }
 
     await player.save();
@@ -138,9 +157,13 @@ export async function execute(interaction: any) {
       .setTitle('Cooking Success!')
       .setDescription(`You successfully cooked **${recipe.cooked.replace('_', ' ')}**!`)
       .addFields(
-        { name: 'Experience Gained', value: `${recipe.experience} Cooking XP`, inline: true },
-        { name: 'Item Created', value: `${recipe.cooked.replace('_', ' ')} x1`, inline: true }
+        { name: 'Experience Gained', value: `${totalExperience} Cooking XP`, inline: true },
+        { name: 'Items Created', value: `${recipe.cooked.replace('_', ' ')} x${actualQuantity}`, inline: true }
       );
+
+    if (actualQuantity < requestedQuantity) {
+      embed.addFields({ name: 'Note', value: `Only cooked ${actualQuantity} out of ${requestedQuantity} requested (insufficient materials)`, inline: false });
+    }
 
     if (expResult.leveledUp) {
       embed.addFields({ name: '🎉 Level Up!', value: `Cooking level is now ${expResult.newLevel}!`, inline: false });

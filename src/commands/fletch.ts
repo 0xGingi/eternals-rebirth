@@ -20,6 +20,28 @@ const fletchingRecipes = [
     experience: 25,
     quantity: 30
   },
+    {
+    id: 'bronze_arrow',
+    name: 'Bronze Arrow',
+    materials: [
+      { item: 'arrow_shaft', quantity: 1 },
+      { item: 'bronze_arrow_head', quantity: 1 }
+    ],
+    level: 1,
+    experience: 20,
+    quantity: 1
+  },
+  {
+    id: 'iron_arrow',
+    name: 'Iron Arrow',
+    materials: [
+      { item: 'oak_arrow_shaft', quantity: 1 },
+      { item: 'iron_arrow_head', quantity: 1 }
+    ],
+    level: 15,
+    experience: 35,
+    quantity: 1
+  },
   {
     id: 'shortbow',
     name: 'Shortbow',
@@ -54,6 +76,13 @@ export const data = new SlashCommandBuilder()
       .setDescription('The item to fletch')
       .setRequired(true)
       .setAutocomplete(true)
+  )
+  .addIntegerOption(option =>
+    option.setName('quantity')
+      .setDescription('How many to fletch (default: 1)')
+      .setRequired(false)
+      .setMinValue(1)
+      .setMaxValue(100)
   );
 
 export async function autocomplete(interaction: any) {
@@ -96,6 +125,7 @@ export async function autocomplete(interaction: any) {
 export async function execute(interaction: any) {
   const userId = interaction.user.id;
   const itemName = interaction.options.getString('item')?.toLowerCase();
+  const requestedQuantity = interaction.options.getInteger('quantity') || 1;
 
   try {
     const player = await Player.findOne({ userId });
@@ -139,21 +169,33 @@ export async function execute(interaction: any) {
       return;
     }
 
+    // Calculate maximum possible fletches based on available materials
+    let maxFletches = requestedQuantity;
     for (const material of recipe.materials) {
       const inventoryItem = player.inventory.find(item => item.itemId === material.item);
-      if (!inventoryItem || inventoryItem.quantity < material.quantity) {
+      if (!inventoryItem) {
         await interaction.reply({
           content: `You need ${material.quantity}x ${material.item} to fletch this item!`,
           ephemeral: true
         });
         return;
       }
+      const possibleFletches = Math.floor(inventoryItem.quantity / material.quantity);
+      maxFletches = Math.min(maxFletches, possibleFletches);
+    }
+
+    if (maxFletches === 0) {
+      await interaction.reply({
+        content: `You don't have enough materials to fletch this item!`,
+        ephemeral: true
+      });
+      return;
     }
 
     for (const material of recipe.materials) {
       const inventoryItem = player.inventory.find(item => item.itemId === material.item);
       if (inventoryItem) {
-        inventoryItem.quantity -= material.quantity;
+        inventoryItem.quantity -= material.quantity * maxFletches;
         if (inventoryItem.quantity <= 0) {
           const filteredInventory = player.inventory.filter(item => item.itemId !== material.item);
           player.inventory.splice(0, player.inventory.length, ...filteredInventory);
@@ -161,16 +203,18 @@ export async function execute(interaction: any) {
       }
     }
 
-    const expResult = addExperience(player.skills?.fletching?.experience || 0, recipe.experience);
+    const totalExperience = recipe.experience * maxFletches;
+    const expResult = addExperience(player.skills?.fletching?.experience || 0, totalExperience);
     if (player.skills?.fletching) {
       player.skills.fletching.experience = expResult.newExp;
     }
 
+    const totalItemsCreated = recipe.quantity * maxFletches;
     const createdItem = player.inventory.find(item => item.itemId === recipe.id);
     if (createdItem) {
-      createdItem.quantity += recipe.quantity;
+      createdItem.quantity += totalItemsCreated;
     } else {
-      player.inventory.push({ itemId: recipe.id, quantity: recipe.quantity });
+      player.inventory.push({ itemId: recipe.id, quantity: totalItemsCreated });
     }
 
     await player.save();
@@ -180,10 +224,14 @@ export async function execute(interaction: any) {
       .setTitle('🏹 Fletching Success!')
       .setDescription(`You successfully fletched **${recipe.name}**!`)
       .addFields(
-        { name: 'Experience Gained', value: `${recipe.experience} Fletching XP`, inline: true },
-        { name: 'Item Created', value: `${recipe.name} x${recipe.quantity}`, inline: true },
-        { name: 'Materials Used', value: recipe.materials.map(m => `${m.item} x${m.quantity}`).join('\n'), inline: true }
+        { name: 'Experience Gained', value: `${totalExperience} Fletching XP`, inline: true },
+        { name: 'Items Created', value: `${recipe.name} x${totalItemsCreated}`, inline: true },
+        { name: 'Materials Used', value: recipe.materials.map(m => `${m.item} x${m.quantity * maxFletches}`).join('\n'), inline: true }
       );
+
+    if (maxFletches < requestedQuantity) {
+      embed.addFields({ name: 'Note', value: `Only fletched ${maxFletches} out of ${requestedQuantity} requested (insufficient materials)`, inline: false });
+    }
 
     if (expResult.leveledUp) {
       embed.addFields({ name: 'Level Up!', value: `Fletching level is now ${expResult.newLevel}!`, inline: false });
