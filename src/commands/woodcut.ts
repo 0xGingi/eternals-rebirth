@@ -3,6 +3,7 @@ import { Player } from '../models/Player';
 import { Area } from '../models/Area';
 import { Item } from '../models/Item';
 import { calculateLevelFromExperience, addExperience } from '../utils/experienceUtils';
+import { canToolAccessResource } from '../utils/toolUtils';
 
 export const data = new SlashCommandBuilder()
   .setName('woodcut')
@@ -141,12 +142,21 @@ export async function execute(interaction: any) {
       return;
     }
 
-    const hasAxe = player.equipment.weapon && 
+    const equippedTool = player.equipment.weapon && 
       await Item.findOne({ id: player.equipment.weapon, subType: 'axe' });
     
-    if (!hasAxe) {
+    if (!equippedTool) {
       await interaction.reply({
         content: 'You need an axe equipped to cut trees!',
+        ephemeral: true
+      });
+      return;
+    }
+
+    // Check if the equipped tool can access this resource
+    if (!canToolAccessResource(player.equipment.weapon, resource.toolRequired, 'axe')) {
+      await interaction.reply({
+        content: `You need at least a ${resource.toolRequired.replace('_', ' ')} to cut ${resource.name}!`,
         ephemeral: true
       });
       return;

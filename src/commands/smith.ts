@@ -1,9 +1,9 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { Player } from '../models/Player';
-import { Item } from '../models/Item';
 import { calculateLevelFromExperience, addExperience } from '../utils/experienceUtils';
 
 const smithingRecipes = [
+  // Swords
   { 
     id: 'bronze_sword',
     name: 'Bronze Sword',
@@ -21,6 +21,14 @@ const smithingRecipes = [
     quantity: 1
   },
   { 
+    id: 'steel_sword',
+    name: 'Steel Sword',
+    materials: [{ item: 'steel_bar', quantity: 1 }],
+    level: 20,
+    experience: 125,
+    quantity: 1
+  },
+  { 
     id: 'mithril_sword',
     name: 'Mithril Sword',
     materials: [{ item: 'mithril_bar', quantity: 1 }],
@@ -28,6 +36,548 @@ const smithingRecipes = [
     experience: 200,
     quantity: 1
   },
+  { 
+    id: 'adamant_sword',
+    name: 'Adamant Sword',
+    materials: [{ item: 'adamant_bar', quantity: 1 }],
+    level: 40,
+    experience: 300,
+    quantity: 1
+  },
+  { 
+    id: 'rune_sword',
+    name: 'Rune Sword',
+    materials: [{ item: 'rune_bar', quantity: 1 }],
+    level: 50,
+    experience: 500,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_sword',
+    name: 'Dragon Sword',
+    materials: [{ item: 'dragon_bar', quantity: 1 }],
+    level: 60,
+    experience: 750,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_sword',
+    name: 'Barrows Sword',
+    materials: [{ item: 'barrows_bar', quantity: 1 }],
+    level: 70,
+    experience: 1000,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_sword',
+    name: 'Third Age Sword',
+    materials: [{ item: 'third_age_bar', quantity: 1 }],
+    level: 80,
+    experience: 1500,
+    quantity: 1
+  },
+  { 
+    id: 'primal_sword',
+    name: 'Primal Sword',
+    materials: [{ item: 'primal_bar', quantity: 1 }],
+    level: 90,
+    experience: 2000,
+    quantity: 1
+  },
+
+  // Helmets
+  { 
+    id: 'bronze_helmet',
+    name: 'Bronze Helmet',
+    materials: [{ item: 'bronze_bar', quantity: 1 }],
+    level: 1,
+    experience: 35,
+    quantity: 1
+  },
+  { 
+    id: 'iron_helmet',
+    name: 'Iron Helmet',
+    materials: [{ item: 'iron_bar', quantity: 1 }],
+    level: 15,
+    experience: 70,
+    quantity: 1
+  },
+  { 
+    id: 'steel_helmet',
+    name: 'Steel Helmet',
+    materials: [{ item: 'steel_bar', quantity: 1 }],
+    level: 20,
+    experience: 90,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_helmet',
+    name: 'Mithril Helmet',
+    materials: [{ item: 'mithril_bar', quantity: 1 }],
+    level: 30,
+    experience: 140,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_helmet',
+    name: 'Adamant Helmet',
+    materials: [{ item: 'adamant_bar', quantity: 1 }],
+    level: 40,
+    experience: 210,
+    quantity: 1
+  },
+  { 
+    id: 'rune_helmet',
+    name: 'Rune Helmet',
+    materials: [{ item: 'rune_bar', quantity: 1 }],
+    level: 50,
+    experience: 350,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_helmet',
+    name: 'Dragon Helmet',
+    materials: [{ item: 'dragon_bar', quantity: 1 }],
+    level: 60,
+    experience: 525,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_helmet',
+    name: 'Barrows Helmet',
+    materials: [{ item: 'barrows_bar', quantity: 1 }],
+    level: 70,
+    experience: 700,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_helmet',
+    name: 'Third Age Helmet',
+    materials: [{ item: 'third_age_bar', quantity: 1 }],
+    level: 80,
+    experience: 1050,
+    quantity: 1
+  },
+  { 
+    id: 'primal_helmet',
+    name: 'Primal Helmet',
+    materials: [{ item: 'primal_bar', quantity: 1 }],
+    level: 90,
+    experience: 1400,
+    quantity: 1
+  },
+
+  // Chestplates
+  { 
+    id: 'bronze_chestplate',
+    name: 'Bronze Chestplate',
+    materials: [{ item: 'bronze_bar', quantity: 3 }],
+    level: 1,
+    experience: 100,
+    quantity: 1
+  },
+  { 
+    id: 'iron_chestplate',
+    name: 'Iron Chestplate',
+    materials: [{ item: 'iron_bar', quantity: 3 }],
+    level: 15,
+    experience: 200,
+    quantity: 1
+  },
+  { 
+    id: 'steel_chestplate',
+    name: 'Steel Chestplate',
+    materials: [{ item: 'steel_bar', quantity: 3 }],
+    level: 20,
+    experience: 250,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_chestplate',
+    name: 'Mithril Chestplate',
+    materials: [{ item: 'mithril_bar', quantity: 3 }],
+    level: 30,
+    experience: 400,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_chestplate',
+    name: 'Adamant Chestplate',
+    materials: [{ item: 'adamant_bar', quantity: 3 }],
+    level: 40,
+    experience: 600,
+    quantity: 1
+  },
+  { 
+    id: 'rune_chestplate',
+    name: 'Rune Chestplate',
+    materials: [{ item: 'rune_bar', quantity: 3 }],
+    level: 50,
+    experience: 1000,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_chestplate',
+    name: 'Dragon Chestplate',
+    materials: [{ item: 'dragon_bar', quantity: 3 }],
+    level: 60,
+    experience: 1500,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_chestplate',
+    name: 'Barrows Chestplate',
+    materials: [{ item: 'barrows_bar', quantity: 3 }],
+    level: 70,
+    experience: 2000,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_chestplate',
+    name: 'Third Age Chestplate',
+    materials: [{ item: 'third_age_bar', quantity: 3 }],
+    level: 80,
+    experience: 3000,
+    quantity: 1
+  },
+  { 
+    id: 'primal_chestplate',
+    name: 'Primal Chestplate',
+    materials: [{ item: 'primal_bar', quantity: 3 }],
+    level: 90,
+    experience: 4000,
+    quantity: 1
+  },
+
+  // Legs
+  { 
+    id: 'bronze_legs',
+    name: 'Bronze Legs',
+    materials: [{ item: 'bronze_bar', quantity: 2 }],
+    level: 1,
+    experience: 75,
+    quantity: 1
+  },
+  { 
+    id: 'iron_legs',
+    name: 'Iron Legs',
+    materials: [{ item: 'iron_bar', quantity: 2 }],
+    level: 15,
+    experience: 150,
+    quantity: 1
+  },
+  { 
+    id: 'steel_legs',
+    name: 'Steel Legs',
+    materials: [{ item: 'steel_bar', quantity: 2 }],
+    level: 20,
+    experience: 190,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_legs',
+    name: 'Mithril Legs',
+    materials: [{ item: 'mithril_bar', quantity: 2 }],
+    level: 30,
+    experience: 300,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_legs',
+    name: 'Adamant Legs',
+    materials: [{ item: 'adamant_bar', quantity: 2 }],
+    level: 40,
+    experience: 450,
+    quantity: 1
+  },
+  { 
+    id: 'rune_legs',
+    name: 'Rune Legs',
+    materials: [{ item: 'rune_bar', quantity: 2 }],
+    level: 50,
+    experience: 750,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_legs',
+    name: 'Dragon Legs',
+    materials: [{ item: 'dragon_bar', quantity: 2 }],
+    level: 60,
+    experience: 1125,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_legs',
+    name: 'Barrows Legs',
+    materials: [{ item: 'barrows_bar', quantity: 2 }],
+    level: 70,
+    experience: 1500,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_legs',
+    name: 'Third Age Legs',
+    materials: [{ item: 'third_age_bar', quantity: 2 }],
+    level: 80,
+    experience: 2250,
+    quantity: 1
+  },
+  { 
+    id: 'primal_legs',
+    name: 'Primal Legs',
+    materials: [{ item: 'primal_bar', quantity: 2 }],
+    level: 90,
+    experience: 3000,
+    quantity: 1
+  },
+
+  // Gloves
+  { 
+    id: 'bronze_gloves',
+    name: 'Bronze Gloves',
+    materials: [{ item: 'bronze_bar', quantity: 1 }],
+    level: 1,
+    experience: 25,
+    quantity: 1
+  },
+  { 
+    id: 'iron_gloves',
+    name: 'Iron Gloves',
+    materials: [{ item: 'iron_bar', quantity: 1 }],
+    level: 15,
+    experience: 50,
+    quantity: 1
+  },
+  { 
+    id: 'steel_gloves',
+    name: 'Steel Gloves',
+    materials: [{ item: 'steel_bar', quantity: 1 }],
+    level: 20,
+    experience: 65,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_gloves',
+    name: 'Mithril Gloves',
+    materials: [{ item: 'mithril_bar', quantity: 1 }],
+    level: 30,
+    experience: 100,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_gloves',
+    name: 'Adamant Gloves',
+    materials: [{ item: 'adamant_bar', quantity: 1 }],
+    level: 40,
+    experience: 150,
+    quantity: 1
+  },
+  { 
+    id: 'rune_gloves',
+    name: 'Rune Gloves',
+    materials: [{ item: 'rune_bar', quantity: 1 }],
+    level: 50,
+    experience: 250,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_gloves',
+    name: 'Dragon Gloves',
+    materials: [{ item: 'dragon_bar', quantity: 1 }],
+    level: 60,
+    experience: 375,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_gloves',
+    name: 'Barrows Gloves',
+    materials: [{ item: 'barrows_bar', quantity: 1 }],
+    level: 70,
+    experience: 500,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_gloves',
+    name: 'Third Age Gloves',
+    materials: [{ item: 'third_age_bar', quantity: 1 }],
+    level: 80,
+    experience: 750,
+    quantity: 1
+  },
+  { 
+    id: 'primal_gloves',
+    name: 'Primal Gloves',
+    materials: [{ item: 'primal_bar', quantity: 1 }],
+    level: 90,
+    experience: 1000,
+    quantity: 1
+  },
+
+  // Boots
+  { 
+    id: 'bronze_boots',
+    name: 'Bronze Boots',
+    materials: [{ item: 'bronze_bar', quantity: 1 }],
+    level: 1,
+    experience: 25,
+    quantity: 1
+  },
+  { 
+    id: 'iron_boots',
+    name: 'Iron Boots',
+    materials: [{ item: 'iron_bar', quantity: 1 }],
+    level: 15,
+    experience: 50,
+    quantity: 1
+  },
+  { 
+    id: 'steel_boots',
+    name: 'Steel Boots',
+    materials: [{ item: 'steel_bar', quantity: 1 }],
+    level: 20,
+    experience: 65,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_boots',
+    name: 'Mithril Boots',
+    materials: [{ item: 'mithril_bar', quantity: 1 }],
+    level: 30,
+    experience: 100,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_boots',
+    name: 'Adamant Boots',
+    materials: [{ item: 'adamant_bar', quantity: 1 }],
+    level: 40,
+    experience: 150,
+    quantity: 1
+  },
+  { 
+    id: 'rune_boots',
+    name: 'Rune Boots',
+    materials: [{ item: 'rune_bar', quantity: 1 }],
+    level: 50,
+    experience: 250,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_boots',
+    name: 'Dragon Boots',
+    materials: [{ item: 'dragon_bar', quantity: 1 }],
+    level: 60,
+    experience: 375,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_boots',
+    name: 'Barrows Boots',
+    materials: [{ item: 'barrows_bar', quantity: 1 }],
+    level: 70,
+    experience: 500,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_boots',
+    name: 'Third Age Boots',
+    materials: [{ item: 'third_age_bar', quantity: 1 }],
+    level: 80,
+    experience: 750,
+    quantity: 1
+  },
+  { 
+    id: 'primal_boots',
+    name: 'Primal Boots',
+    materials: [{ item: 'primal_bar', quantity: 1 }],
+    level: 90,
+    experience: 1000,
+    quantity: 1
+  },
+
+  // Shields
+  { 
+    id: 'bronze_shield',
+    name: 'Bronze Shield',
+    materials: [{ item: 'bronze_bar', quantity: 2 }],
+    level: 1,
+    experience: 75,
+    quantity: 1
+  },
+  { 
+    id: 'iron_shield',
+    name: 'Iron Shield',
+    materials: [{ item: 'iron_bar', quantity: 2 }],
+    level: 15,
+    experience: 150,
+    quantity: 1
+  },
+  { 
+    id: 'steel_shield',
+    name: 'Steel Shield',
+    materials: [{ item: 'steel_bar', quantity: 2 }],
+    level: 20,
+    experience: 190,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_shield',
+    name: 'Mithril Shield',
+    materials: [{ item: 'mithril_bar', quantity: 2 }],
+    level: 30,
+    experience: 300,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_shield',
+    name: 'Adamant Shield',
+    materials: [{ item: 'adamant_bar', quantity: 2 }],
+    level: 40,
+    experience: 450,
+    quantity: 1
+  },
+  { 
+    id: 'rune_shield',
+    name: 'Rune Shield',
+    materials: [{ item: 'rune_bar', quantity: 2 }],
+    level: 50,
+    experience: 750,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_shield',
+    name: 'Dragon Shield',
+    materials: [{ item: 'dragon_bar', quantity: 2 }],
+    level: 60,
+    experience: 1125,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_shield',
+    name: 'Barrows Shield',
+    materials: [{ item: 'barrows_bar', quantity: 2 }],
+    level: 70,
+    experience: 1500,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_shield',
+    name: 'Third Age Shield',
+    materials: [{ item: 'third_age_bar', quantity: 2 }],
+    level: 80,
+    experience: 2250,
+    quantity: 1
+  },
+  { 
+    id: 'primal_shield',
+    name: 'Primal Shield',
+    materials: [{ item: 'primal_bar', quantity: 2 }],
+    level: 90,
+    experience: 3000,
+    quantity: 1
+  },
+
+  // Tools
   { 
     id: 'bronze_pickaxe',
     name: 'Bronze Pickaxe',
@@ -44,6 +594,135 @@ const smithingRecipes = [
     experience: 80,
     quantity: 1
   },
+  { 
+    id: 'bronze_axe',
+    name: 'Bronze Axe',
+    materials: [{ item: 'bronze_bar', quantity: 1 }],
+    level: 1,
+    experience: 40,
+    quantity: 1
+  },
+  { 
+    id: 'iron_axe',
+    name: 'Iron Axe',
+    materials: [{ item: 'iron_bar', quantity: 1 }],
+    level: 15,
+    experience: 80,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_pickaxe',
+    name: 'Mithril Pickaxe',
+    materials: [{ item: 'mithril_bar', quantity: 1 }],
+    level: 30,
+    experience: 120,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_pickaxe',
+    name: 'Adamant Pickaxe',
+    materials: [{ item: 'adamant_bar', quantity: 1 }],
+    level: 40,
+    experience: 200,
+    quantity: 1
+  },
+  { 
+    id: 'rune_pickaxe',
+    name: 'Rune Pickaxe',
+    materials: [{ item: 'rune_bar', quantity: 1 }],
+    level: 50,
+    experience: 350,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_pickaxe',
+    name: 'Dragon Pickaxe',
+    materials: [{ item: 'dragon_bar', quantity: 1 }],
+    level: 60,
+    experience: 500,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_pickaxe',
+    name: 'Barrows Pickaxe',
+    materials: [{ item: 'barrows_bar', quantity: 1 }],
+    level: 70,
+    experience: 700,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_pickaxe',
+    name: 'Third Age Pickaxe',
+    materials: [{ item: 'third_age_bar', quantity: 1 }],
+    level: 80,
+    experience: 1000,
+    quantity: 1
+  },
+  { 
+    id: 'primal_pickaxe',
+    name: 'Primal Pickaxe',
+    materials: [{ item: 'primal_bar', quantity: 1 }],
+    level: 90,
+    experience: 1500,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_axe',
+    name: 'Mithril Axe',
+    materials: [{ item: 'mithril_bar', quantity: 1 }],
+    level: 30,
+    experience: 120,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_axe',
+    name: 'Adamant Axe',
+    materials: [{ item: 'adamant_bar', quantity: 1 }],
+    level: 40,
+    experience: 200,
+    quantity: 1
+  },
+  { 
+    id: 'rune_axe',
+    name: 'Rune Axe',
+    materials: [{ item: 'rune_bar', quantity: 1 }],
+    level: 50,
+    experience: 350,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_axe',
+    name: 'Dragon Axe',
+    materials: [{ item: 'dragon_bar', quantity: 1 }],
+    level: 60,
+    experience: 500,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_axe',
+    name: 'Barrows Axe',
+    materials: [{ item: 'barrows_bar', quantity: 1 }],
+    level: 70,
+    experience: 700,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_axe',
+    name: 'Third Age Axe',
+    materials: [{ item: 'third_age_bar', quantity: 1 }],
+    level: 80,
+    experience: 1000,
+    quantity: 1
+  },
+  { 
+    id: 'primal_axe',
+    name: 'Primal Axe',
+    materials: [{ item: 'primal_bar', quantity: 1 }],
+    level: 90,
+    experience: 1500,
+    quantity: 1
+  },
+
   // Arrow heads
   { 
     id: 'bronze_arrow_head',
@@ -61,21 +740,70 @@ const smithingRecipes = [
     experience: 50,
     quantity: 15
   },
-  // Axes
+
+  // Fishing Rods
   { 
-    id: 'bronze_axe',
-    name: 'Bronze Axe',
-    materials: [{ item: 'bronze_bar', quantity: 1 }],
-    level: 1,
-    experience: 40,
-    quantity: 1
-  },
-  { 
-    id: 'iron_axe',
-    name: 'Iron Axe',
+    id: 'iron_fishing_rod',
+    name: 'Iron Fishing Rod',
     materials: [{ item: 'iron_bar', quantity: 1 }],
     level: 15,
     experience: 80,
+    quantity: 1
+  },
+  { 
+    id: 'mithril_fishing_rod',
+    name: 'Mithril Fishing Rod',
+    materials: [{ item: 'mithril_bar', quantity: 1 }],
+    level: 30,
+    experience: 120,
+    quantity: 1
+  },
+  { 
+    id: 'adamant_fishing_rod',
+    name: 'Adamant Fishing Rod',
+    materials: [{ item: 'adamant_bar', quantity: 1 }],
+    level: 40,
+    experience: 200,
+    quantity: 1
+  },
+  { 
+    id: 'rune_fishing_rod',
+    name: 'Rune Fishing Rod',
+    materials: [{ item: 'rune_bar', quantity: 1 }],
+    level: 50,
+    experience: 350,
+    quantity: 1
+  },
+  { 
+    id: 'dragon_fishing_rod',
+    name: 'Dragon Fishing Rod',
+    materials: [{ item: 'dragon_bar', quantity: 1 }],
+    level: 60,
+    experience: 500,
+    quantity: 1
+  },
+  { 
+    id: 'barrows_fishing_rod',
+    name: 'Barrows Fishing Rod',
+    materials: [{ item: 'barrows_bar', quantity: 1 }],
+    level: 70,
+    experience: 700,
+    quantity: 1
+  },
+  { 
+    id: 'third_age_fishing_rod',
+    name: 'Third Age Fishing Rod',
+    materials: [{ item: 'third_age_bar', quantity: 1 }],
+    level: 80,
+    experience: 1000,
+    quantity: 1
+  },
+  { 
+    id: 'primal_fishing_rod',
+    name: 'Primal Fishing Rod',
+    materials: [{ item: 'primal_bar', quantity: 1 }],
+    level: 90,
+    experience: 1500,
     quantity: 1
   },
 ];
@@ -95,6 +823,70 @@ const smeltingRecipes = [
     materials: [{ item: 'iron_ore', quantity: 1 }, { item: 'coal', quantity: 1 }],
     level: 15,
     experience: 70,
+    quantity: 1
+  },
+  {
+    id: 'steel_bar',
+    name: 'Steel Bar',
+    materials: [{ item: 'iron_ore', quantity: 1 }, { item: 'coal', quantity: 2 }],
+    level: 20,
+    experience: 100,
+    quantity: 1
+  },
+  {
+    id: 'mithril_bar',
+    name: 'Mithril Bar',
+    materials: [{ item: 'mithril_ore', quantity: 1 }, { item: 'coal', quantity: 4 }],
+    level: 30,
+    experience: 150,
+    quantity: 1
+  },
+  {
+    id: 'adamant_bar',
+    name: 'Adamant Bar',
+    materials: [{ item: 'adamant_ore', quantity: 1 }, { item: 'coal', quantity: 6 }],
+    level: 40,
+    experience: 250,
+    quantity: 1
+  },
+  {
+    id: 'rune_bar',
+    name: 'Rune Bar',
+    materials: [{ item: 'rune_ore', quantity: 1 }, { item: 'coal', quantity: 8 }],
+    level: 50,
+    experience: 500,
+    quantity: 1
+  },
+  {
+    id: 'dragon_bar',
+    name: 'Dragon Bar',
+    materials: [{ item: 'dragon_ore', quantity: 1 }, { item: 'coal', quantity: 10 }],
+    level: 60,
+    experience: 750,
+    quantity: 1
+  },
+  {
+    id: 'barrows_bar',
+    name: 'Barrows Bar',
+    materials: [{ item: 'barrows_ore', quantity: 1 }, { item: 'coal', quantity: 12 }],
+    level: 70,
+    experience: 1000,
+    quantity: 1
+  },
+  {
+    id: 'third_age_bar',
+    name: 'Third Age Bar',
+    materials: [{ item: 'third_age_ore', quantity: 1 }, { item: 'coal', quantity: 15 }],
+    level: 80,
+    experience: 1500,
+    quantity: 1
+  },
+  {
+    id: 'primal_bar',
+    name: 'Primal Bar',
+    materials: [{ item: 'primal_ore', quantity: 1 }, { item: 'coal', quantity: 20 }],
+    level: 90,
+    experience: 2000,
     quantity: 1
   },
 ];

@@ -13,7 +13,12 @@ export const data = new SlashCommandBuilder()
       .addChoices(
         { name: 'Lumbridge', value: 'lumbridge' },
         { name: 'Varrock', value: 'varrock' },
-        { name: 'Falador', value: 'falador' }
+        { name: 'Falador', value: 'falador' },
+        { name: 'Catherby', value: 'catherby' },
+        { name: 'Ardougne', value: 'ardougne' },
+        { name: 'Dragon Isle', value: 'dragon_isle' },
+        { name: 'Barrows Crypts', value: 'barrows_crypts' },
+        { name: 'Primal Realm', value: 'primal_realm' }
       )
   );
 

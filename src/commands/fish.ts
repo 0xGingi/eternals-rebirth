@@ -3,6 +3,7 @@ import { Player } from '../models/Player';
 import { Area } from '../models/Area';
 import { Item } from '../models/Item';
 import { calculateLevelFromExperience, addExperience } from '../utils/experienceUtils';
+import { canToolAccessResource } from '../utils/toolUtils';
 
 export const data = new SlashCommandBuilder()
   .setName('fish')
@@ -144,12 +145,21 @@ export async function execute(interaction: any) {
       return;
     }
 
-    const hasRod = player.equipment.weapon && 
+    const equippedTool = player.equipment.weapon && 
       await Item.findOne({ id: player.equipment.weapon, subType: 'rod' });
     
-    if (!hasRod) {
+    if (!equippedTool) {
       await interaction.reply({
         content: 'You need a fishing rod equipped to fish!',
+        ephemeral: true
+      });
+      return;
+    }
+
+    // Check if the equipped tool can access this resource
+    if (!canToolAccessResource(player.equipment.weapon, resource.toolRequired, 'rod')) {
+      await interaction.reply({
+        content: `You need at least a ${resource.toolRequired.replace('_', ' ')} to catch ${resource.name}!`,
         ephemeral: true
       });
       return;
