@@ -78,6 +78,16 @@ export class Bot {
           if (helpCommand && 'handleButton' in helpCommand) {
             await (helpCommand as any).handleButton(interaction);
           }
+        } else if (interaction.customId.startsWith('list_')) {
+          const listCommand = this.commands.get('list');
+          if (listCommand && 'handleButton' in listCommand) {
+            await (listCommand as any).handleButton(interaction);
+          }
+        } else if (interaction.customId.startsWith('inventory_')) {
+          const inventoryCommand = this.commands.get('inventory');
+          if (inventoryCommand && 'handleButton' in inventoryCommand) {
+            await (inventoryCommand as any).handleButton(interaction);
+          }
         }
       }
     });

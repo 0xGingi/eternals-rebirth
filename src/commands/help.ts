@@ -61,12 +61,33 @@ const helpCategories = {
       '`/cook <item> [quantity]` - Cook raw fish into food'
     ]
   },
+  spells: {
+    name: 'Spell Commands',
+    description: 'Cast magic spells and use abilities',
+    commands: [
+      '`/spell low_alch <item> [quantity]` - Low Level Alchemy (Level 1)',
+      '• Converts items to coins at 50% value',
+      '• Requires magic weapon equipped',
+      '• Gives 31 Magic XP per cast',
+      '',
+      '`/spell high_alch <item> [quantity]` - High Level Alchemy (Level 55)',
+      '• Converts items to coins at 100% value',
+      '• Requires magic weapon equipped',
+      '• Gives 65 Magic XP per cast',
+      '',
+      '**Notes:**',
+      '• Only items with value can be alchemized',
+      '• Magic weapon must be equipped to cast spells',
+      '• Cannot cast spells while in combat or skilling'
+    ]
+  },
   information: {
     name: 'Information Commands',
     description: 'Get detailed information about the game',
     commands: [
       '`/list areas` - All areas and their content',
       '`/list monsters` - All monsters by area',
+      '`/list combat` - Combat styles and requirements',
       '`/list resources` - All resources by area',
       '`/list smelting` - Smelting recipes',
       '`/list smithing` - Smithing recipes',
@@ -89,6 +110,7 @@ function createMainMenuEmbed() {
       { name: '🎒 Inventory', value: helpCategories.inventory.description, inline: true },
       { name: '⚔️ Combat', value: helpCategories.combat.description, inline: true },
       { name: '🔨 Skilling', value: helpCategories.skilling.description, inline: true },
+      { name: '🔮 Spells', value: helpCategories.spells.description, inline: true },
       { name: '📚 Information', value: helpCategories.information.description, inline: true }
     )
     .setFooter({ text: 'Click a button below to view commands in that category' });
@@ -142,13 +164,22 @@ function createMainMenuButtons() {
         .setEmoji('🔨')
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
+        .setCustomId('help_spells')
+        .setLabel('Spells')
+        .setEmoji('🔮')
+        .setStyle(ButtonStyle.Primary)
+    );
+
+  const row3 = new ActionRowBuilder<ButtonBuilder>()
+    .addComponents(
+      new ButtonBuilder()
         .setCustomId('help_information')
         .setLabel('Information')
         .setEmoji('📚')
         .setStyle(ButtonStyle.Primary)
     );
 
-  return [row1, row2];
+  return [row1, row2, row3];
 }
 
 function createBackButton() {

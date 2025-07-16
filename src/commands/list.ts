@@ -1,6 +1,8 @@
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { Area } from '../models/Area';
 import { Item } from '../models/Item';
+
+const ITEMS_PER_PAGE = 10;
 
 const smithingRecipes = [
   // Weapons - Swords
@@ -229,57 +231,124 @@ export const data = new SlashCommandBuilder()
       )
   );
 
+function createPaginationButtons(currentPage: number, totalPages: number, category: string): ActionRowBuilder<ButtonBuilder> {
+  const row = new ActionRowBuilder<ButtonBuilder>();
+  
+  if (currentPage > 0) {
+    row.addComponents(
+      new ButtonBuilder()
+        .setCustomId(`list_${category}_${currentPage - 1}`)
+        .setLabel('Previous')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji('⬅️')
+    );
+  }
+  
+  row.addComponents(
+    new ButtonBuilder()
+      .setCustomId(`list_${category}_info`)
+      .setLabel(`Page ${currentPage + 1}/${totalPages}`)
+      .setStyle(ButtonStyle.Secondary)
+      .setDisabled(true)
+  );
+  
+  if (currentPage < totalPages - 1) {
+    row.addComponents(
+      new ButtonBuilder()
+        .setCustomId(`list_${category}_${currentPage + 1}`)
+        .setLabel('Next')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji('➡️')
+    );
+  }
+  
+  return row;
+}
+
 export async function execute(interaction: any) {
   const category = interaction.options.getString('category');
+  const page = 0; // Start with first page
 
   try {
-    let embed;
-
-    switch (category) {
-      case 'areas':
-        embed = await createAreasEmbed();
-        break;
-      case 'monsters':
-        embed = await createMonstersEmbed();
-        break;
-      case 'combat':
-        embed = createCombatEmbed();
-        break;
-      case 'resources':
-        embed = await createResourcesEmbed();
-        break;
-      case 'smelting':
-        embed = createSmeltingEmbed();
-        break;
-      case 'smithing':
-        embed = createSmithingEmbed();
-        break;
-      case 'fletching':
-        embed = createFletchingEmbed();
-        break;
-      case 'crafting':
-        embed = createCraftingEmbed();
-        break;
-      case 'cooking':
-        embed = createCookingEmbed();
-        break;
-      case 'items':
-        embed = await createItemsEmbed();
-        break;
-      default:
-        embed = new EmbedBuilder()
-          .setColor(0xFF0000)
-          .setTitle('Error')
-          .setDescription('Invalid category selected.');
+    const result = await createEmbedWithPagination(category, page);
+    
+    if (!result) {
+      const embed = new EmbedBuilder()
+        .setColor(0xFF0000)
+        .setTitle('Error')
+        .setDescription('Invalid category selected.');
+      await interaction.reply({ embeds: [embed] });
+      return;
     }
 
-    await interaction.reply({ embeds: [embed] });
+    const components = result.totalPages > 1 ? [createPaginationButtons(page, result.totalPages, category)] : [];
+    await interaction.reply({ embeds: [result.embed], components });
   } catch (error) {
     console.error('Error in list command:', error);
     await interaction.reply({
       content: 'An error occurred while fetching the information. Please try again.',
       ephemeral: true
     });
+  }
+}
+
+export async function handleButton(interaction: any) {
+  const customId = interaction.customId;
+  const parts = customId.split('_');
+  
+  if (parts.length >= 3 && parts[0] === 'list') {
+    const category = parts[1];
+    const page = parseInt(parts[2]);
+    
+    if (isNaN(page)) return;
+    
+    try {
+      const result = await createEmbedWithPagination(category, page);
+      
+      if (!result) {
+        await interaction.reply({
+          content: 'Invalid category!',
+          ephemeral: true
+        });
+        return;
+      }
+
+      const components = result.totalPages > 1 ? [createPaginationButtons(page, result.totalPages, category)] : [];
+      await interaction.update({ embeds: [result.embed], components });
+    } catch (error) {
+      console.error('Error handling list pagination:', error);
+      await interaction.reply({
+        content: 'An error occurred while updating the list.',
+        ephemeral: true
+      });
+    }
+  }
+}
+
+async function createEmbedWithPagination(category: string, page: number): Promise<{embed: EmbedBuilder, totalPages: number} | null> {
+  switch (category) {
+    case 'areas':
+      return { embed: await createAreasEmbed(), totalPages: 1 };
+    case 'monsters':
+      return { embed: await createMonstersEmbed(), totalPages: 1 };
+    case 'combat':
+      return { embed: createCombatEmbed(), totalPages: 1 };
+    case 'resources':
+      return { embed: await createResourcesEmbed(), totalPages: 1 };
+    case 'smelting':
+      return await createSmeltingEmbedPaginated(page);
+    case 'smithing':
+      return await createSmithingEmbedPaginated(page);
+    case 'fletching':
+      return await createFletchingEmbedPaginated(page);
+    case 'crafting':
+      return await createCraftingEmbedPaginated(page);
+    case 'cooking':
+      return await createCookingEmbedPaginated(page);
+    case 'items':
+      return { embed: await createItemsEmbed(), totalPages: 1 };
+    default:
+      return null;
   }
 }
 
@@ -369,13 +438,18 @@ async function createResourcesEmbed(): Promise<EmbedBuilder> {
   return embed;
 }
 
-function createSmeltingEmbed(): EmbedBuilder {
+async function createSmeltingEmbedPaginated(page: number): Promise<{embed: EmbedBuilder, totalPages: number}> {
+  const totalPages = Math.ceil(smeltingRecipes.length / ITEMS_PER_PAGE);
+  const startIndex = page * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, smeltingRecipes.length);
+  const recipesOnPage = smeltingRecipes.slice(startIndex, endIndex);
+  
   const embed = new EmbedBuilder()
     .setColor(0xFF4500)
     .setTitle('🔥 Smelting Recipes')
-    .setDescription('All available smelting recipes');
+    .setDescription(`All available smelting recipes (Page ${page + 1}/${totalPages})`);
 
-  smeltingRecipes.forEach((recipe, index) => {
+  recipesOnPage.forEach((recipe, index) => {
     const materials = recipe.materials.map(m => `${m.quantity}x ${m.item.replace('_', ' ')}`).join(' + ');
     
     if (index > 0) {
@@ -389,16 +463,21 @@ function createSmeltingEmbed(): EmbedBuilder {
     });
   });
 
-  return embed;
+  return { embed, totalPages };
 }
 
-function createSmithingEmbed(): EmbedBuilder {
+async function createSmithingEmbedPaginated(page: number): Promise<{embed: EmbedBuilder, totalPages: number}> {
+  const totalPages = Math.ceil(smithingRecipes.length / ITEMS_PER_PAGE);
+  const startIndex = page * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, smithingRecipes.length);
+  const recipesOnPage = smithingRecipes.slice(startIndex, endIndex);
+  
   const embed = new EmbedBuilder()
     .setColor(0x708090)
     .setTitle('⚒️ Smithing Recipes')
-    .setDescription('All available smithing recipes');
+    .setDescription(`All available smithing recipes (Page ${page + 1}/${totalPages})`);
 
-  smithingRecipes.forEach((recipe, index) => {
+  recipesOnPage.forEach((recipe, index) => {
     const materials = recipe.materials.map(m => `${m.quantity}x ${m.item.replace('_', ' ')}`).join(' + ');
     
     if (index > 0) {
@@ -412,16 +491,21 @@ function createSmithingEmbed(): EmbedBuilder {
     });
   });
 
-  return embed;
+  return { embed, totalPages };
 }
 
-function createFletchingEmbed(): EmbedBuilder {
+async function createFletchingEmbedPaginated(page: number): Promise<{embed: EmbedBuilder, totalPages: number}> {
+  const totalPages = Math.ceil(fletchingRecipes.length / ITEMS_PER_PAGE);
+  const startIndex = page * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, fletchingRecipes.length);
+  const recipesOnPage = fletchingRecipes.slice(startIndex, endIndex);
+  
   const embed = new EmbedBuilder()
     .setColor(0x8B4513)
     .setTitle('🏹 Fletching Recipes')
-    .setDescription('All available fletching recipes');
+    .setDescription(`All available fletching recipes (Page ${page + 1}/${totalPages})`);
 
-  fletchingRecipes.forEach((recipe, index) => {
+  recipesOnPage.forEach((recipe, index) => {
     const materials = recipe.materials.map(m => `${m.quantity}x ${m.item.replace('_', ' ')}`).join(' + ');
     
     if (index > 0) {
@@ -435,16 +519,21 @@ function createFletchingEmbed(): EmbedBuilder {
     });
   });
 
-  return embed;
+  return { embed, totalPages };
 }
 
-function createCraftingEmbed(): EmbedBuilder {
+async function createCraftingEmbedPaginated(page: number): Promise<{embed: EmbedBuilder, totalPages: number}> {
+  const totalPages = Math.ceil(craftingRecipes.length / ITEMS_PER_PAGE);
+  const startIndex = page * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, craftingRecipes.length);
+  const recipesOnPage = craftingRecipes.slice(startIndex, endIndex);
+  
   const embed = new EmbedBuilder()
     .setColor(0xFF6347)
     .setTitle('🔨 Crafting Recipes')
-    .setDescription('All available crafting recipes');
+    .setDescription(`All available crafting recipes (Page ${page + 1}/${totalPages})`);
 
-  craftingRecipes.forEach((recipe, index) => {
+  recipesOnPage.forEach((recipe, index) => {
     const materials = recipe.materials.map(m => `${m.quantity}x ${m.item.replace('_', ' ')}`).join(' + ');
     
     if (index > 0) {
@@ -458,16 +547,21 @@ function createCraftingEmbed(): EmbedBuilder {
     });
   });
 
-  return embed;
+  return { embed, totalPages };
 }
 
-function createCookingEmbed(): EmbedBuilder {
+async function createCookingEmbedPaginated(page: number): Promise<{embed: EmbedBuilder, totalPages: number}> {
+  const totalPages = Math.ceil(cookingRecipes.length / ITEMS_PER_PAGE);
+  const startIndex = page * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, cookingRecipes.length);
+  const recipesOnPage = cookingRecipes.slice(startIndex, endIndex);
+  
   const embed = new EmbedBuilder()
     .setColor(0xFF8C00)
     .setTitle('🍳 Cooking Recipes')
-    .setDescription('All available cooking recipes');
+    .setDescription(`All available cooking recipes (Page ${page + 1}/${totalPages})`);
 
-  cookingRecipes.forEach(recipe => {
+  recipesOnPage.forEach(recipe => {
     embed.addFields({
       name: `${recipe.cooked.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())} (Level ${recipe.level})`,
       value: `**Raw Material:** ${recipe.raw.replace('_', ' ')}\n**Experience:** ${recipe.experience} XP`,
@@ -475,7 +569,7 @@ function createCookingEmbed(): EmbedBuilder {
     });
   });
 
-  return embed;
+  return { embed, totalPages };
 }
 
 async function createItemsEmbed(): Promise<EmbedBuilder> {
