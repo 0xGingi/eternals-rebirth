@@ -1,6 +1,6 @@
 import { Client, GatewayIntentBits, Collection } from 'discord.js';
 import dotenv from 'dotenv';
-import { connectDatabase } from './config/database';
+import { connectDatabase, resetSkillingStatus } from './config/database';
 import { registerCommands } from './utils/commandRegistry';
 import { initializeAreas } from './data/areas';
 import { initializeItems } from './data/items';
@@ -85,6 +85,7 @@ export class Bot {
 
   public async start() {
     await connectDatabase();
+    await resetSkillingStatus();
     await initializeAreas();
     await initializeItems();
     await registerCommands(this);
