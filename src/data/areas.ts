@@ -689,6 +689,9 @@ export async function initializeAreas() {
       if (!existingArea) {
         await Area.create(areaData);
         console.log(`Created area: ${areaData.name}`);
+      } else {
+        await Area.findOneAndUpdate({ id: areaData.id }, areaData);
+        console.log(`Updated area: ${areaData.name}`);
       }
     }
   } catch (error) {
