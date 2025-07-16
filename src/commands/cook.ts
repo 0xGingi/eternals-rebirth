@@ -23,7 +23,7 @@ export const data = new SlashCommandBuilder()
       .setDescription('How many to cook (default: 1)')
       .setRequired(false)
       .setMinValue(1)
-      .setMaxValue(100)
+      .setMaxValue(1000)
   );
 
 export async function autocomplete(interaction: any) {
