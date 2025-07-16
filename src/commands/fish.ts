@@ -242,7 +242,21 @@ export async function execute(interaction: any) {
             completedEmbed.addFields({ name: 'Level Up!', value: `Fishing level is now ${expResult.newLevel}!`, inline: false });
           }
 
-          await interaction.editReply({ embeds: [completedEmbed] });
+          try {
+            await interaction.editReply({ embeds: [completedEmbed] });
+          } catch (editError: any) {
+            if (editError.code === 50027) {
+              console.log('Fishing completed but interaction expired, sending new message');
+              try {
+                await interaction.followUp({ embeds: [completedEmbed] });
+              } catch (followUpError) {
+                console.log('Could not send follow-up message, sending to channel');
+                await interaction.channel?.send({ embeds: [completedEmbed] });
+              }
+            } else {
+              throw editError;
+            }
+          }
         } catch (error) {
           console.error('Error completing fishing:', error);
           const errorPlayer = await Player.findOne({ userId });
@@ -252,9 +266,18 @@ export async function execute(interaction: any) {
             errorPlayer.skillingEndTime = null as any;
             await errorPlayer.save();
           }
-          await interaction.editReply({
-            content: 'An error occurred while completing fishing. Please try again.',
-          });
+          
+          try {
+            await interaction.editReply({
+              content: 'An error occurred while completing fishing. Please try again.',
+            });
+          } catch (editError: any) {
+            if (editError.code === 50027) {
+              console.log('Fishing failed and interaction expired');
+            } else {
+              console.error('Error editing reply:', editError);
+            }
+          }
         }
       }, totalTime);
     }
