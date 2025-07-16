@@ -179,7 +179,7 @@ export async function execute(interaction: any) {
         const filteredInventory = player.inventory.filter(invItem => invItem.itemId !== item.id);
         player.inventory.splice(0, player.inventory.length, ...filteredInventory);
       }
-    } else if (item.type === 'weapon') {
+    } else if (item.type === 'weapon' || item.type === 'tool') {
       const previousItem = player.equipment.weapon;
       
       if (previousItem) {
@@ -193,22 +193,24 @@ export async function execute(interaction: any) {
       
       player.equipment.weapon = item.id;
 
-      // Combat style handling
-      if (item.subType === 'melee') {
-        if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
-          player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
+      // Combat style handling - only apply for weapons, not tools
+      if (item.type === 'weapon') {
+        if (item.subType === 'melee') {
+          if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
+            player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
+          }
+          player.combatStats.attackStyle = player.combatStats.lastMeleeStyle || 'attack';
+        } else if (item.subType === 'ranged') {
+          if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
+            player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
+          }
+          player.combatStats.attackStyle = 'range';
+        } else if (item.subType === 'magic') {
+          if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
+            player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
+          }
+          player.combatStats.attackStyle = 'magic';
         }
-        player.combatStats.attackStyle = player.combatStats.lastMeleeStyle || 'attack';
-      } else if (item.subType === 'ranged') {
-        if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
-          player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
-        }
-        player.combatStats.attackStyle = 'range';
-      } else if (item.subType === 'magic') {
-        if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
-          player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
-        }
-        player.combatStats.attackStyle = 'magic';
       }
       
       if (inventoryItem.quantity > 1) {
