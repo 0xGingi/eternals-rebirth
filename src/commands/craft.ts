@@ -11,8 +11,8 @@ const craftingRecipes = [
     materials: [
       { item: 'normal_logs', quantity: 3 },
     ],
-    level: 10,
-    experience: 55,
+    level: 1,
+    experience: 20,
     quantity: 1
   },
   {
@@ -33,8 +33,8 @@ const craftingRecipes = [
     materials: [
       { item: 'normal_logs', quantity: 2 },
     ],
-    level: 5,
-    experience: 30,
+    level: 1,
+    experience: 20,
     quantity: 1
   },
   {

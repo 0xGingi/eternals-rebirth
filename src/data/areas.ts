@@ -22,6 +22,20 @@ export const defaultAreas = [
         ]
       },
       {
+        id: 'cow',
+        name: 'Cow',
+        level: 2,
+        hp: 12,
+        attack: 4,
+        defense: 2,
+        experience: 20,
+        dropTable: [
+          { itemId: 'coins', quantity: 5, chance: 0.7 },
+          { itemId: 'bones', quantity: 1, chance: 0.6 },
+          { itemId: 'leather', quantity: 1, chance: 1.0 }
+        ]
+      },
+      {
         id: 'goblin',
         name: 'Goblin',
         level: 3,
