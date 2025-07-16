@@ -253,19 +253,10 @@ export async function execute(interaction: any) {
           }
 
           try {
-            await interaction.editReply({ embeds: [completedEmbed] });
-          } catch (editError: any) {
-            if (editError.code === 50027) {
-              console.log('Mining completed but interaction expired, sending new message');
-              try {
-                await interaction.followUp({ embeds: [completedEmbed] });
-              } catch (followUpError) {
-                console.log('Could not send follow-up message, sending to channel');
-                await interaction.channel?.send({ embeds: [completedEmbed] });
-              }
-            } else {
-              throw editError;
-            }
+            await interaction.followUp({ embeds: [completedEmbed] });
+          } catch (followUpError) {
+            console.error('Error sending follow-up message:', followUpError);
+            await interaction.channel?.send({ embeds: [completedEmbed] });
           }
         } catch (error) {
           console.error('Error completing mining:', error);

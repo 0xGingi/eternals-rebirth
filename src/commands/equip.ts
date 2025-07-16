@@ -27,7 +27,7 @@ export async function autocomplete(interaction: any) {
     const equipableItems = [];
     for (const invItem of player.inventory) {
       const item = await Item.findOne({ id: invItem.itemId });
-      if (item && (item.type === 'weapon' || item.type === 'tool')) {
+      if (item && (item.type === 'weapon' || item.type === 'tool' || item.type === 'armor')) {
         const name = `${item.name} (x${invItem.quantity})`;
         if (name.toLowerCase().includes(focusedValue.toLowerCase())) {
           equipableItems.push({
@@ -128,48 +128,7 @@ export async function execute(interaction: any) {
       
       const filteredInventory = player.inventory.filter(invItem => invItem.itemId !== item.id);
       player.inventory.splice(0, player.inventory.length, ...filteredInventory);
-    } else {
-      const previousItem = player.equipment.weapon;
-      
-      if (previousItem) {
-        const existingInvItem = player.inventory.find(invItem => invItem.itemId === previousItem);
-        if (existingInvItem) {
-          existingInvItem.quantity += 1;
-        } else {
-          player.inventory.push({ itemId: previousItem, quantity: 1 });
-        }
-      }
-      
-      player.equipment.weapon = item.id;
-      
-      if (item.type === 'weapon') {
-        if (item.subType === 'melee') {
-          if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
-            player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
-          }
-          player.combatStats.attackStyle = player.combatStats.lastMeleeStyle || 'attack';
-        } else if (item.subType === 'ranged') {
-          if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
-            player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
-          }
-          player.combatStats.attackStyle = 'range';
-        } else if (item.subType === 'magic') {
-          if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
-            player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
-          }
-          player.combatStats.attackStyle = 'magic';
-        }
-      }
-      
-      if (inventoryItem.quantity > 1) {
-        inventoryItem.quantity -= 1;
-      } else {
-        const filteredInventory = player.inventory.filter(invItem => invItem.itemId !== item.id);
-        player.inventory.splice(0, player.inventory.length, ...filteredInventory);
-      }
-    }
-    
-    if (item.type === 'armor') {
+    } else if (item.type === 'armor') {
       let previousItem: string = '';
       
       switch (item.subType) {
@@ -212,6 +171,44 @@ export async function execute(interaction: any) {
         } else {
           player.inventory.push({ itemId: previousItem, quantity: 1 });
         }
+      }
+      
+      if (inventoryItem.quantity > 1) {
+        inventoryItem.quantity -= 1;
+      } else {
+        const filteredInventory = player.inventory.filter(invItem => invItem.itemId !== item.id);
+        player.inventory.splice(0, player.inventory.length, ...filteredInventory);
+      }
+    } else if (item.type === 'weapon') {
+      const previousItem = player.equipment.weapon;
+      
+      if (previousItem) {
+        const existingInvItem = player.inventory.find(invItem => invItem.itemId === previousItem);
+        if (existingInvItem) {
+          existingInvItem.quantity += 1;
+        } else {
+          player.inventory.push({ itemId: previousItem, quantity: 1 });
+        }
+      }
+      
+      player.equipment.weapon = item.id;
+
+      // Combat style handling
+      if (item.subType === 'melee') {
+        if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
+          player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
+        }
+        player.combatStats.attackStyle = player.combatStats.lastMeleeStyle || 'attack';
+      } else if (item.subType === 'ranged') {
+        if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
+          player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
+        }
+        player.combatStats.attackStyle = 'range';
+      } else if (item.subType === 'magic') {
+        if (['attack', 'strength', 'defense'].includes(player.combatStats.attackStyle)) {
+          player.combatStats.lastMeleeStyle = player.combatStats.attackStyle as 'attack' | 'strength' | 'defense';
+        }
+        player.combatStats.attackStyle = 'magic';
       }
       
       if (inventoryItem.quantity > 1) {
