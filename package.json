@@ -16,6 +16,8 @@
   },
   "scripts": {
     "migrate-skilling": "bun run scripts/migrate-player-skilling-fields.ts",
-    "deregister-guild": "bun run scripts/deregister-guild-commands.ts"
+    "deregister-guild": "bun run scripts/deregister-guild-commands.ts",
+    "update-schema": "bun run scripts/update-database-schema.ts",
+    "update-weaknesses": "bun run scripts/update-monster-weaknesses.ts"
   }
 }

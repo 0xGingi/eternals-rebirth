@@ -1,9 +1,10 @@
-import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
+import { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from 'discord.js';
 import { Player } from '../models/Player';
 import { Area } from '../models/Area';
 import { Item } from '../models/Item';
 import { calculateCombatStats, calculateDamage, calculateExperienceGained, generateLoot } from './combatUtils';
 import { addExperience } from './experienceUtils';
+import { getAvailableSpells, canCastSpell, consumeRunes, calculateSpellDamage, getSpellExperience, calculateSpellAccuracy } from './spellUtils';
 
 export async function handleCombatAction(interaction: any, action: string) {
   const userId = interaction.user.id;
@@ -110,13 +111,107 @@ export async function handleCombatAction(interaction: any, action: string) {
           playerAction = 'You failed to run away!';
         }
         break;
+
+      case 'spell':
+        if (player.combatStats.attackStyle !== 'magic') {
+          await interaction.reply({
+            content: 'You need to be in magic combat mode to cast spells! Use /style magic first.',
+            ephemeral: true
+          });
+          return;
+        }
+
+        const equippedMagicWeapon = player.equipment.weapon && 
+          await Item.findOne({ id: player.equipment.weapon, subType: 'magic' });
+        
+        if (!equippedMagicWeapon) {
+          await interaction.reply({
+            content: 'You need a magic weapon equipped to cast combat spells!',
+            ephemeral: true
+          });
+          return;
+        }
+
+        const availableSpells = getAvailableSpells(player);
+        if (availableSpells.length === 0) {
+          await interaction.reply({
+            content: 'You don\'t know any combat spells yet!',
+            ephemeral: true
+          });
+          return;
+        }
+
+        const spellOptions = availableSpells.slice(0, 10).map(spell => 
+          new StringSelectMenuOptionBuilder()
+            .setLabel(spell.name)
+            .setDescription(`Level ${spell.levelRequired} - ${spell.maxDamage} max damage`)
+            .setValue(spell.id)
+        );
+
+        const spellSelect = new StringSelectMenuBuilder()
+          .setCustomId('combat_spell_select')
+          .setPlaceholder('Choose a spell to cast')
+          .addOptions(spellOptions);
+
+        const spellRow = new ActionRowBuilder().addComponents(spellSelect);
+
+        await interaction.update({
+          embeds: [new EmbedBuilder()
+            .setColor(0x9932CC)
+            .setTitle('Choose a Spell')
+            .setDescription('Select which spell to cast in combat:')],
+          components: [spellRow]
+        });
+        return;
+
+      default:
+        if (action.startsWith('cast_')) {
+          const spellId = action.replace('cast_', '');
+          const spellCheck = canCastSpell(player, spellId);
+          
+          if (!spellCheck.canCast) {
+            await interaction.reply({
+              content: spellCheck.reason,
+              ephemeral: true
+            });
+            return;
+          }
+
+          const playerStats = await calculateCombatStats(player);
+          const spellAccuracy = calculateSpellAccuracy(spellId, playerStats.magic, monster.elementalWeakness || undefined);
+          const hitRoll = Math.random() * 100;
+          
+          if (hitRoll <= spellAccuracy) {
+            const spellResult = calculateSpellDamage(spellId, playerStats.magic, playerStats.magicBonus || 0, monster.elementalWeakness || undefined);
+            playerDamage = spellResult.damage;
+            monsterCurrentHp -= playerDamage;
+            
+            consumeRunes(player, spellId);
+            
+            const spellExp = getSpellExperience(spellId);
+            if (player.skills?.magic) {
+              const expResult = addExperience(player.skills.magic.experience, spellExp);
+              player.skills.magic.experience = expResult.newExp;
+            }
+
+            let effectivenessText = '';
+            if (spellResult.isEffective) {
+              effectivenessText = ' **It\'s super effective!**';
+            }
+
+            playerAction = `You cast a spell dealing ${playerDamage} magic damage!${effectivenessText}`;
+          } else {
+            playerAction = 'Your spell missed!';
+          }
+        }
+        break;
     }
 
     if (monsterCurrentHp <= 0) {
       combatEnded = true;
       playerWon = true;
     } else if (action !== 'eat') {
-      const monsterAttack = { attack: monster.attack, defense: 0, accuracy: monster.attack + 5, maxHit: monster.attack };
+      const monsterAttack = { attack: monster.attack, defense: 0, accuracy: monster.attack + 5, maxHit: monster.attack, magic: 0, magicBonus: 0 };
       monsterDamage = calculateDamage(monsterAttack, await calculateCombatStats(player).then(s => s.defense));
       
       if (action === 'defend') {
@@ -226,38 +321,64 @@ export async function handleCombatAction(interaction: any, action: string) {
       player.currentMonsterHp = monsterCurrentHp;
       await player.save();
       
+      let monsterInfo = `${monster.name}\nLevel: ${monster.level}\nHP: ${monsterCurrentHp}/${monster.hp}`;
+      if (monster.elementalWeakness) {
+        const weaknessEmoji = {
+          'fire': '🔥',
+          'water': '💧', 
+          'earth': '🌍',
+          'air': '💨'
+        };
+        monsterInfo += `\nWeak to: ${weaknessEmoji[monster.elementalWeakness] || '⚡'} ${monster.elementalWeakness}`;
+      }
+
       const embed = new EmbedBuilder()
         .setColor(0xFFFF00)
         .setTitle('Combat Continues!')
         .setDescription(resultText)
         .addFields(
-          { name: 'Monster', value: `${monster.name}\nLevel: ${monster.level}\nHP: ${monsterCurrentHp}/${monster.hp}`, inline: true },
+          { name: 'Monster', value: monsterInfo, inline: true },
           { name: 'Your Stats', value: `HP: ${player.combatStats.currentHp}/${player.combatStats.maxHp}\nAttack Style: ${player.combatStats.attackStyle}`, inline: true }
         );
 
-      const row = new ActionRowBuilder()
-        .addComponents(
-          new ButtonBuilder()
-            .setCustomId('combat_attack')
-            .setLabel('Attack')
-            .setStyle(ButtonStyle.Danger)
-            .setEmoji('⚔️'),
-          new ButtonBuilder()
-            .setCustomId('combat_defend')
-            .setLabel('Defend')
-            .setStyle(ButtonStyle.Secondary)
-            .setEmoji('🛡️'),
-          new ButtonBuilder()
-            .setCustomId('combat_eat')
-            .setLabel('Eat Food')
-            .setStyle(ButtonStyle.Success)
-            .setEmoji('🍞'),
-          new ButtonBuilder()
-            .setCustomId('combat_run')
-            .setLabel('Run Away')
-            .setStyle(ButtonStyle.Secondary)
-            .setEmoji('🏃')
-        );
+      const buttons = [
+        new ButtonBuilder()
+          .setCustomId('combat_attack')
+          .setLabel('Attack')
+          .setStyle(ButtonStyle.Danger)
+          .setEmoji('⚔️'),
+        new ButtonBuilder()
+          .setCustomId('combat_defend')
+          .setLabel('Defend')
+          .setStyle(ButtonStyle.Secondary)
+          .setEmoji('🛡️'),
+        new ButtonBuilder()
+          .setCustomId('combat_eat')
+          .setLabel('Eat Food')
+          .setStyle(ButtonStyle.Success)
+          .setEmoji('🍞'),
+        new ButtonBuilder()
+          .setCustomId('combat_run')
+          .setLabel('Run Away')
+          .setStyle(ButtonStyle.Secondary)
+          .setEmoji('🏃')
+      ];
+
+      // Add spell button if player is using magic and has a magic weapon
+      if (player.combatStats.attackStyle === 'magic') {
+        const hasMagicWeapon = player.equipment.weapon && 
+          await Item.findOne({ id: player.equipment.weapon, subType: 'magic' });
+        
+        if (hasMagicWeapon) {
+          buttons.splice(1, 0, new ButtonBuilder()
+            .setCustomId('combat_spell')
+            .setLabel('Cast Spell')
+            .setStyle(ButtonStyle.Primary)
+            .setEmoji('🔮'));
+        }
+      }
+
+      const row = new ActionRowBuilder().addComponents(buttons.slice(0, 5));
 
       await interaction.update({ embeds: [embed], components: [row] });
     }

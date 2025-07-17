@@ -51,7 +51,8 @@ const playerSchema = new mongoose.Schema({
     smithing: { type: skillSchema, default: () => ({}) },
     woodcutting: { type: skillSchema, default: () => ({}) },
     fletching: { type: skillSchema, default: () => ({}) },
-    crafting: { type: skillSchema, default: () => ({}) }
+    crafting: { type: skillSchema, default: () => ({}) },
+    runecrafting: { type: skillSchema, default: () => ({}) }
   },
   inventory: [inventoryItemSchema],
   equipment: { type: equipmentSchema, default: () => ({}) },

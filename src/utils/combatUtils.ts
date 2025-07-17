@@ -7,6 +7,8 @@ export interface CombatStats {
   defense: number;
   accuracy: number;
   maxHit: number;
+  magic: number;
+  magicBonus: number;
 }
 
 export async function calculateCombatStats(player: any): Promise<CombatStats> {
@@ -14,7 +16,9 @@ export async function calculateCombatStats(player: any): Promise<CombatStats> {
     attack: 0,
     defense: 0,
     accuracy: 0,
-    maxHit: 0
+    maxHit: 0,
+    magic: 0,
+    magicBonus: 0
   };
 
   const attackLevel = calculateLevelFromExperience(player.skills.attack?.experience || 0);
@@ -34,6 +38,7 @@ export async function calculateCombatStats(player: any): Promise<CombatStats> {
   } else if (combatStyle === 'magic') {
     // Magic increases both magic accuracy and damage
     baseStats.attack = magicLevel;
+    baseStats.magic = magicLevel;
     baseStats.accuracy = magicLevel * 2 + 10;  // Magic skill affects accuracy
     baseStats.maxHit = magicLevel + 3;         // Magic skill affects damage
   } else {
@@ -45,6 +50,9 @@ export async function calculateCombatStats(player: any): Promise<CombatStats> {
   
   // Defense skill affects defense for all combat styles
   baseStats.defense = defenseLevel;
+  
+  // Set magic level for all combat styles (used by spell calculations)
+  baseStats.magic = magicLevel;
 
   // Apply weapon bonuses based on combat style
   if (player.equipment.weapon) {
@@ -62,6 +70,11 @@ export async function calculateCombatStats(player: any): Promise<CombatStats> {
       // Accuracy and damage bonuses apply regardless of style
       baseStats.accuracy += weapon.stats.accuracy || 0;
       baseStats.maxHit += weapon.stats.damage || 0;
+      
+      // Magic bonus from magic weapons
+      if (weapon.stats.magic) {
+        baseStats.magicBonus += weapon.stats.magic;
+      }
     }
   }
 

@@ -2711,6 +2711,282 @@ export const defaultItems = [
     stats: { defense: 10, range: 10, accuracy: 10 },
     stackable: false,
     value: 9600
+  },
+
+  // Rune Essence
+  {
+    id: 'rune_essence',
+    name: 'Rune Essence',
+    description: 'Pure essence used to craft runes.',
+    type: 'resource',
+    subType: 'essence',
+    levelRequired: 1,
+    stackable: true,
+    value: 5
+  },
+
+  // Runes
+  {
+    id: 'air_rune',
+    name: 'Air Rune',
+    description: 'A rune containing the power of air.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 1,
+    stackable: true,
+    value: 10
+  },
+  {
+    id: 'earth_rune',
+    name: 'Earth Rune',
+    description: 'A rune containing the power of earth.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 1,
+    stackable: true,
+    value: 10
+  },
+  {
+    id: 'water_rune',
+    name: 'Water Rune',
+    description: 'A rune containing the power of water.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 5,
+    stackable: true,
+    value: 12
+  },
+  {
+    id: 'fire_rune',
+    name: 'Fire Rune',
+    description: 'A rune containing the power of fire.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 9,
+    stackable: true,
+    value: 15
+  },
+  {
+    id: 'mind_rune',
+    name: 'Mind Rune',
+    description: 'A rune containing mental power.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 2,
+    stackable: true,
+    value: 12
+  },
+  {
+    id: 'body_rune',
+    name: 'Body Rune',
+    description: 'A rune containing physical power.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 20,
+    stackable: true,
+    value: 25
+  },
+  {
+    id: 'cosmic_rune',
+    name: 'Cosmic Rune',
+    description: 'A rune containing cosmic power.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 27,
+    stackable: true,
+    value: 35
+  },
+  {
+    id: 'chaos_rune',
+    name: 'Chaos Rune',
+    description: 'A rune containing chaotic power.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 35,
+    stackable: true,
+    value: 50
+  },
+  {
+    id: 'nature_rune',
+    name: 'Nature Rune',
+    description: 'A rune containing natural power.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 44,
+    stackable: true,
+    value: 75
+  },
+  {
+    id: 'law_rune',
+    name: 'Law Rune',
+    description: 'A rune containing lawful power.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 54,
+    stackable: true,
+    value: 100
+  },
+  {
+    id: 'death_rune',
+    name: 'Death Rune',
+    description: 'A rune containing the power of death.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 65,
+    stackable: true,
+    value: 150
+  },
+  {
+    id: 'blood_rune',
+    name: 'Blood Rune',
+    description: 'A rune containing blood magic.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 77,
+    stackable: true,
+    value: 300
+  },
+  {
+    id: 'soul_rune',
+    name: 'Soul Rune',
+    description: 'A rune containing soul power.',
+    type: 'resource',
+    subType: 'rune',
+    levelRequired: 90,
+    stackable: true,
+    value: 500
+  },
+
+  // Talismans for Runecrafting
+  {
+    id: 'air_talisman',
+    name: 'Air Talisman',
+    description: 'A talisman that allows access to the Air Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 1,
+    stackable: false,
+    value: 50
+  },
+  {
+    id: 'earth_talisman',
+    name: 'Earth Talisman',
+    description: 'A talisman that allows access to the Earth Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 1,
+    stackable: false,
+    value: 50
+  },
+  {
+    id: 'water_talisman',
+    name: 'Water Talisman',
+    description: 'A talisman that allows access to the Water Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 5,
+    stackable: false,
+    value: 75
+  },
+  {
+    id: 'fire_talisman',
+    name: 'Fire Talisman',
+    description: 'A talisman that allows access to the Fire Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 9,
+    stackable: false,
+    value: 100
+  },
+  {
+    id: 'mind_talisman',
+    name: 'Mind Talisman',
+    description: 'A talisman that allows access to the Mind Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 2,
+    stackable: false,
+    value: 60
+  },
+  {
+    id: 'body_talisman',
+    name: 'Body Talisman',
+    description: 'A talisman that allows access to the Body Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 20,
+    stackable: false,
+    value: 200
+  },
+  {
+    id: 'cosmic_talisman',
+    name: 'Cosmic Talisman',
+    description: 'A talisman that allows access to the Cosmic Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 27,
+    stackable: false,
+    value: 300
+  },
+  {
+    id: 'chaos_talisman',
+    name: 'Chaos Talisman',
+    description: 'A talisman that allows access to the Chaos Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 35,
+    stackable: false,
+    value: 500
+  },
+  {
+    id: 'nature_talisman',
+    name: 'Nature Talisman',
+    description: 'A talisman that allows access to the Nature Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 44,
+    stackable: false,
+    value: 750
+  },
+  {
+    id: 'law_talisman',
+    name: 'Law Talisman',
+    description: 'A talisman that allows access to the Law Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 54,
+    stackable: false,
+    value: 1000
+  },
+  {
+    id: 'death_talisman',
+    name: 'Death Talisman',
+    description: 'A talisman that allows access to the Death Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 65,
+    stackable: false,
+    value: 1500
+  },
+  {
+    id: 'blood_talisman',
+    name: 'Blood Talisman',
+    description: 'A talisman that allows access to the Blood Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 77,
+    stackable: false,
+    value: 3000
+  },
+  {
+    id: 'soul_talisman',
+    name: 'Soul Talisman',
+    description: 'A talisman that allows access to the Soul Altar.',
+    type: 'tool',
+    subType: 'talisman',
+    levelRequired: 90,
+    stackable: false,
+    value: 5000
   }
 ];
 

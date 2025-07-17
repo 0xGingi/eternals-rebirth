@@ -17,6 +17,7 @@ const monsterSchema = new mongoose.Schema({
   attack: { type: Number, required: true },
   defense: { type: Number, required: true },
   experience: { type: Number, required: true },
+  elementalWeakness: { type: String, enum: ['fire', 'water', 'earth', 'air'], required: false },
   dropTable: [{
     itemId: { type: String, required: true },
     quantity: { type: Number, required: true },

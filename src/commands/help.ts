@@ -39,13 +39,19 @@ const helpCategories = {
     description: 'Fight monsters and manage combat',
     commands: [
       '`/fight` - Start combat with monsters',
-      '`/style <combat_style>` - Change combat style',
+      '`/style <combat_style>` - Change combat style (attack/strength/defense/range/magic)',
       '',
       '**In combat, use buttons to:**',
       '• Attack - Deal damage to monster',
+      '• Cast Spell - Cast magic spells (magic style only)',
       '• Defend - Reduce incoming damage',
       '• Eat Food - Heal during combat',
-      '• Run Away - Attempt to escape'
+      '• Run Away - Attempt to escape',
+      '',
+      '**Magic Combat:**',
+      '• Equip magic weapon & set style to magic',
+      '• Spells consume runes and deal elemental damage',
+      '• Elemental weaknesses provide +10% accuracy & damage'
     ]
   },
   skilling: {
@@ -58,27 +64,33 @@ const helpCategories = {
       '`/smith <smelt/smith> <item> [quantity]` - Smelt ores or smith items',
       '`/fletch <item> [quantity]` - Fletch logs into arrow shafts and bows',
       '`/craft <item> [quantity]` - Craft arrows, bows, and staffs',
-      '`/cook <item> [quantity]` - Cook raw fish into food'
+      '`/cook <item> [quantity]` - Cook raw fish into food',
+      '`/runecraft <rune> [quantity]` - Craft runes from essence (requires talismans)'
     ]
   },
   spells: {
-    name: 'Spell Commands',
+    name: 'Magic & Spells',
     description: 'Cast magic spells and use abilities',
     commands: [
+      '**Combat Spells** (Used in combat with "Cast Spell" button):',
+      '• Wind/Earth/Water/Fire Strike/Bolt/Blast/Wave/Surge',
+      '• Requires runes & magic weapon equipped',
+      '• Elemental damage with weakness bonuses',
+      '• Levels 1-95, progressively stronger',
+      '',
+      '**Utility Spells:**',
       '`/spell low_alch <item> [quantity]` - Low Level Alchemy (Level 1)',
       '• Converts items to coins at 50% value',
-      '• Requires magic weapon equipped',
-      '• Gives 31 Magic XP per cast',
+      '• Requires magic weapon equipped, gives 31 Magic XP',
       '',
       '`/spell high_alch <item> [quantity]` - High Level Alchemy (Level 55)',
       '• Converts items to coins at 100% value',
-      '• Requires magic weapon equipped',
-      '• Gives 65 Magic XP per cast',
+      '• Requires magic weapon equipped, gives 65 Magic XP',
       '',
       '**Notes:**',
-      '• Only items with value can be alchemized',
-      '• Magic weapon must be equipped to cast spells',
-      '• Cannot cast spells while in combat or skilling'
+      '• Magic weapon must be equipped for all spells',
+      '• Combat spells used via combat interface only',
+      '• Use `/list magic` for complete spell guide'
     ]
   },
   information: {
@@ -94,6 +106,8 @@ const helpCategories = {
       '`/list fletching` - Fletching recipes',
       '`/list crafting` - Crafting recipes',
       '`/list cooking` - Cooking recipes',
+      '`/list runecrafting` - Complete runecrafting guide',
+      '`/list magic` - Magic spells and combat guide',
       '`/list items` - All items by type'
     ]
   }

@@ -227,6 +227,8 @@ export const data = new SlashCommandBuilder()
         { name: 'Fletching Recipes', value: 'fletching' },
         { name: 'Crafting Recipes', value: 'crafting' },
         { name: 'Cooking Recipes', value: 'cooking' },
+        { name: 'Runecrafting Guide', value: 'runecrafting' },
+        { name: 'Magic Spells & Combat', value: 'magic' },
         { name: 'All Items by Type', value: 'items' }
       )
   );
@@ -345,6 +347,10 @@ async function createEmbedWithPagination(category: string, page: number): Promis
       return await createCraftingEmbedPaginated(page);
     case 'cooking':
       return await createCookingEmbedPaginated(page);
+    case 'runecrafting':
+      return { embed: createRunecraftingEmbed(), totalPages: 1 };
+    case 'magic':
+      return { embed: createMagicEmbed(), totalPages: 1 };
     case 'items':
       return { embed: await createItemsEmbed(), totalPages: 1 };
     default:
@@ -614,6 +620,135 @@ async function createItemsEmbed(): Promise<EmbedBuilder> {
       inline: false
     });
   });
+
+  return embed;
+}
+
+function createRunecraftingEmbed(): EmbedBuilder {
+  const embed = new EmbedBuilder()
+    .setColor(0x9932CC)
+    .setTitle('🔮 Runecrafting Guide')
+    .setDescription('Complete guide to the Runecrafting skill');
+
+  embed.addFields(
+    {
+      name: 'Getting Started',
+      value: '• Mine **Rune Essence** at Lumbridge (Level 1 Mining)\n' +
+             '• Obtain **Talismans** from monster drops\n' +
+             '• Use `/runecraft` command to craft runes\n' +
+             '• Each talisman allows crafting of specific rune types',
+      inline: false
+    },
+    {
+      name: 'Basic Runes (Levels 1-30)',
+      value: '**Air Rune** (Lv1) - Air Talisman + 1 Essence = 1 Rune (10 XP)\n' +
+             '**Earth Rune** (Lv5) - Earth Talisman + 1 Essence = 1 Rune (15 XP)\n' +
+             '**Water Rune** (Lv10) - Water Talisman + 1 Essence = 1 Rune (20 XP)\n' +
+             '**Fire Rune** (Lv15) - Fire Talisman + 1 Essence = 1 Rune (25 XP)\n' +
+             '**Mind Rune** (Lv20) - Mind Talisman + 1 Essence = 1 Rune (30 XP)\n' +
+             '**Body Rune** (Lv25) - Body Talisman + 1 Essence = 1 Rune (35 XP)\n' +
+             '**Cosmic Rune** (Lv30) - Cosmic Talisman + 2 Essence = 1 Rune (40 XP)',
+      inline: false
+    },
+    {
+      name: 'Advanced Runes (Levels 35-90)',
+      value: '**Chaos Rune** (Lv35) - Chaos Talisman + 2 Essence = 1 Rune (45 XP)\n' +
+             '**Nature Rune** (Lv40) - Nature Talisman + 2 Essence = 1 Rune (50 XP)\n' +
+             '**Law Rune** (Lv45) - Law Talisman + 3 Essence = 1 Rune (55 XP)\n' +
+             '**Death Rune** (Lv50) - Death Talisman + 3 Essence = 1 Rune (60 XP)\n' +
+             '**Blood Rune** (Lv70) - Blood Talisman + 4 Essence = 1 Rune (80 XP)\n' +
+             '**Soul Rune** (Lv90) - Soul Talisman + 5 Essence = 1 Rune (100 XP)',
+      inline: false
+    },
+    {
+      name: 'Talisman Sources',
+      value: '• **Monster Drops** - All monsters have chance to drop talismans\n' +
+             '• **Drop Rates** - Vary by monster level and area\n' +
+             '• **Stackable** - Talismans stack in inventory\n' +
+             '• **Reusable** - Talismans are not consumed when crafting',
+      inline: false
+    },
+    {
+      name: 'Tips & Strategy',
+      value: '• Start with Air Runes for early XP\n' +
+             '• Collect multiple talismans for efficient crafting\n' +
+             '• Stock up on Rune Essence before crafting sessions\n' +
+             '• Higher level runes give more XP but require more essence\n' +
+             '• Runes are consumed when casting combat spells',
+      inline: false
+    }
+  );
+
+  return embed;
+}
+
+function createMagicEmbed(): EmbedBuilder {
+  const embed = new EmbedBuilder()
+    .setColor(0x8A2BE2)
+    .setTitle('✨ Magic Spells & Combat')
+    .setDescription('Complete guide to Magic combat and spells');
+
+  embed.addFields(
+    {
+      name: 'Magic Combat Basics',
+      value: '• Equip a **Magic Weapon** (staff)\n' +
+             '• Set combat style to **Magic** with `/style magic`\n' +
+             '• Use `/fight` then click **Cast Spell** button\n' +
+             '• Spells consume runes from your inventory\n' +
+             '• Magic attacks train Magic skill',
+      inline: false
+    },
+    {
+      name: 'Elemental Combat Spells',
+      value: '**Wind Strike** (Lv1) - 1 Air + 1 Mind = 2-8 damage\n' +
+             '**Earth Strike** (Lv5) - 1 Earth + 1 Mind = 3-9 damage\n' +
+             '**Water Strike** (Lv10) - 1 Water + 1 Mind = 4-10 damage\n' +
+             '**Fire Strike** (Lv15) - 1 Fire + 1 Mind = 5-11 damage\n' +
+             '**Wind Bolt** (Lv20) - 2 Air + 1 Chaos = 6-12 damage\n' +
+             '**Earth Bolt** (Lv25) - 2 Earth + 1 Chaos = 7-13 damage\n' +
+             '**Water Bolt** (Lv30) - 2 Water + 1 Chaos = 8-14 damage\n' +
+             '**Fire Bolt** (Lv35) - 2 Fire + 1 Chaos = 9-15 damage',
+      inline: false
+    },
+    {
+      name: 'Advanced Combat Spells',
+      value: '**Wind Blast** (Lv40) - 3 Air + 1 Death = 10-16 damage\n' +
+             '**Earth Blast** (Lv45) - 3 Earth + 1 Death = 11-17 damage\n' +
+             '**Water Blast** (Lv50) - 3 Water + 1 Death = 12-18 damage\n' +
+             '**Fire Blast** (Lv55) - 3 Fire + 1 Death = 13-19 damage\n' +
+             '**Wind Wave** (Lv60) - 5 Air + 1 Blood = 14-20 damage\n' +
+             '**Earth Wave** (Lv65) - 5 Earth + 1 Blood = 15-21 damage\n' +
+             '**Water Wave** (Lv70) - 5 Water + 1 Blood = 16-22 damage\n' +
+             '**Fire Wave** (Lv75) - 5 Fire + 1 Blood = 17-23 damage',
+      inline: false
+    },
+    {
+      name: 'Master Spells',
+      value: '**Wind Surge** (Lv80) - 7 Air + 1 Soul = 18-24 damage\n' +
+             '**Earth Surge** (Lv85) - 7 Earth + 1 Soul = 19-25 damage\n' +
+             '**Water Surge** (Lv90) - 7 Water + 1 Soul = 20-26 damage\n' +
+             '**Fire Surge** (Lv95) - 7 Fire + 1 Soul = 21-27 damage',
+      inline: false
+    },
+    {
+      name: 'Elemental Weaknesses',
+      value: '🔥 **Fire** vs Water weak monsters: +10% accuracy & damage\n' +
+             '💧 **Water** vs Fire weak monsters: +10% accuracy & damage\n' +
+             '🌍 **Earth** vs Air weak monsters: +10% accuracy & damage\n' +
+             '💨 **Air** vs Earth weak monsters: +10% accuracy & damage\n' +
+             '*Check monster info during combat for weaknesses*',
+      inline: false
+    },
+    {
+      name: 'Magic Weapons & Requirements',
+      value: '• **Basic Staff** (Lv10) - Crafted with 3 Normal Logs\n' +
+             '• **Oak Staff** (Lv25) - Crafted with 3 Oak Logs\n' +
+             '• **Higher tier staves** available through smithing\n' +
+             '• Magic weapons provide magic accuracy bonus\n' +
+             '• Use `/equip weapon [staff_name]` to equip',
+      inline: false
+    }
+  );
 
   return embed;
 }

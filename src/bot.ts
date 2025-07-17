@@ -89,6 +89,11 @@ export class Bot {
             await (inventoryCommand as any).handleButton(interaction);
           }
         }
+      } else if (interaction.isStringSelectMenu()) {
+        if (interaction.customId === 'combat_spell_select') {
+          const selectedSpell = interaction.values[0];
+          await handleCombatAction(interaction, `cast_${selectedSpell}`);
+        }
       }
     });
   }

@@ -15,10 +15,13 @@ export const defaultAreas = [
         attack: 3,
         defense: 1,
         experience: 15,
+        elementalWeakness: 'fire',
         dropTable: [
           { itemId: 'coins', quantity: 3, chance: 0.8 },
           { itemId: 'bones', quantity: 1, chance: 0.5 },
-          { itemId: 'leather', quantity: 1, chance: 0.3 }
+          { itemId: 'leather', quantity: 1, chance: 0.3 },
+          { itemId: 'air_talisman', quantity: 1, chance: 0.05 },
+          { itemId: 'earth_talisman', quantity: 1, chance: 0.05 }
         ]
       },
       {
@@ -29,10 +32,14 @@ export const defaultAreas = [
         attack: 4,
         defense: 2,
         experience: 20,
+        elementalWeakness: 'earth',
         dropTable: [
           { itemId: 'coins', quantity: 5, chance: 0.7 },
           { itemId: 'bones', quantity: 1, chance: 0.6 },
-          { itemId: 'leather', quantity: 1, chance: 1.0 }
+          { itemId: 'leather', quantity: 1, chance: 1.0 },
+          { itemId: 'air_talisman', quantity: 1, chance: 0.04 },
+          { itemId: 'earth_talisman', quantity: 1, chance: 0.04 },
+          { itemId: 'mind_talisman', quantity: 1, chance: 0.03 }
         ]
       },
       {
@@ -43,11 +50,16 @@ export const defaultAreas = [
         attack: 6,
         defense: 3,
         experience: 25,
+        elementalWeakness: 'water',
         dropTable: [
           { itemId: 'coins', quantity: 8, chance: 0.9 },
           { itemId: 'bones', quantity: 1, chance: 0.6 },
           { itemId: 'bronze_sword', quantity: 1, chance: 0.1 },
-          { itemId: 'leather', quantity: 1, chance: 0.25 }
+          { itemId: 'leather', quantity: 1, chance: 0.25 },
+          { itemId: 'air_talisman', quantity: 1, chance: 0.06 },
+          { itemId: 'earth_talisman', quantity: 1, chance: 0.06 },
+          { itemId: 'mind_talisman', quantity: 1, chance: 0.05 },
+          { itemId: 'water_talisman', quantity: 1, chance: 0.03 }
         ]
       }
     ],
@@ -91,6 +103,14 @@ export const defaultAreas = [
         levelRequired: 15,
         experience: 38,
         toolRequired: 'bronze_axe'
+      },
+      {
+        id: 'rune_essence',
+        name: 'Rune Essence',
+        skill: 'mining',
+        levelRequired: 1,
+        experience: 5,
+        toolRequired: 'bronze_pickaxe'
       }
     ]
   },
@@ -108,11 +128,15 @@ export const defaultAreas = [
         attack: 25,
         defense: 20,
         experience: 50,
+        elementalWeakness: 'air',
         dropTable: [
           { itemId: 'coins', quantity: 25, chance: 0.9 },
           { itemId: 'iron_sword', quantity: 1, chance: 0.05 },
           { itemId: 'bread', quantity: 2, chance: 0.3 },
-          { itemId: 'hard_leather', quantity: 1, chance: 0.2 }
+          { itemId: 'hard_leather', quantity: 1, chance: 0.2 },
+          { itemId: 'water_talisman', quantity: 1, chance: 0.08 },
+          { itemId: 'fire_talisman', quantity: 1, chance: 0.06 },
+          { itemId: 'mind_talisman', quantity: 1, chance: 0.07 }
         ]
       },
       {
@@ -123,11 +147,15 @@ export const defaultAreas = [
         attack: 20,
         defense: 15,
         experience: 40,
+        elementalWeakness: 'fire',
         dropTable: [
           { itemId: 'coins', quantity: 15, chance: 0.8 },
           { itemId: 'bones', quantity: 2, chance: 0.7 },
           { itemId: 'iron_ore', quantity: 1, chance: 0.1 },
-          { itemId: 'hard_leather', quantity: 1, chance: 0.15 }
+          { itemId: 'hard_leather', quantity: 1, chance: 0.15 },
+          { itemId: 'water_talisman', quantity: 1, chance: 0.05 },
+          { itemId: 'fire_talisman', quantity: 1, chance: 0.04 },
+          { itemId: 'body_talisman', quantity: 1, chance: 0.02 }
         ]
       }
     ],
@@ -180,11 +208,15 @@ export const defaultAreas = [
         attack: 35,
         defense: 30,
         experience: 80,
+        elementalWeakness: 'water',
         dropTable: [
           { itemId: 'coins', quantity: 40, chance: 0.9 },
           { itemId: 'mithril_ore', quantity: 1, chance: 0.15 },
           { itemId: 'iron_sword', quantity: 1, chance: 0.1 },
-          { itemId: 'studded_leather', quantity: 1, chance: 0.18 }
+          { itemId: 'studded_leather', quantity: 1, chance: 0.18 },
+          { itemId: 'fire_talisman', quantity: 1, chance: 0.1 },
+          { itemId: 'body_talisman', quantity: 1, chance: 0.08 },
+          { itemId: 'cosmic_talisman', quantity: 1, chance: 0.05 }
         ]
       },
       {
@@ -199,7 +231,10 @@ export const defaultAreas = [
           { itemId: 'coins', quantity: 60, chance: 0.9 },
           { itemId: 'mithril_sword', quantity: 1, chance: 0.05 },
           { itemId: 'bread', quantity: 3, chance: 0.4 },
-          { itemId: 'studded_leather', quantity: 1, chance: 0.15 }
+          { itemId: 'studded_leather', quantity: 1, chance: 0.15 },
+          { itemId: 'body_talisman', quantity: 1, chance: 0.12 },
+          { itemId: 'cosmic_talisman', quantity: 1, chance: 0.08 },
+          { itemId: 'chaos_talisman', quantity: 1, chance: 0.04 }
         ]
       }
     ],
@@ -252,12 +287,15 @@ export const defaultAreas = [
         attack: 55,
         defense: 45,
         experience: 150,
+        elementalWeakness: 'earth',
         dropTable: [
           { itemId: 'coins', quantity: 80, chance: 0.9 },
           { itemId: 'adamant_ore', quantity: 1, chance: 0.12 },
           { itemId: 'steel_sword', quantity: 1, chance: 0.08 },
           { itemId: 'cooked_salmon', quantity: 2, chance: 0.3 },
-          { itemId: 'green_dhide', quantity: 1, chance: 0.12 }
+          { itemId: 'green_dhide', quantity: 1, chance: 0.12 },
+          { itemId: 'chaos_talisman', quantity: 1, chance: 0.1 },
+          { itemId: 'nature_talisman', quantity: 1, chance: 0.06 }
         ]
       },
       {
@@ -273,7 +311,9 @@ export const defaultAreas = [
           { itemId: 'adamant_sword', quantity: 1, chance: 0.03 },
           { itemId: 'steel_helmet', quantity: 1, chance: 0.05 },
           { itemId: 'bones', quantity: 3, chance: 0.7 },
-          { itemId: 'green_dhide', quantity: 1, chance: 0.1 }
+          { itemId: 'green_dhide', quantity: 1, chance: 0.1 },
+          { itemId: 'nature_talisman', quantity: 1, chance: 0.08 },
+          { itemId: 'law_talisman', quantity: 1, chance: 0.04 }
         ]
       },
       {
@@ -289,7 +329,9 @@ export const defaultAreas = [
           { itemId: 'adamant_chestplate', quantity: 1, chance: 0.02 },
           { itemId: 'mithril_sword', quantity: 1, chance: 0.1 },
           { itemId: 'bread', quantity: 5, chance: 0.5 },
-          { itemId: 'blue_dhide', quantity: 1, chance: 0.08 }
+          { itemId: 'blue_dhide', quantity: 1, chance: 0.08 },
+          { itemId: 'law_talisman', quantity: 1, chance: 0.1 },
+          { itemId: 'death_talisman', quantity: 1, chance: 0.03 }
         ]
       }
     ],
@@ -347,7 +389,9 @@ export const defaultAreas = [
           { itemId: 'rune_ore', quantity: 1, chance: 0.1 },
           { itemId: 'adamant_sword', quantity: 1, chance: 0.08 },
           { itemId: 'bones', quantity: 5, chance: 0.8 },
-          { itemId: 'blue_dhide', quantity: 1, chance: 0.1 }
+          { itemId: 'blue_dhide', quantity: 1, chance: 0.1 },
+          { itemId: 'law_talisman', quantity: 1, chance: 0.12 },
+          { itemId: 'death_talisman', quantity: 1, chance: 0.08 }
         ]
       },
       {
@@ -363,7 +407,9 @@ export const defaultAreas = [
           { itemId: 'rune_sword', quantity: 1, chance: 0.02 },
           { itemId: 'adamant_helmet', quantity: 1, chance: 0.04 },
           { itemId: 'cooked_trout', quantity: 3, chance: 0.4 },
-          { itemId: 'red_dhide', quantity: 1, chance: 0.08 }
+          { itemId: 'red_dhide', quantity: 1, chance: 0.08 },
+          { itemId: 'death_talisman', quantity: 1, chance: 0.1 },
+          { itemId: 'blood_talisman', quantity: 1, chance: 0.04 }
         ]
       },
       {
@@ -379,7 +425,9 @@ export const defaultAreas = [
           { itemId: 'rune_chestplate', quantity: 1, chance: 0.015 },
           { itemId: 'rune_helmet', quantity: 1, chance: 0.02 },
           { itemId: 'dragon_ore', quantity: 1, chance: 0.05 },
-          { itemId: 'red_dhide', quantity: 1, chance: 0.06 }
+          { itemId: 'red_dhide', quantity: 1, chance: 0.06 },
+          { itemId: 'blood_talisman', quantity: 1, chance: 0.08 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.02 }
         ]
       }
     ],
@@ -432,12 +480,15 @@ export const defaultAreas = [
         attack: 120,
         defense: 100,
         experience: 500,
+        elementalWeakness: 'water',
         dropTable: [
           { itemId: 'coins', quantity: 500, chance: 0.9 },
           { itemId: 'dragon_ore', quantity: 1, chance: 0.08 },
           { itemId: 'rune_sword', quantity: 1, chance: 0.05 },
           { itemId: 'dragon_sword', quantity: 1, chance: 0.01 },
-          { itemId: 'black_dhide', quantity: 1, chance: 0.1 }
+          { itemId: 'black_dhide', quantity: 1, chance: 0.1 },
+          { itemId: 'blood_talisman', quantity: 1, chance: 0.12 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.06 }
         ]
       },
       {
@@ -453,7 +504,8 @@ export const defaultAreas = [
           { itemId: 'dragon_helmet', quantity: 1, chance: 0.01 },
           { itemId: 'dragon_shield', quantity: 1, chance: 0.008 },
           { itemId: 'barrows_ore', quantity: 1, chance: 0.03 },
-          { itemId: 'black_dhide', quantity: 1, chance: 0.08 }
+          { itemId: 'black_dhide', quantity: 1, chance: 0.08 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.1 }
         ]
       },
       {
@@ -469,7 +521,8 @@ export const defaultAreas = [
           { itemId: 'dragon_chestplate', quantity: 1, chance: 0.005 },
           { itemId: 'dragon_legs', quantity: 1, chance: 0.006 },
           { itemId: 'third_age_ore', quantity: 1, chance: 0.02 },
-          { itemId: 'ancient_dhide', quantity: 1, chance: 0.06 }
+          { itemId: 'ancient_dhide', quantity: 1, chance: 0.06 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.15 }
         ]
       }
     ],
@@ -527,7 +580,9 @@ export const defaultAreas = [
           { itemId: 'barrows_ore', quantity: 1, chance: 0.06 },
           { itemId: 'dragon_sword', quantity: 1, chance: 0.03 },
           { itemId: 'bones', quantity: 10, chance: 0.9 },
-          { itemId: 'ancient_dhide', quantity: 1, chance: 0.08 }
+          { itemId: 'ancient_dhide', quantity: 1, chance: 0.08 },
+          { itemId: 'blood_talisman', quantity: 1, chance: 0.15 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.08 }
         ]
       },
       {
@@ -543,7 +598,8 @@ export const defaultAreas = [
           { itemId: 'barrows_helmet', quantity: 1, chance: 0.008 },
           { itemId: 'barrows_sword', quantity: 1, chance: 0.006 },
           { itemId: 'third_age_ore', quantity: 1, chance: 0.015 },
-          { itemId: 'barrows_leather', quantity: 1, chance: 0.06 }
+          { itemId: 'barrows_leather', quantity: 1, chance: 0.06 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.12 }
         ]
       },
       {
@@ -559,7 +615,8 @@ export const defaultAreas = [
           { itemId: 'barrows_chestplate', quantity: 1, chance: 0.003 },
           { itemId: 'barrows_shield', quantity: 1, chance: 0.004 },
           { itemId: 'primal_ore', quantity: 1, chance: 0.01 },
-          { itemId: 'barrows_leather', quantity: 1, chance: 0.05 }
+          { itemId: 'barrows_leather', quantity: 1, chance: 0.05 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.2 }
         ]
       }
     ],
@@ -609,7 +666,8 @@ export const defaultAreas = [
           { itemId: 'primal_ore', quantity: 1, chance: 0.04 },
           { itemId: 'third_age_sword', quantity: 1, chance: 0.02 },
           { itemId: 'barrows_helmet', quantity: 1, chance: 0.01 },
-          { itemId: 'barrows_leather', quantity: 1, chance: 0.08 }
+          { itemId: 'barrows_leather', quantity: 1, chance: 0.08 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.25 }
         ]
       },
       {
@@ -625,7 +683,8 @@ export const defaultAreas = [
           { itemId: 'primal_helmet', quantity: 1, chance: 0.003 },
           { itemId: 'primal_sword', quantity: 1, chance: 0.002 },
           { itemId: 'third_age_chestplate', quantity: 1, chance: 0.005 },
-          { itemId: 'primal_leather', quantity: 1, chance: 0.06 }
+          { itemId: 'primal_leather', quantity: 1, chance: 0.06 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.3 }
         ]
       },
       {
@@ -641,7 +700,8 @@ export const defaultAreas = [
           { itemId: 'primal_chestplate', quantity: 1, chance: 0.001 },
           { itemId: 'primal_shield', quantity: 1, chance: 0.001 },
           { itemId: 'primal_legs', quantity: 1, chance: 0.0015 },
-          { itemId: 'primal_leather', quantity: 1, chance: 0.04 }
+          { itemId: 'primal_leather', quantity: 1, chance: 0.04 },
+          { itemId: 'soul_talisman', quantity: 1, chance: 0.5 }
         ]
       }
     ],
