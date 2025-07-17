@@ -229,7 +229,9 @@ export const data = new SlashCommandBuilder()
         { name: 'Cooking Recipes', value: 'cooking' },
         { name: 'Runecrafting Guide', value: 'runecrafting' },
         { name: 'Magic Spells & Combat', value: 'magic' },
-        { name: 'All Items by Type', value: 'items' }
+        { name: 'All Items by Type', value: 'items' },
+        { name: 'Equipment Slots & Requirements', value: 'equipment' },
+        { name: 'Skill Training Guide', value: 'skills' }
       )
   );
 
@@ -353,6 +355,10 @@ async function createEmbedWithPagination(category: string, page: number): Promis
       return { embed: createMagicEmbed(), totalPages: 1 };
     case 'items':
       return { embed: await createItemsEmbed(), totalPages: 1 };
+    case 'equipment':
+      return { embed: createEquipmentEmbed(), totalPages: 1 };
+    case 'skills':
+      return { embed: createSkillsEmbed(), totalPages: 1 };
     default:
       return null;
   }
@@ -822,6 +828,168 @@ function createCombatEmbed(): EmbedBuilder {
              '• Monsters drop loot according to their drop table\n' +
              '• Defeated players respawn with full HP\n' +
              '• Combat style determines which skill levels up',
+      inline: false
+    }
+  );
+
+  return embed;
+}
+
+function createEquipmentEmbed(): EmbedBuilder {
+  const embed = new EmbedBuilder()
+    .setColor(0x32CD32)
+    .setTitle('⚔️ Equipment Slots & Requirements')
+    .setDescription('Complete guide to equipment slots and requirements');
+
+  embed.addFields(
+    {
+      name: 'Equipment Slots',
+      value: '**Weapon** - Primary weapon for combat\n' +
+             '**Ammunition** - Arrows/bolts for ranged weapons\n' +
+             '**Helmet** - Head protection\n' +
+             '**Chestplate** - Body protection\n' +
+             '**Legs** - Leg protection\n' +
+             '**Boots** - Foot protection\n' +
+             '**Gloves** - Hand protection\n' +
+             '**Ring** - Jewelry slot\n' +
+             '**Amulet** - Neck jewelry\n' +
+             '**Shield** - Off-hand protection',
+      inline: false
+    },
+    {
+      name: 'Weapon Types & Requirements',
+      value: '**Melee Weapons** - Swords, axes, maces\n' +
+             '• Requires Attack level to equip\n' +
+             '• Can use Attack/Strength/Defense combat styles\n' +
+             '\n' +
+             '**Ranged Weapons** - Bows, crossbows\n' +
+             '• Requires Range level to equip\n' +
+             '• Needs ammunition equipped\n' +
+             '• Can use Range/Defense combat styles\n' +
+             '\n' +
+             '**Magic Weapons** - Staffs, wands\n' +
+             '• Requires Magic level to equip\n' +
+             '• Can use Magic/Defense combat styles\n' +
+             '• Required for casting spells',
+      inline: false
+    },
+    {
+      name: 'Armor Types & Bonuses',
+      value: '**Melee Armor** - Provides attack accuracy bonus\n' +
+             '• Negative bonuses to range/magic accuracy\n' +
+             '• Defense bonus against all attack types\n' +
+             '\n' +
+             '**Range Armor** - Provides range accuracy bonus\n' +
+             '• Negative bonuses to attack/magic accuracy\n' +
+             '• Defense bonus against all attack types\n' +
+             '\n' +
+             '**Magic Armor** - Provides magic accuracy bonus\n' +
+             '• Negative bonuses to attack/range accuracy\n' +
+             '• Defense bonus against all attack types',
+      inline: false
+    },
+    {
+      name: 'Equipment Commands',
+      value: '`/equipment` - View currently equipped items\n' +
+             '`/equip <item>` - Equip weapons, armor, or tools\n' +
+             '`/unequip <slot>` - Remove item from equipment slot\n' +
+             '• Equipment affects combat effectiveness\n' +
+             '• Tools required for skilling activities\n' +
+             '• Level requirements must be met to equip items',
+      inline: false
+    },
+    {
+      name: 'Tool Requirements',
+      value: '**Mining** - Requires pickaxe equipped\n' +
+             '**Fishing** - Requires fishing rod equipped\n' +
+             '**Woodcutting** - Requires axe equipped\n' +
+             '• Higher tier tools provide better gathering rates\n' +
+             '• Tool tier determines maximum resource level\n' +
+             '• Use `/equip tool <tool_name>` to equip tools',
+      inline: false
+    }
+  );
+
+  return embed;
+}
+
+function createSkillsEmbed(): EmbedBuilder {
+  const embed = new EmbedBuilder()
+    .setColor(0x4169E1)
+    .setTitle('📈 Skill Training Guide')
+    .setDescription('Complete guide to training all skills from 1-99');
+
+  embed.addFields(
+    {
+      name: 'Combat Skills',
+      value: '**Attack** - Accuracy with melee weapons\n' +
+             '• Trained using Attack combat style\n' +
+             '• Unlocks higher tier melee weapons\n' +
+             '\n' +
+             '**Strength** - Damage with melee weapons\n' +
+             '• Trained using Strength combat style\n' +
+             '• Increases maximum melee damage\n' +
+             '\n' +
+             '**Defense** - Damage reduction and armor\n' +
+             '• Trained using Defense combat style\n' +
+             '• Unlocks higher tier armor\n' +
+             '\n' +
+             '**Magic** - Magical combat and spells\n' +
+             '• Trained using Magic combat style\n' +
+             '• Unlocks higher tier spells and magic weapons\n' +
+             '\n' +
+             '**Range** - Ranged combat accuracy\n' +
+             '• Trained using Range combat style\n' +
+             '• Unlocks higher tier ranged weapons',
+      inline: false
+    },
+    {
+      name: 'Gathering Skills',
+      value: '**Mining** - Extract ores from rocks\n' +
+             '• Use `/mine [ore] [quantity]` with pickaxe equipped\n' +
+             '• Higher levels unlock better ores\n' +
+             '\n' +
+             '**Fishing** - Catch fish from water\n' +
+             '• Use `/fish [fish] [quantity]` with fishing rod equipped\n' +
+             '• Higher levels unlock better fish\n' +
+             '\n' +
+             '**Woodcutting** - Cut logs from trees\n' +
+             '• Use `/woodcut [tree] [quantity]` with axe equipped\n' +
+             '• Higher levels unlock better logs',
+      inline: false
+    },
+    {
+      name: 'Production Skills',
+      value: '**Smithing** - Create metal items\n' +
+             '• Smelt ores into bars: `/smith smelt <bar> [quantity]`\n' +
+             '• Smith bars into items: `/smith smith <item> [quantity]`\n' +
+             '• Higher levels unlock better metals\n' +
+             '\n' +
+             '**Cooking** - Prepare food for healing\n' +
+             '• Use `/cook <item> [quantity]` to cook raw food\n' +
+             '• Higher levels unlock better food with more healing\n' +
+             '\n' +
+             '**Fletching** - Create ranged weapons and ammunition\n' +
+             '• Use `/fletch <item> [quantity]` with logs\n' +
+             '• Create bows, arrow shafts, and ranged equipment\n' +
+             '\n' +
+             '**Crafting** - Create various items\n' +
+             '• Use `/craft <item> [quantity]` with materials\n' +
+             '• Create arrows, armor, and other equipment\n' +
+             '\n' +
+             '**Runecrafting** - Create magical runes\n' +
+             '• Use `/runecraft <rune> [quantity]` with essence and talismans\n' +
+             '• Runes are consumed when casting spells',
+      inline: false
+    },
+    {
+      name: 'Skill Progression Tips',
+      value: '• All skills progress from level 1 to 99\n' +
+             '• Experience requirements increase exponentially\n' +
+             '• Higher level content provides more experience\n' +
+             '• Equipment bonuses can improve training rates\n' +
+             '• Use `/stats` to check current skill levels\n' +
+             '• Use `/list <skill>` for detailed training guides',
       inline: false
     }
   );

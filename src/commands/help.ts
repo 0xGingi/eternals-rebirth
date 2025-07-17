@@ -63,9 +63,16 @@ const helpCategories = {
       '`/woodcut [tree] [quantity]` - Cut trees (requires axe)',
       '`/smith <smelt/smith> <item> [quantity]` - Smelt ores or smith items',
       '`/fletch <item> [quantity]` - Fletch logs into arrow shafts and bows',
-      '`/craft <item> [quantity]` - Craft arrows, bows, and staffs',
+      '`/craft <item> [quantity]` - Craft arrows, leather armor, and other items',
       '`/cook <item> [quantity]` - Cook raw fish into food',
-      '`/runecraft <rune> [quantity]` - Craft runes from essence (requires talismans)'
+      '`/runecraft <rune> [quantity]` - Craft runes from essence (requires talismans)',
+      '',
+      '**Skilling Requirements:**',
+      '• Mining requires pickaxe equipped',
+      '• Fishing requires fishing rod equipped',
+      '• Woodcutting requires axe equipped',
+      '• Higher tier tools unlock better resources',
+      '• Level requirements apply to all resources and tools'
     ]
   },
   spells: {
@@ -108,7 +115,43 @@ const helpCategories = {
       '`/list cooking` - Cooking recipes',
       '`/list runecrafting` - Complete runecrafting guide',
       '`/list magic` - Magic spells and combat guide',
-      '`/list items` - All items by type'
+      '`/list items` - All items by type',
+      '`/list equipment` - Equipment slots and requirements',
+      '`/list skills` - Complete skill training guide'
+    ]
+  },
+  mechanics: {
+    name: 'Game Mechanics',
+    description: 'Core gameplay systems and mechanics',
+    commands: [
+      '**Experience System:**',
+      '• All skills level from 1-99 with exponential XP requirements',
+      '• Level determines equipment and content accessibility',
+      '• Higher level content provides more experience',
+      '',
+      '**Combat System:**',
+      '• Turn-based combat with 4 actions available',
+      '• Equipment provides accuracy, defense, and damage bonuses',
+      '• Combat styles determine which skill gains experience',
+      '• Magic combat requires runes and elemental weaknesses apply',
+      '',
+      '**Area System:**',
+      '• Areas have level requirements for access',
+      '• Each area contains unique monsters and resources',
+      '• Travel between areas using `/travel` command',
+      '• Higher level areas provide better rewards',
+      '',
+      '**Item System:**',
+      '• Items have level requirements and type restrictions',
+      '• Equipment slots: weapon, armor, ammunition, tools',
+      '• Tools are required for skilling activities',
+      '• Food items restore health during combat',
+      '',
+      '**Skill Training:**',
+      '• Combat skills: Attack, Strength, Defense, Magic, Range',
+      '• Gathering skills: Mining, Fishing, Woodcutting',
+      '• Production skills: Smithing, Cooking, Fletching, Crafting, Runecrafting',
+      '• Skills unlock better equipment and content progression'
     ]
   }
 };
@@ -125,7 +168,8 @@ function createMainMenuEmbed() {
       { name: '⚔️ Combat', value: helpCategories.combat.description, inline: true },
       { name: '🔨 Skilling', value: helpCategories.skilling.description, inline: true },
       { name: '🔮 Spells', value: helpCategories.spells.description, inline: true },
-      { name: '📚 Information', value: helpCategories.information.description, inline: true }
+      { name: '📚 Information', value: helpCategories.information.description, inline: true },
+      { name: '🎯 Game Mechanics', value: helpCategories.mechanics.description, inline: true }
     )
     .setFooter({ text: 'Click a button below to view commands in that category' });
 }
@@ -190,6 +234,11 @@ function createMainMenuButtons() {
         .setCustomId('help_information')
         .setLabel('Information')
         .setEmoji('📚')
+        .setStyle(ButtonStyle.Primary),
+      new ButtonBuilder()
+        .setCustomId('help_mechanics')
+        .setLabel('Mechanics')
+        .setEmoji('🎯')
         .setStyle(ButtonStyle.Primary)
     );
 
