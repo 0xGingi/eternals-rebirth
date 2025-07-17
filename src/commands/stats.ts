@@ -44,7 +44,7 @@ export async function execute(interaction: any) {
     const skillCategories = {
       combat: ['attack', 'strength', 'defense', 'magic', 'range'],
       gathering: ['mining', 'fishing', 'woodcutting'],
-      artisan: ['smithing', 'fletching', 'crafting', 'cooking']
+      artisan: ['smithing', 'fletching', 'crafting', 'cooking', 'runecrafting']
     };
 
     const embed = new EmbedBuilder()
