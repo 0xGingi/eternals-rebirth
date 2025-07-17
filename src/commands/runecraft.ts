@@ -3,19 +3,34 @@ import { Player } from '../models/Player';
 import { calculateLevelFromExperience, addExperience } from '../utils/experienceUtils';
 
 const RUNE_RECIPES = [
-  { id: 'air_rune', name: 'Air Rune', levelRequired: 1, experience: 5, talisman: 'air_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'earth_rune', name: 'Earth Rune', levelRequired: 1, experience: 5, talisman: 'earth_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'mind_rune', name: 'Mind Rune', levelRequired: 2, experience: 6, talisman: 'mind_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'water_rune', name: 'Water Rune', levelRequired: 5, experience: 6, talisman: 'water_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'fire_rune', name: 'Fire Rune', levelRequired: 9, experience: 7, talisman: 'fire_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'body_rune', name: 'Body Rune', levelRequired: 20, experience: 8, talisman: 'body_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'cosmic_rune', name: 'Cosmic Rune', levelRequired: 27, experience: 10, talisman: 'cosmic_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'chaos_rune', name: 'Chaos Rune', levelRequired: 35, experience: 12, talisman: 'chaos_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'nature_rune', name: 'Nature Rune', levelRequired: 44, experience: 15, talisman: 'nature_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'law_rune', name: 'Law Rune', levelRequired: 54, experience: 18, talisman: 'law_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'death_rune', name: 'Death Rune', levelRequired: 65, experience: 22, talisman: 'death_talisman', essenceRequired: 1, runesPerEssence: 1 },
-  { id: 'blood_rune', name: 'Blood Rune', levelRequired: 77, experience: 30, talisman: 'blood_talisman', essenceRequired: 2, runesPerEssence: 1 },
-  { id: 'soul_rune', name: 'Soul Rune', levelRequired: 90, experience: 40, talisman: 'soul_talisman', essenceRequired: 3, runesPerEssence: 1 }
+  // Lumbridge - Basic elemental runes
+  { id: 'air_rune', name: 'Air Rune', levelRequired: 1, experience: 5, talisman: 'air_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'lumbridge' },
+  { id: 'earth_rune', name: 'Earth Rune', levelRequired: 1, experience: 5, talisman: 'earth_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'lumbridge' },
+  { id: 'mind_rune', name: 'Mind Rune', levelRequired: 2, experience: 6, talisman: 'mind_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'lumbridge' },
+  
+  // Varrock - Intermediate elemental runes
+  { id: 'water_rune', name: 'Water Rune', levelRequired: 5, experience: 6, talisman: 'water_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'varrock' },
+  { id: 'fire_rune', name: 'Fire Rune', levelRequired: 9, experience: 7, talisman: 'fire_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'varrock' },
+  { id: 'body_rune', name: 'Body Rune', levelRequired: 20, experience: 8, talisman: 'body_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'varrock' },
+  
+  // Falador - Advanced runes  
+  { id: 'cosmic_rune', name: 'Cosmic Rune', levelRequired: 27, experience: 10, talisman: 'cosmic_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'falador' },
+  { id: 'chaos_rune', name: 'Chaos Rune', levelRequired: 35, experience: 12, talisman: 'chaos_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'falador' },
+  
+  // Catherby - Nature-based runes
+  { id: 'nature_rune', name: 'Nature Rune', levelRequired: 44, experience: 15, talisman: 'nature_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'catherby' },
+  
+  // Ardougne - Law runes
+  { id: 'law_rune', name: 'Law Rune', levelRequired: 54, experience: 18, talisman: 'law_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'ardougne' },
+  
+  // Dragon Isle - Death runes
+  { id: 'death_rune', name: 'Death Rune', levelRequired: 65, experience: 22, talisman: 'death_talisman', essenceRequired: 1, runesPerEssence: 1, area: 'dragon_isle' },
+  
+  // Barrows Crypts - Blood runes
+  { id: 'blood_rune', name: 'Blood Rune', levelRequired: 77, experience: 30, talisman: 'blood_talisman', essenceRequired: 2, runesPerEssence: 1, area: 'barrows_crypts' },
+  
+  // Primal Realm - Soul runes
+  { id: 'soul_rune', name: 'Soul Rune', levelRequired: 90, experience: 40, talisman: 'soul_talisman', essenceRequired: 3, runesPerEssence: 1, area: 'primal_realm' }
 ];
 
 export const data = new SlashCommandBuilder()
@@ -52,7 +67,8 @@ export async function autocomplete(interaction: any) {
       .filter(recipe => {
         const name = `${recipe.name} (Level ${recipe.levelRequired})`;
         return name.toLowerCase().includes(focusedValue.toLowerCase()) && 
-               runecraftingLevel >= recipe.levelRequired;
+               runecraftingLevel >= recipe.levelRequired &&
+               recipe.area === player.currentArea;
       })
       .map(recipe => ({
         name: `${recipe.name} (Level ${recipe.levelRequired}) - ${recipe.experience} XP`,
@@ -114,7 +130,16 @@ export async function execute(interaction: any) {
       }
     } else {
       const runecraftingLevel = calculateLevelFromExperience(player.skills?.runecrafting?.experience || 0);
-      recipe = RUNE_RECIPES.filter(r => runecraftingLevel >= r.levelRequired)[0];
+      recipe = RUNE_RECIPES.filter(r => runecraftingLevel >= r.levelRequired && r.area === player.currentArea)[0];
+    }
+
+    // Check if recipe is available in current area
+    if (recipe && recipe.area !== player.currentArea) {
+      await interaction.reply({
+        content: `You cannot craft ${recipe.name} in ${player.currentArea}. This rune can only be crafted in ${recipe.area}.`,
+        ephemeral: true
+      });
+      return;
     }
 
     if (!recipe) {

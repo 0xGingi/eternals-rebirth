@@ -72,19 +72,7 @@ export async function execute(interaction: any) {
       return;
     }
 
-    const playerLevel = Math.max(
-      calculateLevelFromExperience(player.skills?.attack?.experience || 0),
-      calculateLevelFromExperience(player.skills?.strength?.experience || 0),
-      calculateLevelFromExperience(player.skills?.defense?.experience || 0)
-    );
-
-    if (playerLevel < area.requiredLevel) {
-      await interaction.reply({
-        content: `You need at least level ${area.requiredLevel} in combat skills to travel to ${area.name}!`,
-        ephemeral: true
-      });
-      return;
-    }
+    // No level requirements for travel - areas are now freely accessible
 
     player.currentArea = destination;
     await player.save();
@@ -101,7 +89,7 @@ export async function execute(interaction: any) {
         { name: 'Resources', value: resourcesText || 'None', inline: true },
         { name: 'Commands', value: '`/fight` - Fight monsters\n`/mine` - Mine resources\n`/fish` - Fish\n`/area` - Area info', inline: false }
       )
-      .setFooter({ text: `Required Level: ${area.requiredLevel}` });
+      .setFooter({ text: `Area Level: ${area.requiredLevel} (recommended)` });
 
     await interaction.reply({ embeds: [embed] });
   } catch (error) {

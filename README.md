@@ -39,14 +39,15 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - **Crafting** - Combine materials to make arrows, bows, staffs, and leather armor
 
 ### Areas
-- **Lumbridge** - Starting area (Level 1+) - Basic monsters with fire/earth/water weaknesses, copper/tin ore, rune essence, shrimp, normal trees
-- **Varrock** - Mid-level area (Level 10+) - Stronger monsters with air/fire weaknesses, iron ore, trout, oak trees  
-- **Falador** - High-level area (Level 25+) - Tough monsters with water weakness, coal/mithril ore, salmon, willow trees
-- **Catherby** - Fishing hub (Level 15+) - Water-based monsters with earth weakness, fishing spots, maple trees
-- **Ardougne** - Crafting center (Level 20+) - Varied monsters with different weaknesses, crafting materials, yew trees
-- **Dragon Isle** - Dragon territory (Level 40+) - Dragon enemies with water weakness, adamantite ore, tuna, magic trees
-- **Barrows Crypts** - Undead realm (Level 50+) - Undead monsters with fire/water/air weaknesses, runite ore, lobster, magic trees
-- **Primal Realm** - Endgame area (Level 60+) - Primal monsters with earth/fire/water weaknesses, primal ore, shark, elder trees
+- **Lumbridge** - Starting area (Air/Earth/Mind runes) - Basic monsters with fire/earth/water weaknesses, copper/tin ore, rune essence, shrimp, normal trees
+- **Varrock** - Mid-level area (Water/Fire/Body runes) - Stronger monsters with air/fire weaknesses, iron ore, trout, oak trees  
+- **Falador** - High-level area (Cosmic/Chaos runes) - Tough monsters with water weakness, coal/mithril ore, salmon, willow trees
+- **Catherby** - Fishing hub (Nature runes) - Water-based monsters with earth weakness, fishing spots, maple trees
+- **Ardougne** - Crafting center (Law runes) - Varied monsters with different weaknesses, crafting materials, yew trees
+- **Dragon Isle** - Dragon territory (Death runes) - Dragon enemies with water weakness, adamantite ore, tuna, magic trees
+- **Barrows Crypts** - Undead realm (Blood runes) - Undead monsters with fire/water/air weaknesses, runite ore, lobster, magic trees
+- **Primal Realm** - Endgame area (Soul runes) - Primal monsters with earth/fire/water weaknesses, primal ore, shark, elder trees
+
 
 ### Items & Equipment
 - **Weapons** - Swords (melee), Bows (ranged), Staffs (magic) in Bronze/Iron/Mithril/Adamantite/Runite/Primal tiers
@@ -143,5 +144,7 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - **Rune Essence**: Mine at Lumbridge (Level 1 Mining requirement)
 - **Talismans**: Obtained from monster drops across all areas
 - **13 Rune Types**: Air, Earth, Water, Fire, Mind, Body, Cosmic, Chaos, Nature, Law, Death, Blood, Soul
+- **Area-Specific Crafting**: Each rune type can only be crafted in specific areas
 - **Progressive Difficulty**: Higher level runes require more essence but give more XP
 - **Talisman Reuse**: Talismans are not consumed when crafting runes
+- **Area Distribution**: Lumbridge (Air/Earth/Mind), Varrock (Water/Fire/Body), Falador (Cosmic/Chaos), etc.

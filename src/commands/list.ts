@@ -640,24 +640,32 @@ function createRunecraftingEmbed(): EmbedBuilder {
       inline: false
     },
     {
-      name: 'Basic Runes (Levels 1-30)',
-      value: '**Air Rune** (Lv1) - Air Talisman + 1 Essence = 1 Rune (10 XP)\n' +
-             '**Earth Rune** (Lv5) - Earth Talisman + 1 Essence = 1 Rune (15 XP)\n' +
-             '**Water Rune** (Lv10) - Water Talisman + 1 Essence = 1 Rune (20 XP)\n' +
-             '**Fire Rune** (Lv15) - Fire Talisman + 1 Essence = 1 Rune (25 XP)\n' +
-             '**Mind Rune** (Lv20) - Mind Talisman + 1 Essence = 1 Rune (30 XP)\n' +
-             '**Body Rune** (Lv25) - Body Talisman + 1 Essence = 1 Rune (35 XP)\n' +
-             '**Cosmic Rune** (Lv30) - Cosmic Talisman + 2 Essence = 1 Rune (40 XP)',
+      name: 'Lumbridge Runes (Levels 1-2)',
+      value: '**Air Rune** (Lv1) - Air Talisman + 1 Essence = 1 Rune (5 XP)\n' +
+             '**Earth Rune** (Lv1) - Earth Talisman + 1 Essence = 1 Rune (5 XP)\n' +
+             '**Mind Rune** (Lv2) - Mind Talisman + 1 Essence = 1 Rune (6 XP)',
       inline: false
     },
     {
-      name: 'Advanced Runes (Levels 35-90)',
-      value: '**Chaos Rune** (Lv35) - Chaos Talisman + 2 Essence = 1 Rune (45 XP)\n' +
-             '**Nature Rune** (Lv40) - Nature Talisman + 2 Essence = 1 Rune (50 XP)\n' +
-             '**Law Rune** (Lv45) - Law Talisman + 3 Essence = 1 Rune (55 XP)\n' +
-             '**Death Rune** (Lv50) - Death Talisman + 3 Essence = 1 Rune (60 XP)\n' +
-             '**Blood Rune** (Lv70) - Blood Talisman + 4 Essence = 1 Rune (80 XP)\n' +
-             '**Soul Rune** (Lv90) - Soul Talisman + 5 Essence = 1 Rune (100 XP)',
+      name: 'Varrock Runes (Levels 5-20)',
+      value: '**Water Rune** (Lv5) - Water Talisman + 1 Essence = 1 Rune (6 XP)\n' +
+             '**Fire Rune** (Lv9) - Fire Talisman + 1 Essence = 1 Rune (7 XP)\n' +
+             '**Body Rune** (Lv20) - Body Talisman + 1 Essence = 1 Rune (8 XP)',
+      inline: false
+    },
+    {
+      name: 'Falador Runes (Levels 27-35)',
+      value: '**Cosmic Rune** (Lv27) - Cosmic Talisman + 1 Essence = 1 Rune (10 XP)\n' +
+             '**Chaos Rune** (Lv35) - Chaos Talisman + 1 Essence = 1 Rune (12 XP)',
+      inline: false
+    },
+    {
+      name: 'Other Area Runes (Levels 44-90)',
+      value: '**Nature Rune** (Lv44) - Catherby - Nature Talisman + 1 Essence = 1 Rune (15 XP)\n' +
+             '**Law Rune** (Lv54) - Ardougne - Law Talisman + 1 Essence = 1 Rune (18 XP)\n' +
+             '**Death Rune** (Lv65) - Dragon Isle - Death Talisman + 1 Essence = 1 Rune (22 XP)\n' +
+             '**Blood Rune** (Lv77) - Barrows Crypts - Blood Talisman + 2 Essence = 1 Rune (30 XP)\n' +
+             '**Soul Rune** (Lv90) - Primal Realm - Soul Talisman + 3 Essence = 1 Rune (40 XP)',
       inline: false
     },
     {
@@ -670,11 +678,13 @@ function createRunecraftingEmbed(): EmbedBuilder {
     },
     {
       name: 'Tips & Strategy',
-      value: '• Start with Air Runes for early XP\n' +
+      value: '• Start with Air/Earth/Mind Runes in Lumbridge for early XP\n' +
+             '• Travel to different areas to unlock new rune types\n' +
              '• Collect multiple talismans for efficient crafting\n' +
              '• Stock up on Rune Essence before crafting sessions\n' +
              '• Higher level runes give more XP but require more essence\n' +
-             '• Runes are consumed when casting combat spells',
+             '• Runes are consumed when casting combat spells\n' +
+             '• Area travel is now freely accessible - no combat requirements',
       inline: false
     }
   );
