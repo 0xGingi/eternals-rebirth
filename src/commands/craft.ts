@@ -703,7 +703,7 @@ export const data = new SlashCommandBuilder()
       .setDescription('How many to craft (default: 1)')
       .setRequired(false)
       .setMinValue(1)
-      .setMaxValue(1000)
+      .setMaxValue(100)
   );
 
 export async function autocomplete(interaction: any) {
@@ -822,55 +822,159 @@ export async function execute(interaction: any) {
       return;
     }
 
-    // Remove materials from inventory
-    for (const material of recipe.materials) {
-      const inventoryItem = player.inventory.find(item => item.itemId === material.item);
-      if (inventoryItem) {
-        inventoryItem.quantity -= material.quantity * maxCrafts;
-        if (inventoryItem.quantity <= 0) {
-          const filteredInventory = player.inventory.filter(item => item.itemId !== material.item);
-          player.inventory.splice(0, player.inventory.length, ...filteredInventory);
+    if (maxCrafts === 1) {
+      // Remove materials from inventory
+      for (const material of recipe.materials) {
+        const inventoryItem = player.inventory.find(item => item.itemId === material.item);
+        if (inventoryItem) {
+          inventoryItem.quantity -= material.quantity * maxCrafts;
+          if (inventoryItem.quantity <= 0) {
+            const filteredInventory = player.inventory.filter(item => item.itemId !== material.item);
+            player.inventory.splice(0, player.inventory.length, ...filteredInventory);
+          }
         }
       }
-    }
 
-    // Add experience
-    const totalExperience = recipe.experience * maxCrafts;
-    const expResult = addExperience(player.skills?.crafting?.experience || 0, totalExperience);
-    if (player.skills?.crafting) {
-      player.skills.crafting.experience = expResult.newExp;
-    }
+      // Add experience
+      const totalExperience = recipe.experience * maxCrafts;
+      const expResult = addExperience(player.skills?.crafting?.experience || 0, totalExperience);
+      if (player.skills?.crafting) {
+        player.skills.crafting.experience = expResult.newExp;
+      }
 
-    // Add crafted items to inventory
-    const totalItemsCreated = recipe.quantity * maxCrafts;
-    const createdItem = player.inventory.find(item => item.itemId === recipe.id);
-    if (createdItem) {
-      createdItem.quantity += totalItemsCreated;
+      // Add crafted items to inventory
+      const totalItemsCreated = recipe.quantity * maxCrafts;
+      const createdItem = player.inventory.find(item => item.itemId === recipe.id);
+      if (createdItem) {
+        createdItem.quantity += totalItemsCreated;
+      } else {
+        player.inventory.push({ itemId: recipe.id, quantity: totalItemsCreated });
+      }
+
+      await player.save();
+
+      const embed = new EmbedBuilder()
+        .setColor(0xFF6347)
+        .setTitle('Crafting Success!')
+        .setDescription(`You successfully crafted **${recipe.name}**!`)
+        .addFields(
+          { name: 'Experience Gained', value: `${totalExperience} Crafting XP`, inline: true },
+          { name: 'Items Created', value: `${recipe.name} x${totalItemsCreated}`, inline: true },
+          { name: 'Materials Used', value: recipe.materials.map(m => `${m.item.replace('_', ' ')} x${m.quantity * maxCrafts}`).join('\n'), inline: true }
+        );
+
+      if (expResult.leveledUp) {
+        embed.addFields({ name: 'Level Up!', value: `Crafting level is now ${expResult.newLevel}!`, inline: false });
+      }
+
+      await interaction.reply({ embeds: [embed] });
     } else {
-      player.inventory.push({ itemId: recipe.id, quantity: totalItemsCreated });
+      const minTime = maxCrafts * 2000;
+      const maxTime = maxCrafts * 8000;
+      const totalTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+
+      player.isSkilling = true;
+      player.currentSkill = 'crafting';
+      player.skillingEndTime = new Date(Date.now() + totalTime);
+      await player.save();
+
+      const embed = new EmbedBuilder()
+        .setColor(0xFF6347)
+        .setTitle('Crafting in Progress...')
+        .setDescription(`You begin crafting **${maxCrafts}x ${recipe.name}**...`)
+        .addFields(
+          { name: 'Expected Time', value: `${Math.floor(totalTime / 1000)} seconds`, inline: true },
+          { name: 'Target', value: `${recipe.name} x${maxCrafts}`, inline: true }
+        );
+
+      await interaction.reply({ embeds: [embed] });
+
+      setTimeout(async () => {
+        try {
+          const updatedPlayer = await Player.findOne({ userId });
+          if (!updatedPlayer) return;
+
+          // Remove materials from inventory
+          for (const material of recipe.materials) {
+            const inventoryItem = updatedPlayer.inventory.find(item => item.itemId === material.item);
+            if (inventoryItem) {
+              inventoryItem.quantity -= material.quantity * maxCrafts;
+              if (inventoryItem.quantity <= 0) {
+                const filteredInventory = updatedPlayer.inventory.filter(item => item.itemId !== material.item);
+                updatedPlayer.inventory.splice(0, updatedPlayer.inventory.length, ...filteredInventory);
+              }
+            }
+          }
+
+          // Add experience
+          const totalExperience = recipe.experience * maxCrafts;
+          const expResult = addExperience(updatedPlayer.skills?.crafting?.experience || 0, totalExperience);
+          if (updatedPlayer.skills?.crafting) {
+            updatedPlayer.skills.crafting.experience = expResult.newExp;
+          }
+
+          // Add crafted items to inventory
+          const totalItemsCreated = recipe.quantity * maxCrafts;
+          const createdItem = updatedPlayer.inventory.find(item => item.itemId === recipe.id);
+          if (createdItem) {
+            createdItem.quantity += totalItemsCreated;
+          } else {
+            updatedPlayer.inventory.push({ itemId: recipe.id, quantity: totalItemsCreated });
+          }
+
+          updatedPlayer.isSkilling = false;
+          updatedPlayer.currentSkill = null as any;
+          updatedPlayer.skillingEndTime = null as any;
+          await updatedPlayer.save();
+
+          const completedEmbed = new EmbedBuilder()
+            .setColor(0x00FF00)
+            .setTitle('Crafting Complete!')
+            .setDescription(`You successfully crafted **${maxCrafts}x ${recipe.name}**!`)
+            .addFields(
+              { name: 'Experience Gained', value: `${totalExperience} Crafting XP`, inline: true },
+              { name: 'Items Created', value: `${recipe.name} x${totalItemsCreated}`, inline: true },
+              { name: 'Time Taken', value: `${Math.floor(totalTime / 1000)} seconds`, inline: true }
+            );
+
+          if (maxCrafts < requestedQuantity) {
+            completedEmbed.addFields({ name: 'Note', value: `Only crafted ${maxCrafts} out of ${requestedQuantity} requested (insufficient materials)`, inline: false });
+          }
+
+          if (expResult.leveledUp) {
+            completedEmbed.addFields({ name: 'Level Up!', value: `Crafting level is now ${expResult.newLevel}!`, inline: false });
+          }
+
+          try {
+            await interaction.followUp({ embeds: [completedEmbed] });
+          } catch (followUpError) {
+            console.error('Error sending follow-up message:', followUpError);
+            await interaction.channel?.send({ embeds: [completedEmbed] });
+          }
+        } catch (error) {
+          console.error('Error completing crafting:', error);
+          const errorPlayer = await Player.findOne({ userId });
+          if (errorPlayer) {
+            errorPlayer.isSkilling = false;
+            errorPlayer.currentSkill = null as any;
+            errorPlayer.skillingEndTime = null as any;
+            await errorPlayer.save();
+          }
+          
+          try {
+            await interaction.editReply({
+              content: 'An error occurred while completing crafting. Please try again.',
+            });
+          } catch (editError: any) {
+            if (editError.code === 50027) {
+              console.log('Crafting failed and interaction expired');
+            } else {
+              console.error('Error editing reply:', editError);
+            }
+          }
+        }
+      }, totalTime);
     }
-
-    await player.save();
-
-    const embed = new EmbedBuilder()
-      .setColor(0xFF6347)
-      .setTitle('🔨 Crafting Success!')
-      .setDescription(`You successfully crafted **${recipe.name}**!`)
-      .addFields(
-        { name: 'Experience Gained', value: `${totalExperience} Crafting XP`, inline: true },
-        { name: 'Items Created', value: `${recipe.name} x${totalItemsCreated}`, inline: true },
-        { name: 'Materials Used', value: recipe.materials.map(m => `${m.item.replace('_', ' ')} x${m.quantity * maxCrafts}`).join('\n'), inline: true }
-      );
-
-    if (maxCrafts < requestedQuantity) {
-      embed.addFields({ name: 'Note', value: `Only crafted ${maxCrafts} out of ${requestedQuantity} requested (insufficient materials)`, inline: false });
-    }
-
-    if (expResult.leveledUp) {
-      embed.addFields({ name: 'Level Up!', value: `Crafting level is now ${expResult.newLevel}!`, inline: false });
-    }
-
-    await interaction.reply({ embeds: [embed] });
   } catch (error) {
     console.error('Error crafting:', error);
     await interaction.reply({

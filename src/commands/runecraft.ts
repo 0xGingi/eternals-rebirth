@@ -47,7 +47,7 @@ export const data = new SlashCommandBuilder()
       .setDescription('How many runes to craft (default: 1)')
       .setRequired(false)
       .setMinValue(1)
-      .setMaxValue(1000)
+      .setMaxValue(100)
   );
 
 export async function autocomplete(interaction: any) {
@@ -217,8 +217,8 @@ export async function execute(interaction: any) {
 
       await interaction.reply({ embeds: [embed] });
     } else {
-      const minTime = quantity * 800;
-      const maxTime = quantity * 3000;
+      const minTime = quantity * 4000;
+      const maxTime = quantity * 12000;
       const totalTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
 
       player.isSkilling = true;

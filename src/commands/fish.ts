@@ -19,7 +19,7 @@ export const data = new SlashCommandBuilder()
       .setDescription('How many fish to catch (default: 1)')
       .setRequired(false)
       .setMinValue(1)
-      .setMaxValue(200)
+      .setMaxValue(100)
   );
 
 export async function autocomplete(interaction: any) {
@@ -195,8 +195,8 @@ export async function execute(interaction: any) {
 
       await interaction.reply({ embeds: [embed] });
     } else {
-      const minTime = quantity * 1000;
-      const maxTime = quantity * 5000;
+      const minTime = quantity * 5000;
+      const maxTime = quantity * 15000;
       const totalTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
 
       player.isSkilling = true;
