@@ -60,21 +60,26 @@ export async function calculateCombatStats(player: any): Promise<CombatStats> {
     if (weapon) {
       // Apply appropriate weapon stat bonuses based on combat style
       if (combatStyle === 'range') {
-        baseStats.attack += weapon.stats.range || 0;     // Range weapons boost range attack
+        // Range weapons: range stat affects both damage and accuracy
+        baseStats.accuracy += weapon.stats.range || 0;
+        baseStats.maxHit += weapon.stats.range || 0;
       } else if (combatStyle === 'magic') {
-        baseStats.attack += weapon.stats.magic || 0;     // Magic weapons boost magic attack
+        // Magic weapons: magic stat affects both damage and accuracy
+        baseStats.accuracy += weapon.stats.magic || 0;
+        baseStats.maxHit += weapon.stats.magic || 0;
+        baseStats.magicBonus += weapon.stats.magic || 0;
       } else {
-        baseStats.attack += weapon.stats.attack || 0;    // Melee weapons boost melee attack
+        // Melee weapons: attack stat affects accuracy, strength stat affects damage
+        baseStats.accuracy += weapon.stats.attack || 0;
+        baseStats.maxHit += weapon.stats.strength || 0;
       }
       
-      // Accuracy and damage bonuses apply regardless of style
+      // Apply direct accuracy and damage bonuses (these are separate from skill bonuses)
       baseStats.accuracy += weapon.stats.accuracy || 0;
       baseStats.maxHit += weapon.stats.damage || 0;
       
-      // Magic bonus from magic weapons
-      if (weapon.stats.magic) {
-        baseStats.magicBonus += weapon.stats.magic;
-      }
+      // Defense always applies to defense stat
+      baseStats.defense += weapon.stats.defense || 0;
     }
   }
 
@@ -83,6 +88,37 @@ export async function calculateCombatStats(player: any): Promise<CombatStats> {
     const ammunition = await Item.findOne({ id: player.equipment.ammunition.itemId });
     if (ammunition) {
       baseStats.maxHit += ammunition.stats.damage || 0;
+    }
+  }
+
+  // Apply armor defense bonuses
+  const armorSlots = ['helmet', 'chest', 'legs', 'boots', 'gloves', 'shield'];
+  for (const slot of armorSlots) {
+    if (player.equipment[slot]) {
+      const armor = await Item.findOne({ id: player.equipment[slot] });
+      if (armor) {
+        baseStats.defense += armor.stats.defense || 0;
+        
+        // Apply style-specific bonuses from armor
+        if (combatStyle === 'range') {
+          // Range armor: range stat affects both damage and accuracy
+          baseStats.accuracy += armor.stats.range || 0;
+          baseStats.maxHit += armor.stats.range || 0;
+        } else if (combatStyle === 'magic') {
+          // Magic armor: magic stat affects both damage and accuracy
+          baseStats.accuracy += armor.stats.magic || 0;
+          baseStats.maxHit += armor.stats.magic || 0;
+          baseStats.magicBonus += armor.stats.magic || 0;
+        } else {
+          // Melee armor: attack stat affects accuracy, strength stat affects damage
+          baseStats.accuracy += armor.stats.attack || 0;
+          baseStats.maxHit += armor.stats.strength || 0;
+        }
+        
+        // Apply direct accuracy and damage bonuses (these are separate from skill bonuses)
+        baseStats.accuracy += armor.stats.accuracy || 0;
+        baseStats.maxHit += armor.stats.damage || 0;
+      }
     }
   }
 
