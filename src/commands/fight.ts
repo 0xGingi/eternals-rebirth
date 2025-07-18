@@ -1,6 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } from 'discord.js';
 import { Player } from '../models/Player';
 import { Area } from '../models/Area';
+import { Item } from '../models/Item';
 import { checkRangedCombatRequirements } from '../utils/combatUtils';
 
 export const data = new SlashCommandBuilder()
@@ -127,29 +128,54 @@ export async function execute(interaction: any) {
       )
       .setFooter({ text: 'Choose your action!' });
 
-    const row = new ActionRowBuilder()
-      .addComponents(
-        new ButtonBuilder()
-          .setCustomId('combat_attack')
-          .setLabel('Attack')
-          .setStyle(ButtonStyle.Danger)
-          .setEmoji('⚔️'),
-        new ButtonBuilder()
-          .setCustomId('combat_defend')
-          .setLabel('Defend')
-          .setStyle(ButtonStyle.Secondary)
-          .setEmoji('🛡️'),
-        new ButtonBuilder()
-          .setCustomId('combat_eat')
-          .setLabel('Eat Food')
-          .setStyle(ButtonStyle.Success)
-          .setEmoji('🍞'),
-        new ButtonBuilder()
-          .setCustomId('combat_run')
-          .setLabel('Run Away')
-          .setStyle(ButtonStyle.Secondary)
-          .setEmoji('🏃')
-      );
+    const buttons = [];
+
+    // Add spell button if player is using magic and has a magic weapon
+    if (player.combatStats.attackStyle === 'magic') {
+      const hasMagicWeapon = player.equipment.weapon && 
+        await Item.findOne({ id: player.equipment.weapon, subType: 'magic' });
+      
+      if (hasMagicWeapon) {
+        const { getAvailableSpells, canCastSpell } = await import('../utils/spellUtils');
+        const availableSpells = getAvailableSpells(player);
+        const castableSpells = availableSpells.filter(spell => canCastSpell(player, spell.id).canCast);
+        const hasUsableSpells = castableSpells.length > 0;
+        
+        buttons.push(new ButtonBuilder()
+          .setCustomId('combat_spell')
+          .setLabel(hasUsableSpells ? 'Cast Spell' : 'Cast Spell (No Runes)')
+          .setStyle(hasUsableSpells ? ButtonStyle.Primary : ButtonStyle.Secondary)
+          .setEmoji(hasUsableSpells ? '🔮' : '❌'));
+      }
+    } else {
+      // Add basic attack button for non-magic combat styles
+      buttons.push(new ButtonBuilder()
+        .setCustomId('combat_attack')
+        .setLabel('Attack')
+        .setStyle(ButtonStyle.Danger)
+        .setEmoji('⚔️'));
+    }
+
+    // Add common combat buttons
+    buttons.push(
+      new ButtonBuilder()
+        .setCustomId('combat_defend')
+        .setLabel('Defend')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji('🛡️'),
+      new ButtonBuilder()
+        .setCustomId('combat_eat')
+        .setLabel('Eat Food')
+        .setStyle(ButtonStyle.Success)
+        .setEmoji('🍞'),
+      new ButtonBuilder()
+        .setCustomId('combat_run')
+        .setLabel('Run Away')
+        .setStyle(ButtonStyle.Secondary)
+        .setEmoji('🏃')
+    );
+
+    const row = new ActionRowBuilder().addComponents(buttons.slice(0, 5));
 
     await interaction.reply({ embeds: [embed], components: [row] });
   } catch (error) {

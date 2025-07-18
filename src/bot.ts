@@ -92,7 +92,11 @@ export class Bot {
       } else if (interaction.isStringSelectMenu()) {
         if (interaction.customId === 'combat_spell_select') {
           const selectedSpell = interaction.values[0];
-          await handleCombatAction(interaction, `cast_${selectedSpell}`);
+          if (selectedSpell === 'back_to_combat') {
+            await handleCombatAction(interaction, 'back_to_combat');
+          } else {
+            await handleCombatAction(interaction, `cast_${selectedSpell}`);
+          }
         }
       }
     });

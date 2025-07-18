@@ -40,6 +40,14 @@ export async function handleCombatAction(interaction: any, action: string) {
 
     switch (action) {
       case 'attack':
+        if (player.combatStats.attackStyle === 'magic') {
+          await interaction.reply({
+            content: 'You cannot use basic attacks in magic mode! Use spells instead.',
+            ephemeral: true
+          });
+          return;
+        }
+        
         if (player.combatStats.attackStyle === 'range') {
           if (!player.equipment.ammunition.itemId || player.equipment.ammunition.quantity <= 0) {
             playerAction = 'You cannot attack without arrows! You need to equip arrows or change your combat style.';
@@ -133,19 +141,29 @@ export async function handleCombatAction(interaction: any, action: string) {
         }
 
         const availableSpells = getAvailableSpells(player);
-        if (availableSpells.length === 0) {
+        const castableSpells = availableSpells.filter(spell => canCastSpell(player, spell.id).canCast);
+        
+        if (castableSpells.length === 0) {
           await interaction.reply({
-            content: 'You don\'t know any combat spells yet!',
+            content: 'You don\'t have the runes to cast any spells! You need to craft or obtain runes first.',
             ephemeral: true
           });
           return;
         }
 
-        const spellOptions = availableSpells.slice(0, 10).map(spell => 
-          new StringSelectMenuOptionBuilder()
+        const spellOptions = castableSpells.slice(0, 9).map(spell => {
+          const runesList = Object.entries(spell.runes).map(([rune, amount]) => `${amount}x ${rune.replace('_', ' ')}`).join(', ');
+          return new StringSelectMenuOptionBuilder()
             .setLabel(spell.name)
-            .setDescription(`Level ${spell.levelRequired} - ${spell.maxDamage} max damage`)
-            .setValue(spell.id)
+            .setDescription(`Level ${spell.levelRequired} - ${spell.maxDamage} max damage - Runes: ${runesList}`)
+            .setValue(spell.id);
+        });
+
+        spellOptions.push(
+          new StringSelectMenuOptionBuilder()
+            .setLabel('Back to Combat')
+            .setDescription('Return to main combat options')
+            .setValue('back_to_combat')
         );
 
         const spellSelect = new StringSelectMenuBuilder()
@@ -164,16 +182,59 @@ export async function handleCombatAction(interaction: any, action: string) {
         });
         return;
 
+      case 'back_to_combat':
+        break;
+
       default:
         if (action.startsWith('cast_')) {
           const spellId = action.replace('cast_', '');
           const spellCheck = canCastSpell(player, spellId);
           
           if (!spellCheck.canCast) {
-            await interaction.reply({
-              content: spellCheck.reason,
-              ephemeral: true
-            });
+            const embed = new EmbedBuilder()
+              .setColor(0xFF0000)
+              .setTitle('Cannot Cast Spell')
+              .setDescription(spellCheck.reason)
+              .addFields(
+                { name: 'Options', value: '• Try another spell\n• Defend\n• Eat Food\n• Run Away', inline: false }
+              );
+
+            const buttons = [];
+
+            // Add spell button to try other spells
+            const availableSpells = getAvailableSpells(player);
+            const castableSpells = availableSpells.filter(spell => canCastSpell(player, spell.id).canCast);
+            const hasUsableSpells = castableSpells.length > 0;
+            
+            if (hasUsableSpells) {
+              buttons.push(new ButtonBuilder()
+                .setCustomId('combat_spell')
+                .setLabel('Try Another Spell')
+                .setStyle(ButtonStyle.Primary)
+                .setEmoji('🔮'));
+            }
+
+            // Add common combat buttons
+            buttons.push(
+              new ButtonBuilder()
+                .setCustomId('combat_defend')
+                .setLabel('Defend')
+                .setStyle(ButtonStyle.Secondary)
+                .setEmoji('🛡️'),
+              new ButtonBuilder()
+                .setCustomId('combat_eat')
+                .setLabel('Eat Food')
+                .setStyle(ButtonStyle.Success)
+                .setEmoji('🍞'),
+              new ButtonBuilder()
+                .setCustomId('combat_run')
+                .setLabel('Run Away')
+                .setStyle(ButtonStyle.Secondary)
+                .setEmoji('🏃')
+            );
+
+            const row = new ActionRowBuilder().addComponents(buttons);
+            await interaction.update({ embeds: [embed], components: [row] });
             return;
           }
 
@@ -341,12 +402,35 @@ export async function handleCombatAction(interaction: any, action: string) {
           { name: 'Your Stats', value: `HP: ${player.combatStats.currentHp}/${player.combatStats.maxHp}\nAttack Style: ${player.combatStats.attackStyle}`, inline: true }
         );
 
-      const buttons = [
-        new ButtonBuilder()
+      const buttons = [];
+
+      // Add spell button if player is using magic and has a magic weapon
+      if (player.combatStats.attackStyle === 'magic') {
+        const hasMagicWeapon = player.equipment.weapon && 
+          await Item.findOne({ id: player.equipment.weapon, subType: 'magic' });
+        
+        if (hasMagicWeapon) {
+          const availableSpells = getAvailableSpells(player);
+          const castableSpells = availableSpells.filter(spell => canCastSpell(player, spell.id).canCast);
+          const hasUsableSpells = castableSpells.length > 0;
+          
+          buttons.push(new ButtonBuilder()
+            .setCustomId('combat_spell')
+            .setLabel(hasUsableSpells ? 'Cast Spell' : 'Cast Spell (No Runes)')
+            .setStyle(hasUsableSpells ? ButtonStyle.Primary : ButtonStyle.Secondary)
+            .setEmoji(hasUsableSpells ? '🔮' : '❌'));
+        }
+      } else {
+        // Add basic attack button for non-magic combat styles
+        buttons.push(new ButtonBuilder()
           .setCustomId('combat_attack')
           .setLabel('Attack')
           .setStyle(ButtonStyle.Danger)
-          .setEmoji('⚔️'),
+          .setEmoji('⚔️'));
+      }
+
+      // Add common combat buttons
+      buttons.push(
         new ButtonBuilder()
           .setCustomId('combat_defend')
           .setLabel('Defend')
@@ -362,21 +446,7 @@ export async function handleCombatAction(interaction: any, action: string) {
           .setLabel('Run Away')
           .setStyle(ButtonStyle.Secondary)
           .setEmoji('🏃')
-      ];
-
-      // Add spell button if player is using magic and has a magic weapon
-      if (player.combatStats.attackStyle === 'magic') {
-        const hasMagicWeapon = player.equipment.weapon && 
-          await Item.findOne({ id: player.equipment.weapon, subType: 'magic' });
-        
-        if (hasMagicWeapon) {
-          buttons.splice(1, 0, new ButtonBuilder()
-            .setCustomId('combat_spell')
-            .setLabel('Cast Spell')
-            .setStyle(ButtonStyle.Primary)
-            .setEmoji('🔮'));
-        }
-      }
+      );
 
       const row = new ActionRowBuilder().addComponents(buttons.slice(0, 5));
 
