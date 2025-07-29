@@ -6,7 +6,13 @@ import { calculateLevelFromExperience, addExperience } from '../utils/experience
 const cookingRecipes = [
   { raw: 'shrimp', cooked: 'cooked_shrimp', level: 1, experience: 30 },
   { raw: 'trout', cooked: 'cooked_trout', level: 15, experience: 70 },
-  { raw: 'salmon', cooked: 'cooked_salmon', level: 25, experience: 90 }
+  { raw: 'salmon', cooked: 'cooked_salmon', level: 25, experience: 90 },
+  { raw: 'tuna', cooked: 'cooked_tuna', level: 35, experience: 110 },
+  { raw: 'lobster', cooked: 'cooked_lobster', level: 40, experience: 130 },
+  { raw: 'shark', cooked: 'cooked_shark', level: 50, experience: 150 },
+  { raw: 'manta_ray', cooked: 'cooked_manta_ray', level: 60, experience: 180 },
+  { raw: 'dark_crab', cooked: 'cooked_dark_crab', level: 70, experience: 220 },
+  { raw: 'anglerfish', cooked: 'cooked_anglerfish', level: 80, experience: 250 }
 ];
 
 export const data = new SlashCommandBuilder()

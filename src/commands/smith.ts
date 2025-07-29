@@ -842,6 +842,14 @@ const smeltingRecipes = [
     quantity: 1
   },
   {
+    id: 'gold_bar',
+    name: 'Gold Bar',
+    materials: [{ item: 'gold_ore', quantity: 5 }],
+    level: 35,
+    experience: 200,
+    quantity: 1
+  },
+  {
     id: 'adamant_bar',
     name: 'Adamant Bar',
     materials: [{ item: 'adamant_ore', quantity: 1 }, { item: 'coal', quantity: 6 }],

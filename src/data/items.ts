@@ -1959,6 +1959,16 @@ export const defaultItems = [
     value: 200
   },
   {
+    id: 'gold_bar',
+    name: 'Gold Bar',
+    description: 'A bar of gold, used for smithing.',
+    type: 'resource',
+    subType: 'bar',
+    levelRequired: 35,
+    stackable: true,
+    value: 300
+  },
+  {
     id: 'adamant_bar',
     name: 'Adamant Bar',
     description: 'A bar of adamant, used for smithing.',
