@@ -11,8 +11,8 @@
   },
   "dependencies": {
     "discord.js": "^14.21.0",
-    "dotenv": "^17.2.0",
-    "mongoose": "^8.16.4"
+    "dotenv": "^17.2.1",
+    "mongoose": "^8.16.5"
   },
   "scripts": {
     "migrate-skilling": "bun run scripts/migrate-player-skilling-fields.ts",
