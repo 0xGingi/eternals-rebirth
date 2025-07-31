@@ -25,6 +25,70 @@ const craftingRecipes = [
     experience: 85,
     quantity: 1
   },
+  {
+    id: 'willow_staff',
+    name: 'Willow Staff',
+    materials: [
+      { item: 'willow_logs', quantity: 3 },
+    ],
+    level: 40,
+    experience: 120,
+    quantity: 1
+  },
+  {
+    id: 'maple_staff',
+    name: 'Maple Staff',
+    materials: [
+      { item: 'maple_logs', quantity: 3 },
+    ],
+    level: 55,
+    experience: 175,
+    quantity: 1
+  },
+  {
+    id: 'dragon_staff',
+    name: 'Dragon Staff',
+    materials: [
+      { item: 'dragon_orb', quantity: 1 },
+      { item: 'yew_logs', quantity: 3 },
+    ],
+    level: 65,
+    experience: 250,
+    quantity: 1
+  },
+  {
+    id: 'barrows_staff',
+    name: 'Barrows Staff',
+    materials: [
+      { item: 'barrows_orb', quantity: 1 },
+      { item: 'magic_logs', quantity: 3 },
+    ],
+    level: 75,
+    experience: 350,
+    quantity: 1
+  },
+  {
+    id: 'third_age_staff',
+    name: 'Third Age Staff',
+    materials: [
+      { item: 'third_age_orb', quantity: 1 },
+      { item: 'elder_logs', quantity: 3 },
+    ],
+    level: 85,
+    experience: 500,
+    quantity: 1
+  },
+  {
+    id: 'primal_staff',
+    name: 'Primal Staff',
+    materials: [
+      { item: 'primal_orb', quantity: 1 },
+      { item: 'primal_logs', quantity: 3 },
+    ],
+    level: 95,
+    experience: 750,
+    quantity: 1
+  },
 
   // Bow crafting
   {

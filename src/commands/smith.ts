@@ -806,6 +806,40 @@ const smithingRecipes = [
     experience: 1500,
     quantity: 1
   },
+
+  // Staff Orbs
+  {
+    id: 'dragon_orb',
+    name: 'Dragon Orb',
+    materials: [{ item: 'dragon_bar', quantity: 2 }],
+    level: 60,
+    experience: 600,
+    quantity: 1
+  },
+  {
+    id: 'barrows_orb',
+    name: 'Barrows Orb',
+    materials: [{ item: 'barrows_bar', quantity: 2 }],
+    level: 70,
+    experience: 850,
+    quantity: 1
+  },
+  {
+    id: 'third_age_orb',
+    name: 'Third Age Orb',
+    materials: [{ item: 'third_age_bar', quantity: 2 }],
+    level: 80,
+    experience: 1200,
+    quantity: 1
+  },
+  {
+    id: 'primal_orb',
+    name: 'Primal Orb',
+    materials: [{ item: 'primal_bar', quantity: 2 }],
+    level: 90,
+    experience: 1600,
+    quantity: 1
+  }
 ];
 
 const smeltingRecipes = [

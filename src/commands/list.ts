@@ -77,7 +77,13 @@ const smithingRecipes = [
   { id: 'rune_crossbow', name: 'Rune Crossbow', materials: [{ item: 'rune_bar', quantity: 2 }], level: 60, experience: 700, quantity: 1 },
   { id: 'dragon_crossbow', name: 'Dragon Crossbow', materials: [{ item: 'dragon_bar', quantity: 2 }], level: 70, experience: 1050, quantity: 1 },
   { id: 'barrows_crossbow', name: 'Barrows Crossbow', materials: [{ item: 'barrows_bar', quantity: 2 }], level: 80, experience: 1400, quantity: 1 },
-  { id: 'primal_crossbow', name: 'Primal Crossbow', materials: [{ item: 'primal_bar', quantity: 2 }], level: 90, experience: 1800, quantity: 1 }
+  { id: 'primal_crossbow', name: 'Primal Crossbow', materials: [{ item: 'primal_bar', quantity: 2 }], level: 90, experience: 1800, quantity: 1 },
+  
+  // Staff Orbs
+  { id: 'dragon_orb', name: 'Dragon Orb', materials: [{ item: 'dragon_bar', quantity: 2 }], level: 60, experience: 600, quantity: 1 },
+  { id: 'barrows_orb', name: 'Barrows Orb', materials: [{ item: 'barrows_bar', quantity: 2 }], level: 70, experience: 850, quantity: 1 },
+  { id: 'third_age_orb', name: 'Third Age Orb', materials: [{ item: 'third_age_bar', quantity: 2 }], level: 80, experience: 1200, quantity: 1 },
+  { id: 'primal_orb', name: 'Primal Orb', materials: [{ item: 'primal_bar', quantity: 2 }], level: 90, experience: 1600, quantity: 1 }
 ];
 
 const smeltingRecipes = [
@@ -126,6 +132,12 @@ const craftingRecipes = [
   // Staffs
   { id: 'basic_staff', name: 'Basic Staff', materials: [{ item: 'normal_logs', quantity: 3 }, { item: 'bronze_arrow_head', quantity: 1 }], level: 10, experience: 55, quantity: 1 },
   { id: 'oak_staff', name: 'Oak Staff', materials: [{ item: 'oak_logs', quantity: 3 }, { item: 'iron_arrow_head', quantity: 1 }], level: 25, experience: 85, quantity: 1 },
+  { id: 'willow_staff', name: 'Willow Staff', materials: [{ item: 'willow_logs', quantity: 3 }], level: 40, experience: 120, quantity: 1 },
+  { id: 'maple_staff', name: 'Maple Staff', materials: [{ item: 'maple_logs', quantity: 3 }], level: 55, experience: 175, quantity: 1 },
+  { id: 'dragon_staff', name: 'Dragon Staff', materials: [{ item: 'dragon_orb', quantity: 1 }, { item: 'yew_logs', quantity: 3 }], level: 65, experience: 250, quantity: 1 },
+  { id: 'barrows_staff', name: 'Barrows Staff', materials: [{ item: 'barrows_orb', quantity: 1 }, { item: 'magic_logs', quantity: 3 }], level: 75, experience: 350, quantity: 1 },
+  { id: 'third_age_staff', name: 'Third Age Staff', materials: [{ item: 'third_age_orb', quantity: 1 }, { item: 'elder_logs', quantity: 3 }], level: 85, experience: 500, quantity: 1 },
+  { id: 'primal_staff', name: 'Primal Staff', materials: [{ item: 'primal_orb', quantity: 1 }, { item: 'primal_logs', quantity: 3 }], level: 95, experience: 750, quantity: 1 },
   
   // Leather Armor - Basic Leather
   { id: 'leather_coif', name: 'Leather Coif', materials: [{ item: 'leather', quantity: 1 }], level: 1, experience: 25, quantity: 1 },
@@ -757,11 +769,19 @@ function createMagicEmbed(): EmbedBuilder {
     },
     {
       name: 'Magic Weapons & Requirements',
-      value: '• **Basic Staff** (Lv10) - Crafted with 3 Normal Logs\n' +
-             '• **Oak Staff** (Lv25) - Crafted with 3 Oak Logs\n' +
-             '• **Higher tier staves** available through smithing\n' +
-             '• Magic weapons provide magic accuracy bonus\n' +
-             '• Use `/equip weapon [staff_name]` to equip',
+      value: '**Wood-Only Staves (Levels 1-45):**\n' +
+             '• **Basic Staff** (Lv1) - 3 Normal Logs\n' +
+             '• **Oak Staff** (Lv15) - 3 Oak Logs\n' +
+             '• **Willow Staff** (Lv30) - 3 Willow Logs\n' +
+             '• **Maple Staff** (Lv45) - 3 Maple Logs\n' +
+             '\n' +
+             '**Hybrid Orb Staves (Levels 60+):**\n' +
+             '• **Dragon Staff** (Lv60) - Dragon Orb + 3 Yew Logs\n' +
+             '• **Barrows Staff** (Lv70) - Barrows Orb + 3 Magic Logs\n' +
+             '• **Third Age Staff** (Lv80) - Third Age Orb + 3 Elder Logs\n' +
+             '• **Primal Staff** (Lv90) - Primal Orb + 3 Primal Logs\n' +
+             '\n' +
+             '*Orbs are smithed from 2 metal bars of the same tier*',
       inline: false
     }
   );

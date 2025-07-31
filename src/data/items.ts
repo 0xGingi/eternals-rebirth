@@ -1881,6 +1881,116 @@ export const defaultItems = [
     stackable: false,
     value: 250
   },
+  {
+    id: 'willow_staff',
+    name: 'Willow Staff',
+    description: 'A flexible willow staff with enhanced magical properties.',
+    type: 'weapon',
+    subType: 'magic',
+    levelRequired: 30,
+    stats: { magic: 23, accuracy: 28, damage: 18 },
+    stackable: false,
+    value: 400
+  },
+  {
+    id: 'maple_staff',
+    name: 'Maple Staff',
+    description: 'A reliable maple staff for advanced magic users.',
+    type: 'weapon',
+    subType: 'magic',
+    levelRequired: 45,
+    stats: { magic: 32, accuracy: 36, damage: 24 },
+    stackable: false,
+    value: 600
+  },
+  {
+    id: 'dragon_orb',
+    name: 'Dragon Orb',
+    description: 'A powerful orb forged from dragon metal, used to create dragon staves.',
+    type: 'resource',
+    subType: 'component',
+    levelRequired: 60,
+    stats: { magic: 20 },
+    stackable: false,
+    value: 1000
+  },
+  {
+    id: 'barrows_orb',
+    name: 'Barrows Orb',
+    description: 'An ancient orb from the barrows, radiating dark magical energy.',
+    type: 'resource',
+    subType: 'component',
+    levelRequired: 70,
+    stats: { magic: 25 },
+    stackable: false,
+    value: 1800
+  },
+  {
+    id: 'third_age_orb',
+    name: 'Third Age Orb',
+    description: 'A rare orb from the Third Age, containing immense magical power.',
+    type: 'resource',
+    subType: 'component',
+    levelRequired: 80,
+    stats: { magic: 30 },
+    stackable: false,
+    value: 3600
+  },
+  {
+    id: 'primal_orb',
+    name: 'Primal Orb',
+    description: 'The ultimate orb of primal magical energy, sought after by master wizards.',
+    type: 'resource',
+    subType: 'component',
+    levelRequired: 90,
+    stats: { magic: 35 },
+    stackable: false,
+    value: 7200
+  },
+  {
+    id: 'dragon_staff',
+    name: 'Dragon Staff',
+    description: 'A legendary staff combining dragon orb with yew wood.',
+    type: 'weapon',
+    subType: 'magic',
+    levelRequired: 60,
+    stats: { magic: 42, accuracy: 45, damage: 30 },
+    stackable: false,
+    value: 1400
+  },
+  {
+    id: 'barrows_staff',
+    name: 'Barrows Staff',
+    description: 'An ancient staff from the barrows, infused with dark magic.',
+    type: 'weapon',
+    subType: 'magic',
+    levelRequired: 70,
+    stats: { magic: 52, accuracy: 55, damage: 36 },
+    stackable: false,
+    value: 2400
+  },
+  {
+    id: 'third_age_staff',
+    name: 'Third Age Staff',
+    description: 'A rare staff from the Third Age, wielding immense magical power.',
+    type: 'weapon',
+    subType: 'magic',
+    levelRequired: 80,
+    stats: { magic: 62, accuracy: 65, damage: 42 },
+    stackable: false,
+    value: 4200
+  },
+  {
+    id: 'primal_staff',
+    name: 'Primal Staff',
+    description: 'The ultimate staff of primal magical energy, unmatched in power.',
+    type: 'weapon',
+    subType: 'magic',
+    levelRequired: 90,
+    stats: { magic: 72, accuracy: 75, damage: 48 },
+    stackable: false,
+    value: 7800
+  },
 
   // Arrows
   {
