@@ -750,12 +750,533 @@ const craftingRecipes = [
     level: 93,
     experience: 300,
     quantity: 1
+  },
+
+  // Magic Robe Crafting Recipes
+  // Wizard Robes (T1) - Level 1
+  {
+    id: 'wizard_hat',
+    name: 'Wizard Hat',
+    materials: [
+      { item: 'cloth', quantity: 2 },
+    ],
+    level: 1,
+    experience: 15,
+    quantity: 1
+  },
+  {
+    id: 'wizard_robe_top',
+    name: 'Wizard Robe Top',
+    materials: [
+      { item: 'cloth', quantity: 4 },
+    ],
+    level: 3,
+    experience: 25,
+    quantity: 1
+  },
+  {
+    id: 'wizard_robe_bottom',
+    name: 'Wizard Robe Bottom',
+    materials: [
+      { item: 'cloth', quantity: 3 },
+    ],
+    level: 2,
+    experience: 20,
+    quantity: 1
+  },
+  {
+    id: 'wizard_gloves',
+    name: 'Wizard Gloves',
+    materials: [
+      { item: 'cloth', quantity: 1 },
+    ],
+    level: 1,
+    experience: 10,
+    quantity: 1
+  },
+  {
+    id: 'wizard_boots',
+    name: 'Wizard Boots',
+    materials: [
+      { item: 'cloth', quantity: 1 },
+    ],
+    level: 1,
+    experience: 10,
+    quantity: 1
+  },
+
+  // Apprentice Robes (T10) - Level 10
+  {
+    id: 'apprentice_hat',
+    name: 'Apprentice Hat',
+    materials: [
+      { item: 'soft_cloth', quantity: 2 },
+    ],
+    level: 12,
+    experience: 35,
+    quantity: 1
+  },
+  {
+    id: 'apprentice_robe_top',
+    name: 'Apprentice Robe Top',
+    materials: [
+      { item: 'soft_cloth', quantity: 4 },
+    ],
+    level: 15,
+    experience: 60,
+    quantity: 1
+  },
+  {
+    id: 'apprentice_robe_bottom',
+    name: 'Apprentice Robe Bottom',
+    materials: [
+      { item: 'soft_cloth', quantity: 3 },
+    ],
+    level: 13,
+    experience: 50,
+    quantity: 1
+  },
+  {
+    id: 'apprentice_gloves',
+    name: 'Apprentice Gloves',
+    materials: [
+      { item: 'soft_cloth', quantity: 1 },
+    ],
+    level: 10,
+    experience: 25,
+    quantity: 1
+  },
+  {
+    id: 'apprentice_boots',
+    name: 'Apprentice Boots',
+    materials: [
+      { item: 'soft_cloth', quantity: 1 },
+    ],
+    level: 10,
+    experience: 25,
+    quantity: 1
+  },
+
+  // Adept Robes (T20) - Level 20
+  {
+    id: 'adept_hat',
+    name: 'Adept Hat',
+    materials: [
+      { item: 'fine_cloth', quantity: 2 },
+    ],
+    level: 22,
+    experience: 70,
+    quantity: 1
+  },
+  {
+    id: 'adept_robe_top',
+    name: 'Adept Robe Top',
+    materials: [
+      { item: 'fine_cloth', quantity: 4 },
+    ],
+    level: 25,
+    experience: 120,
+    quantity: 1
+  },
+  {
+    id: 'adept_robe_bottom',
+    name: 'Adept Robe Bottom',
+    materials: [
+      { item: 'fine_cloth', quantity: 3 },
+    ],
+    level: 23,
+    experience: 100,
+    quantity: 1
+  },
+  {
+    id: 'adept_gloves',
+    name: 'Adept Gloves',
+    materials: [
+      { item: 'fine_cloth', quantity: 1 },
+    ],
+    level: 20,
+    experience: 50,
+    quantity: 1
+  },
+  {
+    id: 'adept_boots',
+    name: 'Adept Boots',
+    materials: [
+      { item: 'fine_cloth', quantity: 1 },
+    ],
+    level: 20,
+    experience: 50,
+    quantity: 1
+  },
+
+  // Mystic Robes (T30) - Level 30
+  {
+    id: 'mystic_hat',
+    name: 'Mystic Hat',
+    materials: [
+      { item: 'silk_cloth', quantity: 2 },
+    ],
+    level: 32,
+    experience: 140,
+    quantity: 1
+  },
+  {
+    id: 'mystic_robe_top',
+    name: 'Mystic Robe Top',
+    materials: [
+      { item: 'silk_cloth', quantity: 4 },
+    ],
+    level: 35,
+    experience: 240,
+    quantity: 1
+  },
+  {
+    id: 'mystic_robe_bottom',
+    name: 'Mystic Robe Bottom',
+    materials: [
+      { item: 'silk_cloth', quantity: 3 },
+    ],
+    level: 33,
+    experience: 200,
+    quantity: 1
+  },
+  {
+    id: 'mystic_gloves',
+    name: 'Mystic Gloves',
+    materials: [
+      { item: 'silk_cloth', quantity: 1 },
+    ],
+    level: 30,
+    experience: 100,
+    quantity: 1
+  },
+  {
+    id: 'mystic_boots',
+    name: 'Mystic Boots',
+    materials: [
+      { item: 'silk_cloth', quantity: 1 },
+    ],
+    level: 30,
+    experience: 100,
+    quantity: 1
+  },
+
+  // Enchanted Robes (T40) - Level 40
+  {
+    id: 'enchanted_hat',
+    name: 'Enchanted Hat',
+    materials: [
+      { item: 'mystic_cloth', quantity: 2 },
+    ],
+    level: 42,
+    experience: 280,
+    quantity: 1
+  },
+  {
+    id: 'enchanted_robe_top',
+    name: 'Enchanted Robe Top',
+    materials: [
+      { item: 'mystic_cloth', quantity: 4 },
+    ],
+    level: 45,
+    experience: 480,
+    quantity: 1
+  },
+  {
+    id: 'enchanted_robe_bottom',
+    name: 'Enchanted Robe Bottom',
+    materials: [
+      { item: 'mystic_cloth', quantity: 3 },
+    ],
+    level: 43,
+    experience: 400,
+    quantity: 1
+  },
+  {
+    id: 'enchanted_gloves',
+    name: 'Enchanted Gloves',
+    materials: [
+      { item: 'mystic_cloth', quantity: 1 },
+    ],
+    level: 40,
+    experience: 200,
+    quantity: 1
+  },
+  {
+    id: 'enchanted_boots',
+    name: 'Enchanted Boots',
+    materials: [
+      { item: 'mystic_cloth', quantity: 1 },
+    ],
+    level: 40,
+    experience: 200,
+    quantity: 1
+  },
+
+  // Battlemage Robes (T50) - Level 50
+  {
+    id: 'battlemage_hat',
+    name: 'Battlemage Hat',
+    materials: [
+      { item: 'enchanted_cloth', quantity: 2 },
+    ],
+    level: 52,
+    experience: 560,
+    quantity: 1
+  },
+  {
+    id: 'battlemage_robe_top',
+    name: 'Battlemage Robe Top',
+    materials: [
+      { item: 'enchanted_cloth', quantity: 4 },
+    ],
+    level: 55,
+    experience: 960,
+    quantity: 1
+  },
+  {
+    id: 'battlemage_robe_bottom',
+    name: 'Battlemage Robe Bottom',
+    materials: [
+      { item: 'enchanted_cloth', quantity: 3 },
+    ],
+    level: 53,
+    experience: 800,
+    quantity: 1
+  },
+  {
+    id: 'battlemage_gloves',
+    name: 'Battlemage Gloves',
+    materials: [
+      { item: 'enchanted_cloth', quantity: 1 },
+    ],
+    level: 50,
+    experience: 400,
+    quantity: 1
+  },
+  {
+    id: 'battlemage_boots',
+    name: 'Battlemage Boots',
+    materials: [
+      { item: 'enchanted_cloth', quantity: 1 },
+    ],
+    level: 50,
+    experience: 400,
+    quantity: 1
+  },
+
+  // Lunar Robes (T60) - Level 60
+  {
+    id: 'lunar_hat',
+    name: 'Lunar Hat',
+    materials: [
+      { item: 'lunar_cloth', quantity: 2 },
+    ],
+    level: 62,
+    experience: 1120,
+    quantity: 1
+  },
+  {
+    id: 'lunar_robe_top',
+    name: 'Lunar Robe Top',
+    materials: [
+      { item: 'lunar_cloth', quantity: 4 },
+    ],
+    level: 65,
+    experience: 1920,
+    quantity: 1
+  },
+  {
+    id: 'lunar_robe_bottom',
+    name: 'Lunar Robe Bottom',
+    materials: [
+      { item: 'lunar_cloth', quantity: 3 },
+    ],
+    level: 63,
+    experience: 1600,
+    quantity: 1
+  },
+  {
+    id: 'lunar_gloves',
+    name: 'Lunar Gloves',
+    materials: [
+      { item: 'lunar_cloth', quantity: 1 },
+    ],
+    level: 60,
+    experience: 800,
+    quantity: 1
+  },
+  {
+    id: 'lunar_boots',
+    name: 'Lunar Boots',
+    materials: [
+      { item: 'lunar_cloth', quantity: 1 },
+    ],
+    level: 60,
+    experience: 800,
+    quantity: 1
+  },
+
+  // Infinity Robes (T70) - Level 70
+  {
+    id: 'infinity_hat',
+    name: 'Infinity Hat',
+    materials: [
+      { item: 'infinity_cloth', quantity: 2 },
+    ],
+    level: 72,
+    experience: 2240,
+    quantity: 1
+  },
+  {
+    id: 'infinity_robe_top',
+    name: 'Infinity Robe Top',
+    materials: [
+      { item: 'infinity_cloth', quantity: 4 },
+    ],
+    level: 75,
+    experience: 3840,
+    quantity: 1
+  },
+  {
+    id: 'infinity_robe_bottom',
+    name: 'Infinity Robe Bottom',
+    materials: [
+      { item: 'infinity_cloth', quantity: 3 },
+    ],
+    level: 73,
+    experience: 3200,
+    quantity: 1
+  },
+  {
+    id: 'infinity_gloves',
+    name: 'Infinity Gloves',
+    materials: [
+      { item: 'infinity_cloth', quantity: 1 },
+    ],
+    level: 70,
+    experience: 1600,
+    quantity: 1
+  },
+  {
+    id: 'infinity_boots',
+    name: 'Infinity Boots',
+    materials: [
+      { item: 'infinity_cloth', quantity: 1 },
+    ],
+    level: 70,
+    experience: 1600,
+    quantity: 1
+  },
+
+  // Ancestral Robes (T80) - Level 80
+  {
+    id: 'ancestral_hat',
+    name: 'Ancestral Hat',
+    materials: [
+      { item: 'ancestral_cloth', quantity: 2 },
+    ],
+    level: 82,
+    experience: 4480,
+    quantity: 1
+  },
+  {
+    id: 'ancestral_robe_top',
+    name: 'Ancestral Robe Top',
+    materials: [
+      { item: 'ancestral_cloth', quantity: 4 },
+    ],
+    level: 85,
+    experience: 7680,
+    quantity: 1
+  },
+  {
+    id: 'ancestral_robe_bottom',
+    name: 'Ancestral Robe Bottom',
+    materials: [
+      { item: 'ancestral_cloth', quantity: 3 },
+    ],
+    level: 83,
+    experience: 6400,
+    quantity: 1
+  },
+  {
+    id: 'ancestral_gloves',
+    name: 'Ancestral Gloves',
+    materials: [
+      { item: 'ancestral_cloth', quantity: 1 },
+    ],
+    level: 80,
+    experience: 3200,
+    quantity: 1
+  },
+  {
+    id: 'ancestral_boots',
+    name: 'Ancestral Boots',
+    materials: [
+      { item: 'ancestral_cloth', quantity: 1 },
+    ],
+    level: 80,
+    experience: 3200,
+    quantity: 1
+  },
+
+  // Ethereal Robes (T90) - Level 90
+  {
+    id: 'ethereal_hat',
+    name: 'Ethereal Hat',
+    materials: [
+      { item: 'ethereal_cloth', quantity: 2 },
+    ],
+    level: 92,
+    experience: 8960,
+    quantity: 1
+  },
+  {
+    id: 'ethereal_robe_top',
+    name: 'Ethereal Robe Top',
+    materials: [
+      { item: 'ethereal_cloth', quantity: 4 },
+    ],
+    level: 95,
+    experience: 15360,
+    quantity: 1
+  },
+  {
+    id: 'ethereal_robe_bottom',
+    name: 'Ethereal Robe Bottom',
+    materials: [
+      { item: 'ethereal_cloth', quantity: 3 },
+    ],
+    level: 93,
+    experience: 12800,
+    quantity: 1
+  },
+  {
+    id: 'ethereal_gloves',
+    name: 'Ethereal Gloves',
+    materials: [
+      { item: 'ethereal_cloth', quantity: 1 },
+    ],
+    level: 90,
+    experience: 6400,
+    quantity: 1
+  },
+  {
+    id: 'ethereal_boots',
+    name: 'Ethereal Boots',
+    materials: [
+      { item: 'ethereal_cloth', quantity: 1 },
+    ],
+    level: 90,
+    experience: 6400,
+    quantity: 1
   }
 ];
 
 export const data = new SlashCommandBuilder()
   .setName('craft')
-  .setDescription('Craft arrows, bows, and staffs from materials')
+  .setDescription('Craft arrows, bows, staffs, and magic robes from materials')
   .addStringOption(option =>
     option.setName('item')
       .setDescription('The item to craft')

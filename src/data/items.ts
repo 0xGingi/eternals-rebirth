@@ -3107,6 +3107,679 @@ export const defaultItems = [
     levelRequired: 90,
     stackable: false,
     value: 5000
+  },
+
+  // Cloth materials for magic robes
+  {
+    id: 'cloth',
+    name: 'Cloth',
+    description: 'Basic cloth material for crafting robes.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 1,
+    stackable: true,
+    value: 5
+  },
+  {
+    id: 'soft_cloth',
+    name: 'Soft Cloth',
+    description: 'Soft cloth material for crafting robes.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 10,
+    stackable: true,
+    value: 15
+  },
+  {
+    id: 'fine_cloth',
+    name: 'Fine Cloth',
+    description: 'Fine cloth material for crafting robes.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 20,
+    stackable: true,
+    value: 35
+  },
+  {
+    id: 'silk_cloth',
+    name: 'Silk Cloth',
+    description: 'Premium silk cloth for crafting robes.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 30,
+    stackable: true,
+    value: 75
+  },
+  {
+    id: 'mystic_cloth',
+    name: 'Mystic Cloth',
+    description: 'Magical cloth imbued with mystical energy.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 40,
+    stackable: true,
+    value: 150
+  },
+  {
+    id: 'enchanted_cloth',
+    name: 'Enchanted Cloth',
+    description: 'Cloth woven with enchanted threads.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 50,
+    stackable: true,
+    value: 300
+  },
+  {
+    id: 'lunar_cloth',
+    name: 'Lunar Cloth',
+    description: 'Rare cloth blessed by lunar magic.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 60,
+    stackable: true,
+    value: 600
+  },
+  {
+    id: 'infinity_cloth',
+    name: 'Infinity Cloth',
+    description: 'Mystical cloth that seems to shimmer with infinite power.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 70,
+    stackable: true,
+    value: 1200
+  },
+  {
+    id: 'ancestral_cloth',
+    name: 'Ancestral Cloth',
+    description: 'Ancient cloth woven by master mages of old.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 80,
+    stackable: true,
+    value: 2400
+  },
+  {
+    id: 'ethereal_cloth',
+    name: 'Ethereal Cloth',
+    description: 'The ultimate cloth material, shimmering with ethereal energy.',
+    type: 'resource',
+    subType: 'cloth',
+    levelRequired: 90,
+    stackable: true,
+    value: 4800
+  },
+
+  // Magic Robe Sets (T1-90)
+  // Wizard Robes (T1) - Level 1
+  {
+    id: 'wizard_hat',
+    name: 'Wizard Hat',
+    description: 'A basic pointed hat worn by novice wizards.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 1,
+    stats: { defense: 2, magic: 3, accuracy: 5 },
+    stackable: false,
+    value: 25
+  },
+  {
+    id: 'wizard_robe_top',
+    name: 'Wizard Robe Top',
+    description: 'Basic robes worn by novice wizards.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 1,
+    stats: { defense: 4, magic: 6, accuracy: 8 },
+    stackable: false,
+    value: 50
+  },
+  {
+    id: 'wizard_robe_bottom',
+    name: 'Wizard Robe Bottom',
+    description: 'Basic robe bottoms for novice wizards.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 1,
+    stats: { defense: 3, magic: 4, accuracy: 6 },
+    stackable: false,
+    value: 35
+  },
+  {
+    id: 'wizard_gloves',
+    name: 'Wizard Gloves',
+    description: 'Basic gloves for casting spells.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 1,
+    stats: { defense: 1, magic: 2, accuracy: 3 },
+    stackable: false,
+    value: 15
+  },
+  {
+    id: 'wizard_boots',
+    name: 'Wizard Boots',
+    description: 'Basic boots for aspiring wizards.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 1,
+    stats: { defense: 1, magic: 2, accuracy: 3 },
+    stackable: false,
+    value: 15
+  },
+
+  // Apprentice Robes (T10) - Level 10
+  {
+    id: 'apprentice_hat',
+    name: 'Apprentice Hat',
+    description: 'A hat worn by apprentice mages.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 10,
+    stats: { defense: 4, magic: 6, accuracy: 8 },
+    stackable: false,
+    value: 120
+  },
+  {
+    id: 'apprentice_robe_top',
+    name: 'Apprentice Robe Top',
+    description: 'Robes worn by apprentice mages.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 10,
+    stats: { defense: 8, magic: 12, accuracy: 10 },
+    stackable: false,
+    value: 240
+  },
+  {
+    id: 'apprentice_robe_bottom',
+    name: 'Apprentice Robe Bottom',
+    description: 'Robe bottoms for apprentice mages.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 10,
+    stats: { defense: 6, magic: 8, accuracy: 9 },
+    stackable: false,
+    value: 180
+  },
+  {
+    id: 'apprentice_gloves',
+    name: 'Apprentice Gloves',
+    description: 'Gloves that aid in spell casting.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 10,
+    stats: { defense: 2, magic: 4, accuracy: 5 },
+    stackable: false,
+    value: 90
+  },
+  {
+    id: 'apprentice_boots',
+    name: 'Apprentice Boots',
+    description: 'Boots worn by apprentice mages.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 10,
+    stats: { defense: 2, magic: 4, accuracy: 5 },
+    stackable: false,
+    value: 90
+  },
+
+  // Adept Robes (T20) - Level 20
+  {
+    id: 'adept_hat',
+    name: 'Adept Hat',
+    description: 'A hat worn by adept mages.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 20,
+    stats: { defense: 6, magic: 9, accuracy: 12 },
+    stackable: false,
+    value: 480
+  },
+  {
+    id: 'adept_robe_top',
+    name: 'Adept Robe Top',
+    description: 'Robes worn by adept mages.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 20,
+    stats: { defense: 12, magic: 18, accuracy: 15 },
+    stackable: false,
+    value: 960
+  },
+  {
+    id: 'adept_robe_bottom',
+    name: 'Adept Robe Bottom',
+    description: 'Robe bottoms for adept mages.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 20,
+    stats: { defense: 9, magic: 12, accuracy: 13 },
+    stackable: false,
+    value: 720
+  },
+  {
+    id: 'adept_gloves',
+    name: 'Adept Gloves',
+    description: 'Gloves that enhance magical abilities.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 20,
+    stats: { defense: 3, magic: 6, accuracy: 8 },
+    stackable: false,
+    value: 360
+  },
+  {
+    id: 'adept_boots',
+    name: 'Adept Boots',
+    description: 'Boots worn by adept mages.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 20,
+    stats: { defense: 3, magic: 6, accuracy: 8 },
+    stackable: false,
+    value: 360
+  },
+
+  // Mystic Robes (T30) - Level 30
+  {
+    id: 'mystic_hat',
+    name: 'Mystic Hat',
+    description: 'A mystical hat imbued with magical energy.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 30,
+    stats: { defense: 8, magic: 12, accuracy: 15 },
+    stackable: false,
+    value: 1600
+  },
+  {
+    id: 'mystic_robe_top',
+    name: 'Mystic Robe Top',
+    description: 'Mystical robes that enhance magical power.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 30,
+    stats: { defense: 16, magic: 24, accuracy: 20 },
+    stackable: false,
+    value: 3200
+  },
+  {
+    id: 'mystic_robe_bottom',
+    name: 'Mystic Robe Bottom',
+    description: 'Mystical robe bottoms for skilled mages.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 30,
+    stats: { defense: 12, magic: 16, accuracy: 17 },
+    stackable: false,
+    value: 2400
+  },
+  {
+    id: 'mystic_gloves',
+    name: 'Mystic Gloves',
+    description: 'Gloves that channel mystical energy.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 30,
+    stats: { defense: 4, magic: 8, accuracy: 10 },
+    stackable: false,
+    value: 1200
+  },
+  {
+    id: 'mystic_boots',
+    name: 'Mystic Boots',
+    description: 'Boots imbued with mystical power.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 30,
+    stats: { defense: 4, magic: 8, accuracy: 10 },
+    stackable: false,
+    value: 1200
+  },
+
+  // Enchanted Robes (T40) - Level 40
+  {
+    id: 'enchanted_hat',
+    name: 'Enchanted Hat',
+    description: 'A hat enhanced with powerful enchantments.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 40,
+    stats: { defense: 10, magic: 15, accuracy: 18 },
+    stackable: false,
+    value: 3200
+  },
+  {
+    id: 'enchanted_robe_top',
+    name: 'Enchanted Robe Top',
+    description: 'Robes woven with magical enchantments.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 40,
+    stats: { defense: 20, magic: 30, accuracy: 25 },
+    stackable: false,
+    value: 6400
+  },
+  {
+    id: 'enchanted_robe_bottom',
+    name: 'Enchanted Robe Bottom',
+    description: 'Enchanted robe bottoms for powerful mages.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 40,
+    stats: { defense: 15, magic: 20, accuracy: 21 },
+    stackable: false,
+    value: 4800
+  },
+  {
+    id: 'enchanted_gloves',
+    name: 'Enchanted Gloves',
+    description: 'Gloves enhanced with magical enchantments.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 40,
+    stats: { defense: 5, magic: 10, accuracy: 12 },
+    stackable: false,
+    value: 2400
+  },
+  {
+    id: 'enchanted_boots',
+    name: 'Enchanted Boots',
+    description: 'Boots enhanced with magical properties.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 40,
+    stats: { defense: 5, magic: 10, accuracy: 12 },
+    stackable: false,
+    value: 2400
+  },
+
+  // Battlemage Robes (T50) - Level 50
+  {
+    id: 'battlemage_hat',
+    name: 'Battlemage Hat',
+    description: 'A hat worn by battle-hardened mages.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 50,
+    stats: { defense: 12, magic: 18, accuracy: 22 },
+    stackable: false,
+    value: 6400
+  },
+  {
+    id: 'battlemage_robe_top',
+    name: 'Battlemage Robe Top',
+    description: 'Robes designed for combat magic.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 50,
+    stats: { defense: 24, magic: 36, accuracy: 30 },
+    stackable: false,
+    value: 12800
+  },
+  {
+    id: 'battlemage_robe_bottom',
+    name: 'Battlemage Robe Bottom',
+    description: 'Robe bottoms for battlemages.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 50,
+    stats: { defense: 18, magic: 24, accuracy: 25 },
+    stackable: false,
+    value: 9600
+  },
+  {
+    id: 'battlemage_gloves',
+    name: 'Battlemage Gloves',
+    description: 'Gloves designed for battle magic.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 50,
+    stats: { defense: 6, magic: 12, accuracy: 15 },
+    stackable: false,
+    value: 4800
+  },
+  {
+    id: 'battlemage_boots',
+    name: 'Battlemage Boots',
+    description: 'Boots worn by battlemages.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 50,
+    stats: { defense: 6, magic: 12, accuracy: 15 },
+    stackable: false,
+    value: 4800
+  },
+
+  // Lunar Robes (T60) - Level 60
+  {
+    id: 'lunar_hat',
+    name: 'Lunar Hat',
+    description: 'A hat blessed by lunar magic.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 60,
+    stats: { defense: 14, magic: 21, accuracy: 26 },
+    stackable: false,
+    value: 12800
+  },
+  {
+    id: 'lunar_robe_top',
+    name: 'Lunar Robe Top',
+    description: 'Robes blessed by the power of the moon.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 60,
+    stats: { defense: 28, magic: 42, accuracy: 35 },
+    stackable: false,
+    value: 25600
+  },
+  {
+    id: 'lunar_robe_bottom',
+    name: 'Lunar Robe Bottom',
+    description: 'Robe bottoms infused with lunar energy.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 60,
+    stats: { defense: 21, magic: 28, accuracy: 29 },
+    stackable: false,
+    value: 19200
+  },
+  {
+    id: 'lunar_gloves',
+    name: 'Lunar Gloves',
+    description: 'Gloves blessed by lunar magic.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 60,
+    stats: { defense: 7, magic: 14, accuracy: 18 },
+    stackable: false,
+    value: 9600
+  },
+  {
+    id: 'lunar_boots',
+    name: 'Lunar Boots',
+    description: 'Boots blessed by the moon.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 60,
+    stats: { defense: 7, magic: 14, accuracy: 18 },
+    stackable: false,
+    value: 9600
+  },
+
+  // Infinity Robes (T70) - Level 70
+  {
+    id: 'infinity_hat',
+    name: 'Infinity Hat',
+    description: 'A hat that channels infinite magical power.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 70,
+    stats: { defense: 16, magic: 24, accuracy: 30 },
+    stackable: false,
+    value: 25600
+  },
+  {
+    id: 'infinity_robe_top',
+    name: 'Infinity Robe Top',
+    description: 'Robes that harness infinite magical energy.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 70,
+    stats: { defense: 32, magic: 48, accuracy: 40 },
+    stackable: false,
+    value: 51200
+  },
+  {
+    id: 'infinity_robe_bottom',
+    name: 'Infinity Robe Bottom',
+    description: 'Robe bottoms imbued with infinite power.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 70,
+    stats: { defense: 24, magic: 32, accuracy: 33 },
+    stackable: false,
+    value: 38400
+  },
+  {
+    id: 'infinity_gloves',
+    name: 'Infinity Gloves',
+    description: 'Gloves that channel infinite magic.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 70,
+    stats: { defense: 8, magic: 16, accuracy: 20 },
+    stackable: false,
+    value: 19200
+  },
+  {
+    id: 'infinity_boots',
+    name: 'Infinity Boots',
+    description: 'Boots imbued with infinite magical energy.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 70,
+    stats: { defense: 8, magic: 16, accuracy: 20 },
+    stackable: false,
+    value: 19200
+  },
+
+  // Ancestral Robes (T80) - Level 80
+  {
+    id: 'ancestral_hat',
+    name: 'Ancestral Hat',
+    description: 'An ancient hat worn by master mages of old.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 80,
+    stats: { defense: 18, magic: 27, accuracy: 34 },
+    stackable: false,
+    value: 51200
+  },
+  {
+    id: 'ancestral_robe_top',
+    name: 'Ancestral Robe Top',
+    description: 'Ancient robes passed down through generations of master mages.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 80,
+    stats: { defense: 36, magic: 54, accuracy: 45 },
+    stackable: false,
+    value: 102400
+  },
+  {
+    id: 'ancestral_robe_bottom',
+    name: 'Ancestral Robe Bottom',
+    description: 'Ancient robe bottoms worn by legendary mages.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 80,
+    stats: { defense: 27, magic: 36, accuracy: 37 },
+    stackable: false,
+    value: 76800
+  },
+  {
+    id: 'ancestral_gloves',
+    name: 'Ancestral Gloves',
+    description: 'Ancient gloves that have channeled countless spells.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 80,
+    stats: { defense: 9, magic: 18, accuracy: 22 },
+    stackable: false,
+    value: 38400
+  },
+  {
+    id: 'ancestral_boots',
+    name: 'Ancestral Boots',
+    description: 'Ancient boots worn by master mages.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 80,
+    stats: { defense: 9, magic: 18, accuracy: 22 },
+    stackable: false,
+    value: 38400
+  },
+
+  // Ethereal Robes (T90) - Level 90
+  {
+    id: 'ethereal_hat',
+    name: 'Ethereal Hat',
+    description: 'The ultimate magical hat, shimmering with ethereal energy.',
+    type: 'armor',
+    subType: 'helmet',
+    levelRequired: 90,
+    stats: { defense: 20, magic: 30, accuracy: 38 },
+    stackable: false,
+    value: 102400
+  },
+  {
+    id: 'ethereal_robe_top',
+    name: 'Ethereal Robe Top',
+    description: 'The ultimate magical robes, crafted from ethereal energy.',
+    type: 'armor',
+    subType: 'chest',
+    levelRequired: 90,
+    stats: { defense: 40, magic: 60, accuracy: 50 },
+    stackable: false,
+    value: 204800
+  },
+  {
+    id: 'ethereal_robe_bottom',
+    name: 'Ethereal Robe Bottom',
+    description: 'Ultimate robe bottoms that transcend physical reality.',
+    type: 'armor',
+    subType: 'legs',
+    levelRequired: 90,
+    stats: { defense: 30, magic: 40, accuracy: 42 },
+    stackable: false,
+    value: 153600
+  },
+  {
+    id: 'ethereal_gloves',
+    name: 'Ethereal Gloves',
+    description: 'Ultimate gloves that channel pure magical essence.',
+    type: 'armor',
+    subType: 'gloves',
+    levelRequired: 90,
+    stats: { defense: 10, magic: 20, accuracy: 25 },
+    stackable: false,
+    value: 76800
+  },
+  {
+    id: 'ethereal_boots',
+    name: 'Ethereal Boots',
+    description: 'Ultimate boots that seem to float above the ground.',
+    type: 'armor',
+    subType: 'boots',
+    levelRequired: 90,
+    stats: { defense: 10, magic: 20, accuracy: 25 },
+    stackable: false,
+    value: 76800
   }
 ];
 

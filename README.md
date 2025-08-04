@@ -36,8 +36,8 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - **Mining** - Mine ores and rune essence for smithing/runecrafting (8 resource types)
 - **Smithing** - Smelt ores into bars and create weapons/armor/tools
 - **Woodcutting** - Cut trees to obtain logs (7 tree types with level requirements)
-- **Fletching** - Create arrow shafts and bows from logs
-- **Crafting** - Combine materials to make arrows, bows, staffs, and leather armor
+- **Fletching** - Create arrow shafts and bows from logs  
+- **Crafting** - Combine materials to make arrows, bows, staffs, leather armor, and magic robes
 
 ### Areas
 - **Lumbridge** - Starting area (Air/Earth/Mind runes) - Basic monsters with fire/earth/water weaknesses, copper/tin ore, rune essence, shrimp, normal trees
@@ -60,6 +60,8 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - **Talismans** - 13 reusable talismans for runecrafting, obtained from monster drops
 - **Resources** - 8 resource types (7 ores + rune essence), 7 fish types, 7 log types with level requirements
 - **Materials** - Bars, Arrow Components, Crafting Materials in 6 metal tiers (Bronze to Primal)
+- **Cloth Materials** - 10 cloth types (Cloth to Ethereal Cloth) for crafting magic robes
+- **Magic Robes** - 10 tiers of magic armor sets (Wizard to Ethereal) providing magic bonuses
 
 ## Quick Start with Docker
 
@@ -125,7 +127,8 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - `/woodcut [tree] [quantity]` - Cut trees in your current area (requires axe)
 - `/smith <smelt/smith> <item> [quantity]` - Smelt ores into bars OR smith bars into weapons/armor/tools
 - `/fletch <item> [quantity]` - Create arrow shafts and bows from logs
-- `/craft <item> [quantity]` - Craft arrows, bows, staffs, and leather armor from materials
+- `/gather [material] [quantity]` - Gather cloth materials for crafting magic robes
+- `/craft <item> [quantity]` - Craft arrows, bows, staffs, leather armor, and magic robes from materials
 - `/cook <item> [quantity]` - Cook raw fish into edible food
 - `/runecraft <rune> [quantity]` - Craft runes from essence using talismans (13 rune types, levels 1-90)
 
@@ -149,3 +152,13 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - **Progressive Difficulty**: Higher level runes require more essence but give more XP
 - **Talisman Reuse**: Talismans are not consumed when crafting runes
 - **Area Distribution**: Lumbridge (Air/Earth/Mind), Varrock (Water/Fire/Body), Falador (Cosmic/Chaos), etc.
+
+### Gathering & Magic Robes System
+- **Cloth Gathering**: Use `/gather` command to collect cloth materials (no tools required)
+- **10 Cloth Tiers**: Cloth, Soft Cloth, Fine Cloth, Silk Cloth, Mystic Cloth, Enchanted Cloth, Lunar Cloth, Infinity Cloth, Ancestral Cloth, Ethereal Cloth
+- **Crafting Experience**: Gathering gives 1-2 Crafting XP per material collected
+- **Magic Robe Sets**: Complete 5-piece armor sets (Hat, Top, Bottom, Gloves, Boots) for each tier
+- **Magic Bonuses**: Robes provide Magic accuracy and damage bonuses, essential for spell casting
+- **Progressive Tiers**: T1-90 magic armor matching other equipment progression (Wizard to Ethereal)
+- **Crafting Requirements**: Higher tier robes require higher Crafting levels (1-95)
+- **RuneScape Inspired**: Names and progression similar to RuneScape magic armor system

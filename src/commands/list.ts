@@ -238,6 +238,7 @@ export const data = new SlashCommandBuilder()
         { name: 'Smithing Recipes (Items)', value: 'smithing' },
         { name: 'Fletching Recipes', value: 'fletching' },
         { name: 'Crafting Recipes', value: 'crafting' },
+        { name: 'Gathering & Magic Robes Guide', value: 'gathering' },
         { name: 'Cooking Recipes', value: 'cooking' },
         { name: 'Runecrafting Guide', value: 'runecrafting' },
         { name: 'Magic Spells & Combat', value: 'magic' },
@@ -360,6 +361,8 @@ async function createEmbedWithPagination(category: string, page: number): Promis
       return await createFletchingEmbedPaginated(page);
     case 'crafting':
       return await createCraftingEmbedPaginated(page);
+    case 'gathering':
+      return { embed: createGatheringEmbed(), totalPages: 1 };
     case 'cooking':
       return await createCookingEmbedPaginated(page);
     case 'runecrafting':
@@ -597,6 +600,108 @@ async function createCookingEmbedPaginated(page: number): Promise<{embed: EmbedB
   });
 
   return { embed, totalPages };
+}
+
+function createGatheringEmbed(): EmbedBuilder {
+  const embed = new EmbedBuilder()
+    .setColor(0x32CD32)
+    .setTitle('🧵 Gathering & Magic Robes Guide')
+    .setDescription('Complete guide to gathering cloth and crafting magic robes');
+
+  embed.addFields(
+    {
+      name: 'Getting Started with Gathering',
+      value: '• Use `/gather [material] [quantity]` to gather cloth materials\n' +
+             '• Gathering trains Crafting skill (1-2 XP per material)\n' +
+             '• Higher level cloth requires higher Crafting levels\n' +
+             '• No tools required - gather with your hands!\n' +
+             '• Gathering takes time based on quantity (1-3 seconds per item)',
+      inline: false
+    },
+    {
+      name: 'Cloth Materials (T1-90)',
+      value: '**Cloth** (Lv1) - 1 XP - Basic cloth for wizard robes\n' +
+             '**Soft Cloth** (Lv10) - 1 XP - For apprentice robes\n' +
+             '**Fine Cloth** (Lv20) - 1 XP - For adept robes\n' +
+             '**Silk Cloth** (Lv30) - 2 XP - For mystic robes\n' +
+             '**Mystic Cloth** (Lv40) - 2 XP - For enchanted robes\n' +
+             '**Enchanted Cloth** (Lv50) - 2 XP - For battlemage robes\n' +
+             '**Lunar Cloth** (Lv60) - 2 XP - For lunar robes\n' +
+             '**Infinity Cloth** (Lv70) - 2 XP - For infinity robes\n' +
+             '**Ancestral Cloth** (Lv80) - 2 XP - For ancestral robes\n' +
+             '**Ethereal Cloth** (Lv90) - 2 XP - For ethereal robes',
+      inline: false
+    },
+    {
+      name: 'Magic Robe Sets (Levels 1-90)',
+      value: '**Wizard Robes** (T1) - Made from Cloth\n' +
+             '• Hat, Top, Bottom, Gloves, Boots\n' +
+             '• Levels 1-3 Crafting required\n' +
+             '\n' +
+             '**Apprentice Robes** (T10) - Made from Soft Cloth\n' +
+             '• Levels 10-15 Crafting required\n' +
+             '\n' +
+             '**Adept Robes** (T20) - Made from Fine Cloth\n' +
+             '• Levels 20-25 Crafting required\n' +
+             '\n' +
+             '**Mystic Robes** (T30) - Made from Silk Cloth\n' +
+             '• Levels 30-35 Crafting required\n' +
+             '\n' +
+             '**Enchanted Robes** (T40) - Made from Mystic Cloth\n' +
+             '• Levels 40-45 Crafting required',
+      inline: false
+    },
+    {
+      name: 'Higher Tier Magic Robes (Levels 50-90)',
+      value: '**Battlemage Robes** (T50) - Made from Enchanted Cloth\n' +
+             '• Levels 50-55 Crafting required\n' +
+             '\n' +
+             '**Lunar Robes** (T60) - Made from Lunar Cloth\n' +
+             '• Levels 60-65 Crafting required\n' +
+             '\n' +
+             '**Infinity Robes** (T70) - Made from Infinity Cloth\n' +
+             '• Levels 70-75 Crafting required\n' +
+             '\n' +
+             '**Ancestral Robes** (T80) - Made from Ancestral Cloth\n' +
+             '• Levels 80-85 Crafting required\n' +
+             '\n' +
+             '**Ethereal Robes** (T90) - Made from Ethereal Cloth\n' +
+             '• Levels 90-95 Crafting required',
+      inline: false
+    },
+    {
+      name: 'Magic Armor Stats & Benefits',
+      value: '• Magic robes provide **Magic** and **Accuracy** bonuses\n' +
+             '• Higher tier robes have better stats and requirements\n' +
+             '• All pieces: Hat, Robe Top, Robe Bottom, Gloves, Boots\n' +
+             '• Negative bonuses to Attack and Range accuracy\n' +
+             '• Essential for magic combat effectiveness\n' +
+             '• Can be equipped at Magic level equal to tier level',
+      inline: false
+    },
+    {
+      name: 'Crafting Magic Robes',
+      value: '• Use `/craft <robe_piece> [quantity]` to craft robes\n' +
+             '• Material requirements: 1-4 cloth per piece\n' +
+             '• Hats require 2 cloth, Tops require 4 cloth\n' +
+             '• Bottoms require 3 cloth, Gloves/Boots require 1 cloth\n' +
+             '• Higher tier robes give more Crafting XP\n' +
+             '• Craft full sets for complete magic protection',
+      inline: false
+    },
+    {
+      name: 'Training Strategy',
+      value: '• Start gathering Cloth at level 1 for basic XP\n' +
+             '• Progress through cloth tiers as Crafting level increases\n' +
+             '• Craft complete robe sets for Magic training\n' +
+             '• Higher tier materials give better XP rates\n' +
+             '• Gather in bulk to minimize time spent gathering\n' +
+             '• Use `/gather` without material name for highest available',
+      inline: false
+    }
+  );
+
+  return embed;
 }
 
 async function createItemsEmbed(): Promise<EmbedBuilder> {
