@@ -5,6 +5,7 @@ import { registerCommands } from './utils/commandRegistry';
 import { initializeAreas } from './data/areas';
 import { initializeItems } from './data/items';
 import { handleCombatAction } from './utils/combatHandler';
+import { taskScheduler } from './utils/scheduler';
 
 dotenv.config();
 
@@ -88,6 +89,11 @@ export class Bot {
           if (inventoryCommand && 'handleButton' in inventoryCommand) {
             await (inventoryCommand as any).handleButton(interaction);
           }
+        } else if (interaction.customId.startsWith('ge_')) {
+          const geCommand = this.commands.get('ge');
+          if (geCommand && 'handleButton' in geCommand) {
+            await (geCommand as any).handleButton(interaction);
+          }
         }
       } else if (interaction.isStringSelectMenu()) {
         if (interaction.customId === 'combat_spell_select') {
@@ -108,6 +114,7 @@ export class Bot {
     await initializeAreas();
     await initializeItems();
     await registerCommands(this);
+    taskScheduler.start();
     await this.client.login(process.env.DISCORD_TOKEN);
   }
 }

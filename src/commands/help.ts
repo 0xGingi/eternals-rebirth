@@ -100,6 +100,32 @@ const helpCategories = {
       '• Use `/list magic` for complete spell guide'
     ]
   },
+  grandexchange: {
+    name: 'Grand Exchange',
+    description: 'Trade items with other players',
+    commands: [
+      '`/ge buy <item> <quantity> <price>` - Place a buy offer',
+      '`/ge sell <item> <quantity> <price>` - Place a sell offer',
+      '`/ge offers` - View your active and recent offers',
+      '`/ge cancel <offer_id>` - Cancel an active offer',
+      '`/ge price <item>` - Check market price for an item',
+      '`/ge search [query]` - View active listings (with optional search)',
+      '',
+      '**How it Works:**',
+      '• Place buy offers with coins from your inventory',
+      '• Place sell offers with items from your inventory',
+      '• Orders automatically match with best available prices',
+      '• Instant trades occur when prices overlap',
+      '• Unfilled orders remain active for 7 days',
+      '',
+      '**Trading Tips:**',
+      '• Check current prices before placing offers',
+      '• Set competitive prices for faster trades',
+      '• Cancel and replace offers to adjust prices',
+      '• Use search to find exact item IDs',
+      '• Coins and items are held until orders complete'
+    ]
+  },
   information: {
     name: 'Information Commands',
     description: 'Get detailed information about the game',
@@ -168,6 +194,7 @@ function createMainMenuEmbed() {
       { name: '⚔️ Combat', value: helpCategories.combat.description, inline: true },
       { name: '🔨 Skilling', value: helpCategories.skilling.description, inline: true },
       { name: '🔮 Spells', value: helpCategories.spells.description, inline: true },
+      { name: '💰 Grand Exchange', value: helpCategories.grandexchange.description, inline: true },
       { name: '📚 Information', value: helpCategories.information.description, inline: true },
       { name: '🎯 Game Mechanics', value: helpCategories.mechanics.description, inline: true }
     )
@@ -230,6 +257,11 @@ function createMainMenuButtons() {
 
   const row3 = new ActionRowBuilder<ButtonBuilder>()
     .addComponents(
+      new ButtonBuilder()
+        .setCustomId('help_grandexchange')
+        .setLabel('Grand Exchange')
+        .setEmoji('💰')
+        .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
         .setCustomId('help_information')
         .setLabel('Information')

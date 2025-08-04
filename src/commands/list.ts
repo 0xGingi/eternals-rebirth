@@ -241,6 +241,7 @@ export const data = new SlashCommandBuilder()
         { name: 'Cooking Recipes', value: 'cooking' },
         { name: 'Runecrafting Guide', value: 'runecrafting' },
         { name: 'Magic Spells & Combat', value: 'magic' },
+        { name: 'Grand Exchange Trading Guide', value: 'grandexchange' },
         { name: 'All Items by Type', value: 'items' },
         { name: 'Equipment Slots & Requirements', value: 'equipment' },
         { name: 'Skill Training Guide', value: 'skills' }
@@ -365,6 +366,8 @@ async function createEmbedWithPagination(category: string, page: number): Promis
       return { embed: createRunecraftingEmbed(), totalPages: 1 };
     case 'magic':
       return { embed: createMagicEmbed(), totalPages: 1 };
+    case 'grandexchange':
+      return { embed: createGrandExchangeEmbed(), totalPages: 1 };
     case 'items':
       return { embed: await createItemsEmbed(), totalPages: 1 };
     case 'equipment':
@@ -926,6 +929,75 @@ function createEquipmentEmbed(): EmbedBuilder {
              '• Higher tier tools provide better gathering rates\n' +
              '• Tool tier determines maximum resource level\n' +
              '• Use `/equip tool <tool_name>` to equip tools',
+      inline: false
+    }
+  );
+
+  return embed;
+}
+
+function createGrandExchangeEmbed(): EmbedBuilder {
+  const embed = new EmbedBuilder()
+    .setColor(0xFFD700)
+    .setTitle('💰 Grand Exchange Trading Guide')
+    .setDescription('Complete guide to trading items with other players');
+
+  embed.addFields(
+    {
+      name: 'Getting Started',
+      value: '• Use `/ge` commands to access the Grand Exchange\n' +
+             '• Place buy offers with coins from your inventory\n' +
+             '• Place sell offers with items from your inventory\n' +
+             '• Orders automatically match with best available prices\n' +
+             '• Check market prices before placing offers',
+      inline: false
+    },
+    {
+      name: 'Trading Commands',
+      value: '**`/ge buy <item> <quantity> <price>`** - Place a buy offer\n' +
+             '**`/ge sell <item> <quantity> <price>`** - Place a sell offer\n' +
+             '**`/ge offers`** - View your active and recent offers\n' +
+             '**`/ge cancel <offer_id>`** - Cancel an active offer\n' +
+             '**`/ge price <item>`** - Check current market price\n' +
+             '**`/ge search <query>`** - Search for tradeable items',
+      inline: false
+    },
+    {
+      name: 'How Trading Works',
+      value: '• **Instant Matching:** Orders automatically match when prices overlap\n' +
+             '• **Best Price First:** Buy orders match lowest sell prices first\n' +
+             '• **Time Priority:** Earlier orders get priority at same price\n' +
+             '• **Partial Fills:** Large orders may be filled by multiple smaller orders\n' +
+             '• **Price Protection:** Buyers get refunded if they pay above market price',
+      inline: false
+    },
+    {
+      name: 'Order Management',
+      value: '• **Active Orders:** Remain active for 7 days\n' +
+             '• **Automatic Expiry:** Expired orders return items/coins to inventory\n' +
+             '• **Cancel Anytime:** Get your items/coins back immediately\n' +
+             '• **Order Status:** Track completion progress in `/ge offers`\n' +
+             '• **Transaction History:** View recent completed trades',
+      inline: false
+    },
+    {
+      name: 'Trading Tips & Strategy',
+      value: '• **Market Research:** Use `/ge price` to check current market rates\n' +
+             '• **Competitive Pricing:** Set prices close to market value for faster trades\n' +
+             '• **Bulk Trading:** Large quantities may take longer to fill\n' +
+             '• **Item Search:** Use `/ge search` to find exact item names and IDs\n' +
+             '• **Patience Pays:** Sometimes waiting gets you better prices\n' +
+             '• **Quick Sales:** Price items lower for instant sales',
+      inline: false
+    },
+    {
+      name: 'Important Notes',
+      value: '• Items and coins are held in escrow until orders complete\n' +
+             '• You cannot use held items/coins for other activities\n' +
+             '• All items in the game can be traded (except quest items)\n' +
+             '• Price history helps determine fair market value\n' +
+             '• The Grand Exchange operates 24/7 even when offline\n' +
+             '• No transaction fees - keep 100% of your profits',
       inline: false
     }
   );

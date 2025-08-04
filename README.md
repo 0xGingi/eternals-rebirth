@@ -13,6 +13,7 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - **Equipment System** - Equip weapons, armor, and tools in dedicated slots
 - **Magic System** - Cast combat spells and utility spells with rune consumption
 - **Runecrafting System** - Craft runes from essence using talismans for magic combat
+- **Grand Exchange** - Buy and Sell items from other players
 
 ### Combat System
 - Interactive button-based combat (Attack, Cast Spell, Defend, Eat Food, Run Away)
