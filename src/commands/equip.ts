@@ -228,7 +228,7 @@ export async function execute(interaction: any) {
       .setTitle('Item Equipped!')
       .setDescription(`You equipped **${item.name}**${item.subType === 'ammunition' ? ` (${player.equipment.ammunition.quantity} total)` : ''}`)
       .addFields(
-        { name: 'Stats', value: Object.entries(item.stats).filter(([_, value]) => typeof value === 'number' && value > 0).map(([stat, value]) => `${stat.charAt(0).toUpperCase() + stat.slice(1)}: +${value}`).join('\n') || 'No stat bonuses', inline: true },
+        { name: 'Stats', value: Object.entries((item.stats as any).toObject()).filter(([key, value]) => key !== '_id' && typeof value === 'number' && value > 0).map(([stat, value]) => `${stat.charAt(0).toUpperCase() + stat.slice(1)}: +${value}`).join('\n') || 'No stat bonuses', inline: true },
         { name: 'Required Level', value: `${item.levelRequired} ${requiredSkill}`, inline: true }
       );
 
