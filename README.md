@@ -1,13 +1,13 @@
-# Eternals Rebirth - Discord MMORPG Bot
+# Eternals Rebirth - Telegram MMORPG Bot
 
-A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
+A Telegram MMORPG bot, the successor to Eternals Online, inspired by RuneScape.
 
 ## Features
 
 ### Core Systems
 - **Player Registration & Stats** - Create characters and track progression with visual progress bars
 - **Experience System** - Level skills from 1-99 like RuneScape with XP requirements
-- **Turn-based Combat** - Fight monsters with interactive Discord buttons and magic spells
+- **Turn-based Combat** - Fight monsters (Telegram UI)
 - **Area Travel** - Explore 8 different zones with unique content and level requirements
 - **Inventory Management** - Full inventory system with pagination support
 - **Equipment System** - Equip weapons, armor, and tools in dedicated slots
@@ -16,7 +16,7 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - **Grand Exchange** - Buy and Sell items from other players
 
 ### Combat System
-- Interactive button-based combat (Attack, Cast Spell, Defend, Eat Food, Run Away)
+- Turn-based combat (Telegram UI)
 - Combat style switching to train different skills (Attack/Strength/Defense/Range/Magic)
 - Magic combat with 20+ elemental spells (Wind/Earth/Water/Fire variants)
 - Elemental weakness system - monsters weak to specific elements take +10% damage
@@ -63,11 +63,11 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
 - **Cloth Materials** - 10 cloth types (Cloth to Ethereal Cloth) for crafting magic robes
 - **Magic Robes** - 10 tiers of magic armor sets (Wizard to Ethereal) providing magic bonuses
 
-## Quick Start with Docker
+## Quick Start with Docker (Telegram)
 
 ### Prerequisites
 - Docker and Docker Compose installed
-- Discord Bot Token and Application ID (see [DISCORD_SETUP.md](DISCORD_SETUP.md))
+- Telegram bot token from BotFather
 
 ### Setup Steps
 
@@ -83,59 +83,79 @@ A Discord MMORPG bot, the successor to Eternals Online, Inspired by runescape
    ```
 
 3. **Configure Environment**
-   Edit `.env` file with your credentials:
+   Edit `.env` (or `.env.docker`) with your credentials:
    ```env
-   DISCORD_TOKEN=your_bot_token_here
-   CLIENT_ID=your_client_id_here
-   GUILD_ID=your_guild_id_here
+   TELEGRAM_TOKEN=your_bot_token_here
    MONGO_ROOT_PASSWORD=your_secure_password_here
    ```
 
 4. **Start Services**
    ```bash
-   docker-compose up -d
-   ```
+docker-compose up -d
+```
 
-## Commands
+## Run Locally
+
+```bash
+bun install
+TELEGRAM_TOKEN=your_token_here bun run src/telegram/bot.ts
+```
+
+## Commands (Telegram)
 
 ### Basic Commands
 - `/register` - Register your character to start playing
-- `/stats` - View your character stats, levels, and progress bars
-- `/help` - Interactive help menu with categories for all commands
-- `/list <category>` - View detailed game information with pagination (areas, monsters, recipes, items, etc.)
+- `/stats` - View your character stats
+- `/inventory` - View your inventory
+- `/inventory search <query> [page]` - Search inventory
+- `/inventory sort <name|qty> [asc|desc] [page]` - Sort inventory
+- `/help` - List available commands
+- `/guide <topic> [page]` - Skill guides (areas, mining, fishing, woodcutting, cooking, smith, fletch, crafting, runecraft)
+- `/daily` - Daily rewards (+100 coins, +5 bread; restores missing basic tools)
 
 ### World & Navigation Commands
 - `/travel <destination>` - Travel to different areas (8 areas available)
-- `/area` - View current area information, including monsters and resources
+- `/area [monsters|resources] [page]` - View current area information, with paging
+- `/area filter <text> [page]` - Filter monsters/resources by name
 
 ### Inventory & Equipment Commands
-- `/inventory [page]` - View your inventory with pagination (20 items per page)
+- `/inventory` - View your inventory
+- `/inventory search <query> [page]` - Search inventory
 - `/equipment` - View your equipped items in all slots
 - `/equip <item>` - Equip weapons, tools, or armor from your inventory
 - `/unequip <slot>` - Unequip items from specific equipment slots
 - `/eat <food>` - Eat food to restore health
 
 ### Combat Commands
-- `/fight [monster]` - Start combat with monsters (random or specific)
+- `/fight [monster]` - Start combat with monsters
 - `/style <combat_style>` - Change combat style (attack/strength/defense/range/magic)
-- Use interactive buttons during combat (Attack, Cast Spell, Defend, Eat, Run)
-- Magic combat: Equip magic weapon, set style to magic, use "Cast Spell" button to select spells
+- `/attack` `/defend` `/eat <food>` `/run` - Combat actions
 
-### Skilling Commands
-- `/mine [ore] [quantity]` - Mine ores and rune essence in your current area (requires pickaxe)
-- `/fish [fish] [quantity]` - Catch fish in your current area (requires fishing rod)
-- `/woodcut [tree] [quantity]` - Cut trees in your current area (requires axe)
-- `/smith <smelt/smith> <item> [quantity]` - Smelt ores into bars OR smith bars into weapons/armor/tools
-- `/fletch <item> [quantity]` - Create arrow shafts and bows from logs
+- `/mine [ore] [quantity]` - Mine ores and rune essence
+- `/fish [fish] [quantity]` - Catch fish
+- `/woodcut [tree] [quantity]` - Cut trees
+- `/smith smelt <bar_id> [quantity]` - Smelt bars from ores/coal
+- `/smith make <item_id> [quantity]` - Forge metal weapons/armor/tools from bars
+- `/fletch <item> [quantity]` - Make arrow shafts and bows
 - `/gather [material] [quantity]` - Gather cloth materials for crafting magic robes
-- `/craft <item> [quantity]` - Craft arrows, bows, staffs, leather armor, and magic robes from materials
-- `/cook <item> [quantity]` - Cook raw fish into edible food
-- `/runecraft <rune> [quantity]` - Craft runes from essence using talismans (13 rune types, levels 1-90)
+- `/craft <item> [quantity]` - Craft magic robes from cloth
+- `/leather <item_id> [quantity]` - Craft leather and dragonhide gear
+- `/cook <item> [quantity]` - Cook raw fish into food
+- `/runecraft <rune> [quantity]` - Craft runes from essence using talismans (area-gated)
+
+### Economy Commands
+- `/ge buy <item> <qty> <price_each>` - Create buy offer
+- `/ge sell <item> <qty> <price_each>` - Create sell offer
+- `/ge offers [page]` - View your offers
+- `/ge offers <active|completed|cancelled> [page]` - Filter offers by status
+- `/ge my <item> [active|completed|cancelled] [page]` - View your offers for an item
+- `/ge cancel <offer_id>` - Cancel an active offer
+- `/ge price <item>` - View average/high/low prices
+- `/ge search <query> [page]` - Find item IDs by name
 
 ### Magic Commands
-- `/spell <spell_name>` - Cast utility magic spells:
-  - `low_alch` - Convert items to 50% coin value (Level 1 Magic)
-  - `high_alch` - Convert items to 100% coin value (Level 55 Magic)
+- `/spells [page]` - List available combat spells
+- `/cast <spell_id_or_name>` - Cast a combat spell during /fight (requires magic style and magic weapon)
 
 ### Magic Combat System
 - **20+ Combat Spells**: Wind/Earth/Water/Fire Strike/Bolt/Blast/Wave/Surge (Levels 1-95)

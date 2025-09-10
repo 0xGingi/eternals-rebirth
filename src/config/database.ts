@@ -3,7 +3,7 @@ import { Player } from '../models/Player';
 
 export const connectDatabase = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27020/eternals-rebirth');
+    await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27021/eternals-rebirth');
     console.log('Connected to MongoDB');
   } catch (error) {
     console.error('MongoDB connection error:', error);

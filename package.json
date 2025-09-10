@@ -1,6 +1,6 @@
 {
   "name": "eternals-rebirth",
-  "module": "src/bot.ts",
+  "module": "src/telegram/bot.ts",
   "type": "module",
   "private": true,
   "devDependencies": {
@@ -10,13 +10,14 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "discord.js": "^14.21.0",
     "dotenv": "^17.2.1",
-    "mongoose": "^8.17.0"
+    "mongoose": "^8.17.0",
+    "telegraf": "^4.16.3"
   },
   "scripts": {
+    "start": "bun run src/telegram/bot.ts",
+    "start:telegram": "bun run src/telegram/bot.ts",
     "migrate-skilling": "bun run scripts/migrate-player-skilling-fields.ts",
-    "deregister-guild": "bun run scripts/deregister-guild-commands.ts",
     "update-schema": "bun run scripts/update-database-schema.ts",
     "update-weaknesses": "bun run scripts/update-monster-weaknesses.ts"
   }

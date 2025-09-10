@@ -1,10 +1,10 @@
 services:
   mongodb:
     image: mongo:8.0.11
-    container_name: eternals-rebirth-mongo
+    container_name: eternals-rebirth-mongo-telegram
     restart: unless-stopped
     ports:
-      - "27020:27017"
+      - "27021:27017"
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
@@ -13,28 +13,26 @@ services:
       - mongodb_data:/data/db
       - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
     networks:
-      - eternals-network
+      - eternals-network-telegram
 
   bot:
     build: .
-    container_name: eternals-rebirth-bot
+    container_name: eternals-rebirth-telegram
     restart: unless-stopped
     depends_on:
       - mongodb
     environment:
-      - DISCORD_TOKEN=${DISCORD_TOKEN}
-      - CLIENT_ID=${CLIENT_ID}
-      - GUILD_ID=${GUILD_ID}
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
       - MONGODB_URI=mongodb://${MONGO_ROOT_USERNAME:-admin}:${MONGO_ROOT_PASSWORD}@mongodb:27017/eternals-rebirth?authSource=admin
       - NODE_ENV=production
     volumes:
       - ./logs:/app/logs
     networks:
-      - eternals-network
+      - eternals-network-telegram
 
 volumes:
   mongodb_data:
 
 networks:
-  eternals-network:
+  eternals-network-telegram:
     driver: bridge

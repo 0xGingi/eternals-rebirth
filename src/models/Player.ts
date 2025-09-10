@@ -67,4 +67,9 @@ const playerSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Daily reward tracking
+playerSchema.add({
+  dailyClaimAt: { type: Date, default: null }
+});
+
 export const Player = mongoose.model('Player', playerSchema);

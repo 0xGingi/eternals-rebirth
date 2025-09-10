@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Setting up Eternals Rebirth Discord Bot..."
+echo "Setting up Eternals Rebirth Telegram Bot..."
 
 if ! command -v docker &> /dev/null; then
     echo "❌ Docker is not installed. Please install Docker first."
@@ -16,12 +16,10 @@ if [ ! -f ".env" ]; then
     echo "⚠️  .env file not found. Creating from template..."
     cp .env.docker .env
     echo "Please edit .env file with your credentials:"
-    echo "   - DISCORD_TOKEN=your_bot_token"
-    echo "   - CLIENT_ID=your_client_id"
-    echo "   - GUILD_ID=your_guild_id"
+    echo "   - TELEGRAM_TOKEN=your_bot_token"
     echo "   - MONGO_ROOT_PASSWORD=your_secure_password"
     echo ""
-    echo "Get your bot token from: https://discord.com/developers/applications"
+    echo "Get your Telegram bot token from @BotFather in Telegram"
     echo ""
     read -p "Press Enter after you've updated the .env file..."
 fi

@@ -16,4 +16,5 @@ USER nodejs
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD bun --version || exit 1
 
-CMD ["bun", "run", "src/bot.ts"]
+# Default to Telegram bot entry
+CMD ["bun", "run", "src/telegram/bot.ts"]
