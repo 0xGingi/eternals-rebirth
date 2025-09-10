@@ -1,5 +1,6 @@
 import { Context } from 'telegraf';
 import { Area } from '../../models/Area';
+import { Item } from '../../models/Item';
 import { COOKS } from './cook';
 import { SMELTS } from './smith';
 import { FLETCHES } from './fletch';
@@ -20,7 +21,9 @@ export async function guideCommand(ctx: Context) {
   const text = ((ctx.message as any)?.text || '').trim();
   const parts = text.split(/\s+/);
   const topic = (parts[1] || '').toLowerCase() as Topic;
-  const page = Math.max(1, parseInt(parts[2] || '1', 10) || 1);
+  const maybeSub = (parts[2] || '').toLowerCase();
+  const hasItemsSub = topic === 'smith' && (maybeSub === 'items' || maybeSub === 'make');
+  const page = Math.max(1, parseInt(parts[hasItemsSub ? 3 : 2] || '1', 10) || 1);
 
   if (!topic || !['areas','mining','fishing','woodcutting','cooking','smith','fletch','crafting','runecraft'].includes(topic)) {
     return ctx.reply([
@@ -30,6 +33,7 @@ export async function guideCommand(ctx: Context) {
       '- mining|fishing|woodcutting: Resource nodes + areas',
       '- cooking: Cookable foods',
       '- smith: Smeltable bars',
+      '- smith items: Smithable items from bars',
       '- fletch: Arrow shafts & bows',
       '- crafting: Magic robes from cloth',
       '- runecraft: Runes & altar areas'
@@ -68,10 +72,50 @@ export async function guideCommand(ctx: Context) {
     return ctx.reply([`Cooking guide (page ${pg.page}/${pg.total}):`, ...pg.items].join('\n'));
   }
 
-  if (topic === 'smith') {
+  if (topic === 'smith' && !hasItemsSub) {
     const list = SMELTS.map(s => `• ${s.name} — Lvl ${s.level}, XP ${s.xp} — Inputs: ${s.inputs.map(i => `${i.itemId} x${i.qty}`).join(', ')}`);
     const pg = paginate(list, page, 12);
     return ctx.reply([`Smithing (smelt) guide (page ${pg.page}/${pg.total}):`, ...pg.items].join('\n'));
+  }
+
+  if (topic === 'smith' && hasItemsSub) {
+    const metals = ['bronze','iron','steel','mithril','adamant','rune','dragon','barrows','third_age','primal'];
+    const allowedArmor = new Set(['helmet','chest','legs','boots','gloves','shield']);
+    function inferPrefix(id: string): string | null {
+      for (const m of metals) if (id.startsWith(m + '_')) return m;
+      return null;
+    }
+    function barCostFor(subType: string): number {
+      switch (subType) {
+        case 'helmet': return 2;
+        case 'chest': return 5;
+        case 'legs': return 4;
+        case 'boots': return 1;
+        case 'gloves': return 1;
+        case 'shield': return 3;
+        case 'pickaxe': return 3;
+        case 'axe': return 2;
+        default: return 2; // weapons and others
+      }
+    }
+    const items = await Item.find({});
+    const smithables = items.filter((it: any) => {
+      const prefix = inferPrefix(it.id);
+      if (!prefix) return false;
+      if (it.type === 'weapon' && it.subType === 'melee') return true;
+      if (it.type === 'armor' && allowedArmor.has(it.subType)) return true;
+      if (it.type === 'tool' && (it.subType === 'pickaxe' || it.subType === 'axe')) return true;
+      return false;
+    }).map(it => {
+      const prefix = inferPrefix(it.id)!;
+      const bars = barCostFor(it.subType);
+      const barId = `${prefix}_bar`;
+      return { name: it.name, level: it.levelRequired || 1, barId, bars, sub: it.subType };
+    }).sort((a, b) => (a.level - b.level) || a.name.localeCompare(b.name));
+
+    const list = smithables.map(s => `• ${s.name} — Lvl ${s.level} — Bars: ${s.barId} x${s.bars} — ${s.sub}`);
+    const pg = paginate(list, page, 12);
+    return ctx.reply([`Smithing (items) guide (page ${pg.page}/${pg.total}):`, ...pg.items].join('\n'));
   }
 
   if (topic === 'fletch') {
@@ -95,4 +139,3 @@ export async function guideCommand(ctx: Context) {
 }
 
 function capitalize(s: string) { return s.charAt(0).toUpperCase() + s.slice(1); }
-
